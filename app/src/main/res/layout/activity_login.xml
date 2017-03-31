@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:gravity="center_horizontal"
+    android:orientation="vertical"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    tools:context="com.campusconnection.LoginActivity">
+
+    <EditText
+        android:id="@+id/loginEmailInput"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:inputType="textEmailAddress"
+        android:hint="@string/prompt_email"
+        android:layout_below="@+id/loginAppText"
+        android:layout_marginTop="80dp" />
+
+
+    <EditText
+        android:id="@+id/loginPassInput"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:inputType="textPassword"
+        android:hint="@string/prompt_password"
+        android:layout_alignTop="@+id/loginProgressBar"
+        android:layout_marginTop="28dp" />
+
+    <Button
+        android:id="@+id/loginButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/action_login"
+        android:layout_below="@+id/loginPassInput"
+        android:layout_alignLeft="@+id/loginPassInput"
+        android:layout_alignStart="@+id/loginPassInput"
+        android:layout_marginTop="39dp"
+        android:layout_alignRight="@+id/loginPassInput"
+        android:layout_alignEnd="@+id/loginPassInput" />
+
+    <TextView
+        android:id="@+id/loginAppText"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_marginTop="69dp"
+        android:text="@string/app_name"
+        android:layout_centerHorizontal="true"/>
+
+    <ProgressBar
+        android:id="@+id/loginProgressBar"
+        style="?android:attr/progressBarStyle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/loginEmailInput"
+        android:layout_centerHorizontal="true" />
+
+    <Button
+        android:id="@+id/signupButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Join the connection"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="25dp"
+        android:layout_alignLeft="@+id/loginButton"
+        android:layout_alignStart="@+id/loginButton"
+        android:layout_alignRight="@+id/loginButton"
+        android:layout_alignEnd="@+id/loginButton" />
+
+    <TextView
+        android:id="@+id/forgotPasswordText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@+id/loginButton"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="54dp"
+        android:text="Forgot Password?" />
+
+</RelativeLayout>

@@ -10,7 +10,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 public class ApiClient {
 
-    public static final String BASE_URL = "http://75.128.92.169:8080/CCService/v1/index.php/";
+    public static final String BASE_URL = "http://24.4.63.249:8080/CCService/v1/index.php/";
     private static Retrofit retrofit = null;
 
 

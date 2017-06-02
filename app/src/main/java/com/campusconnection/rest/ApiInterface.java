@@ -1,39 +1,42 @@
 package com.campusconnection.rest;
 
 import com.campusconnection.model.GenericResponse;
-import com.campusconnection.model.Member;
-import com.campusconnection.model.MemberSession;
+import com.campusconnection.model.LoginRequest;
+import com.campusconnection.model.MemberResponse;
+import com.campusconnection.model.MemberSessionResponse;
+import com.campusconnection.model.RegisterRequest;
+import com.campusconnection.model.SignupRequest;
 
 import retrofit2.Call;
 import retrofit2.http.Body;
 import retrofit2.http.Field;
 import retrofit2.http.Path;
-import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.GET;
 import retrofit2.http.PUT;
 import retrofit2.http.POST;
 
 public interface ApiInterface {
-    @FormUrlEncoded
     @POST("login")
-    Call<GenericResponse> checkLogin(@Field("email") String email, @Field("password") String password);
+    Call<GenericResponse> checkLogin(@Body LoginRequest login);
 
-    @FormUrlEncoded
     @POST("register")
-    Call<GenericResponse> register(@Field("email") String email);
+    Call<GenericResponse> register(@Body RegisterRequest register);
 
     @POST("signup")
-    Call<GenericResponse> signup(@Body Member member);
+    Call<GenericResponse> signup(@Body SignupRequest signup);
+
+    @GET("status/{code}")
+    Call<GenericResponse> checkStatus(@Path("code") String code);
 
     @GET("logout")
     Call<GenericResponse> logout();
 
     @GET("member")
-    Call<MemberSession> getSession();
+    Call<MemberSessionResponse> getSession();
 
     @GET("profile/{id}")
-    Call<Member> getProfile(@Path("id") int id);
+    Call<MemberResponse> getProfile(@Path("id") int id);
 
     @PUT("profile/{id}")
-    Call<Member> updateProfile(@Path("id") int id, @Body Member member);
+    Call<MemberResponse> updateProfile(@Path("id") int id, @Body MemberResponse memberResponse);
 }

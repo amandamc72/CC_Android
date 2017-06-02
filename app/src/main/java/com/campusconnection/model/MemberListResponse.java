@@ -5,12 +5,12 @@ import com.google.gson.annotations.SerializedName;
 import java.util.ArrayList;
 import java.util.List;
 
-public class MemberList {
+public class MemberListResponse {
 
     @SerializedName("member_list")
     private List memberList = new ArrayList();
 
-    public MemberList(List memberList){
+    public MemberListResponse(List memberList){
         this.memberList = memberList;
     }
 

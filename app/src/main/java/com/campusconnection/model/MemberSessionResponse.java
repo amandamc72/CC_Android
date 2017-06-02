@@ -2,14 +2,14 @@ package com.campusconnection.model;
 
 import com.google.gson.annotations.SerializedName;
 
-public class MemberSession {
+public class MemberSessionResponse {
 
     @SerializedName("error")
     private Boolean error;
     @SerializedName("id")
     private Integer id;
 
-    public MemberSession(Boolean error, Integer id){
+    public MemberSessionResponse(Boolean error, Integer id){
         this.error = error;
         this.id = id;
     }

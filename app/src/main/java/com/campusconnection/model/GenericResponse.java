@@ -8,10 +8,13 @@ public class GenericResponse {
     private Boolean error;
     @SerializedName("message")
     private String message;
+    @SerializedName("code")
+    private String code;
 
-    public GenericResponse(Boolean error, String message){
-        this.setError(error);
-        this.setMessage(message);
+    public GenericResponse(Boolean error, String message, String code){
+        this.error = error;
+        this.message = message;
+        this.code = code;
     }
 
     public Boolean getError() {
@@ -29,4 +32,13 @@ public class GenericResponse {
     public void setMessage(String message) {
         this.message = message;
     }
+
+    public String getCode() {
+        return code;
+    }
+
+    public void setCode(String code) {
+        this.code = code;
+    }
+
 }

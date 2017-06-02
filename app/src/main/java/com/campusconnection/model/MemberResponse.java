@@ -5,7 +5,7 @@ import com.google.gson.annotations.SerializedName;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Member {
+public class MemberResponse {
 
     @SerializedName("id")
     private Integer id;
@@ -34,21 +34,21 @@ public class Member {
     @SerializedName("interests")
     private List interests = new ArrayList();
 
-    public Member(Integer id, String thumbnail, List subPics, String name, String city, String school,
-                  String standing, String major, String minor, Integer age, String about, List courses, List interests){
-        this.setId(id);
-        this.setThumbnail(thumbnail);
-        this.setSubPics(subPics);
-        this.setName(name);
-        this.setCity(city);
-        this.setSchool(school);
-        this.setStanding(standing);
-        this.setMajor(major);
-        this.setMinor(minor);
-        this.setAge(age);
-        this.setAbout(about);
-        this.setCourses(courses);
-        this.setInterests(interests);
+    public MemberResponse(Integer id, String thumbnail, List subPics, String name, String city, String school,
+                          String standing, String major, String minor, Integer age, String about, List courses, List interests){
+        this.id = id;
+        this.thumbnail = thumbnail;
+        this.subPics = subPics;
+        this.name = name;
+        this.city = city;
+        this.school = school;
+        this.standing = standing;
+        this.major = major;
+        this.minor = minor;
+        this.age = age;
+        this.about = about;
+        this.courses = courses;
+        this.interests = interests;
     }
 
 

@@ -1,8 +1,141 @@
 <resources>
     <string name="app_name">Campus Connection</string>
-    <!-- Login Strings -->
-    <string name="prompt_email">Email</string>
+    <string name="company">\u00A9 Company, Inc.</string>
+    <string name="popup_ok">OK</string>
+    <string name="code_key">code</string>
+
+    <!-- LoginRequest Strings -->
+    <string name="prompt_email">Student Email</string>
     <string name="prompt_password">Password</string>
-    <string name="action_login">Log In</string>
+    <string name="action_login">Sign In</string>
+    <string name="action_join">Join the connection!</string>
+    <string name="label_dont_have_account">Don\'t have an account?</string>
+    <string name="label_forgot_password">Forgot password?</string>
+
+    <!--Register Strings -->
+    <string name="label_sign_up">Sign up</string>
+    <string name="action_send_activation_email">Send Verification Email</string>
+    <string name="label_send_act_email">Send activation email</string>
+    <string name="label_step_1_2">Step 1 of 2</string>
+
+    <!--Sign up path Strings -->
+    <string name="label_statement">Join Campus Connection to find and connect with other students on your campus.</string>
+    <string name="action_signup_with_facebook">Sign up with Facebook</string>
+    <string name="action_signup_with_email">Sign up with email</string>
+
+    <!--Sign up Strings -->
+    <string name="prompt_first_name">First Name</string>
+    <string name="prompt_last_name">Last Name</string>
+    <string name="prompt_city">City</string>
+    <string name="prompt_school">School</string>
+    <string name="prompt_major">Major</string>
+    <string name="prompt_minor">Minor (Optional)</string>
+    <string name="prompt_birthday">Birthday</string>
+    <string name="prompt_gender_male">Male</string>
+    <string name="prompt_gender_female">Female</string>
+    <string name="action_sign_up">Sign up</string>
+    <string name="label_step_2_2">Step 2 of 2</string>
+
+    <!--Menu Strings-->
+    <string name="label_home">Home</string>
+    <string name="label_profile">Profile</string>
+    <string name="label_inbox">Inbox</string>
+    <string name="label_search">Search</string>
+    <string name="label_settings">Settings</string>
+    <string name="label_logout">Logout</string>
+
+    <!--Profile Strings-->
+    <string name="label_add_photos">Add Photos</string>
+    <string name="action_edit_profile">Edit</string>
+    <string name="label_details">Details</string>
+    <string name="label_about">About</string>
+    <string name="label_curr_courses">Current Courses</string>
+    <string name="label_interests">Interests</string>
+
+    <!--Search Strings-->
+    <string name="label_school">School</string>
+    <string name="label_major">Major</string>
+    <string name="label_minor">Minor</string>
+    <string name="label_age">Age</string>
+    <string name="label_any">Any</string>
+    <string name="label_male">Male</string>
+    <string name="label_female">Female</string>
+    <string name="label_city">City</string>
+    <string name="label_state">State</string>
+    <string name="action_search">Connect!</string>
+
+    <!--Settings Strings-->
+    <string name="label_account_settings">Account Settings</string>
+    <string name="label_name">Name</string>
+    <string name="label_change_name">Change Name</string>
+    <string name="label_password">Password</string>
+    <string name="label_change_password">Change Password</string>
+    <string name="label_home_settings">Home Display Settings</string>
+    <string name="label_show_me">Show Me</string>
+    <string name="label_notification_settings">Notification Settings</string>
+    <string name="label_mesages">Messages</string>
+    <string name="label_swipes">Swipes</string>
+
+    <!--Error Strings -->
+    <string name="error_invalid_email">This email address is invalid</string>
     <string name="error_field_required">This field is required</string>
+
+    <!--States Array -->
+    <string-array name="states_array">
+        <item>Select State...</item>
+        <item>Alabama</item>
+        <item>Alaska</item>
+        <item>Arizona</item>
+        <item>Arkansas</item>
+        <item>California</item>
+        <item>Colorado</item>
+        <item>Connecticut</item>
+        <item>Delaware</item>
+        <item>Florida</item>
+        <item>Georgia</item>
+        <item>Hawaii</item>
+        <item>Idaho</item>
+        <item>Illinois</item>
+        <item>Indiana</item>
+        <item>Iowa</item>
+        <item>Kansas</item>
+        <item>Kentucky</item>
+        <item>Louisiana</item>
+        <item>Maine</item>
+        <item>Maryland</item>
+        <item>Massachusetts</item>
+        <item>Michigan</item>
+        <item>Minnesota</item>
+        <item>Mississippi</item>
+        <item>Missouri</item>
+        <item>Montana</item>
+        <item>Nebraska</item>
+        <item>Nevada</item>
+        <item>New Hampshire</item>
+        <item>New Jersey</item>
+        <item>New Mexico</item>
+        <item>New York</item>
+        <item>North Carolina</item>
+        <item>North Dakota</item>
+        <item>Ohio</item>
+        <item>Oklahoma</item>
+        <item>Oregon</item>
+        <item>Pennsylvania</item>
+        <item>Rhode Island</item>
+        <item>South Carolina</item>
+        <item>South Dakota</item>
+        <item>Tennessee</item>
+        <item>Texas</item>
+        <item>Utah</item>
+        <item>Vermont</item>
+        <item>Virginia</item>
+        <item>Washington</item>
+        <item>West Virginia</item>
+        <item>Wisconsin</item>
+        <item>Wyoming</item>
+    </string-array>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+
 </resources>

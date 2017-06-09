@@ -22,7 +22,7 @@ public class MemberListResponse {
         this.memberList = memberList;
     }
 
-    public class MemberListData {
+    public static class MemberListData {
 
         @SerializedName("id")
         private Integer id;

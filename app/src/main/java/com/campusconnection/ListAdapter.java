@@ -48,14 +48,16 @@ public class ListAdapter extends BaseAdapter {
             convertView = mInflater.inflate(R.layout.list_row, null);
         }
 
+        int id = listItems.get(position).getId();
+
         ImageView thumbnail = (ImageView) convertView.findViewById(R.id.thumbnail);
-        Picasso.with(context).load("http://i.imgur.com/DvpvklR.png").into(thumbnail);
+        Picasso.with(context).load(listItems.get(position).getThumbnail()).into(thumbnail);
 
         TextView firstName = (TextView) convertView.findViewById(R.id.firstName);
         firstName.setText(listItems.get(position).getFirstName());
 
         TextView age = (TextView) convertView.findViewById(R.id.age);
-        age.setText(listItems.get(position).getAge().toString());
+        age.setText(listItems.get(position).getAge());
 
         TextView school = (TextView) convertView.findViewById(R.id.school);
         school.setText(listItems.get(position).getSchool());

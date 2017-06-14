@@ -3,6 +3,7 @@ package com.campusconnection;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.util.Log;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -14,9 +15,18 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.*;
 
+import com.campusconnection.model.GenericResponse;
 import com.campusconnection.model.MemberListResponse;
+import com.campusconnection.model.RegisterRequest;
+import com.campusconnection.rest.ApiClient;
+import com.campusconnection.rest.ApiInterface;
+import com.google.gson.GsonBuilder;
 
 import java.util.ArrayList;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class ListActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -29,13 +39,7 @@ public class ListActivity extends AppCompatActivity
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        //Connect list to adapter
-        ArrayList<MemberListResponse.MemberListData> memberList = getMembersList();
-        ListAdapter listAdapter = new ListAdapter(this, memberList);
-
-        //Setup list view
-        ListView listView = (ListView) findViewById(R.id.memberListView);
-        listView.setAdapter(listAdapter);
+        getMembersListAdapter();
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -113,11 +117,26 @@ public class ListActivity extends AppCompatActivity
         return true;
     }
 
-    public ArrayList<MemberListResponse.MemberListData> getMembersList(){
-        ArrayList<MemberListResponse.MemberListData> list = new ArrayList<>();
+    public void getMembersListAdapter(){
+        int offset = 0;
+        ApiInterface apiService = ApiClient.getClient().create(ApiInterface.class);
+        Call<MemberListResponse> call = apiService.getMembers(offset);
 
-        list.add(new MemberListResponse.MemberListData(1,"thumbnail","Amanda",26,"Eastern Michigan University", "Juior","Comp Sci","CIS"));
-        list.add(new MemberListResponse.MemberListData(1,"thumbnail","Sam",27,"Eastern Michigan University", "Freshman","Libral Arts","SDsf"));
-        return list;
+        call.enqueue(new Callback<MemberListResponse>() {
+            @Override
+            public void onResponse(Call<MemberListResponse> call, Response<MemberListResponse> response) {
+                MemberListResponse res = response.body();
+
+                ArrayList<MemberListResponse.MemberListData> members = res.getMemberList();
+
+                ListAdapter listAdapter = new ListAdapter(ListActivity.this, members);
+                ListView listView = (ListView) findViewById(R.id.memberListView);
+                listView.setAdapter(listAdapter);
+            }
+            @Override
+            public void onFailure(Call call, Throwable t) {
+                call.cancel();
+            }
+        });
     }
 }

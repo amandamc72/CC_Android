@@ -4,34 +4,46 @@ import com.google.gson.annotations.SerializedName;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.StringTokenizer;
 
 public class MemberListResponse {
 
-    @SerializedName("member_list")
-    private List memberList = new ArrayList();
+    @SerializedName("error")
+    private Boolean error;
+    @SerializedName("members")
+    private ArrayList<MemberListData> memberList = new ArrayList<>();
 
-    public MemberListResponse(List memberList){
+    public MemberListResponse(boolean error, ArrayList memberList){
+        this.error = error;
         this.memberList = memberList;
     }
 
-    public List getMemberList() {
+    public Boolean getError() {
+        return error;
+    }
+
+    public void setError(Boolean error) {
+        this.error = error;
+    }
+
+    public ArrayList<MemberListData> getMemberList() {
         return memberList;
     }
 
-    public void setMemberList(List memberList) {
+    public void setMemberList(ArrayList memberList) {
         this.memberList = memberList;
     }
 
-    public static class MemberListData {
+    public class MemberListData {
 
-        @SerializedName("id")
+        @SerializedName("memberId")
         private Integer id;
         @SerializedName("thumbnail")
         private String thumbnail;
-        @SerializedName("first_name")
+        @SerializedName("firstname")
         private String firstName;
-        @SerializedName("age")
-        private Integer age;
+        @SerializedName("dob")
+        private String age;
         @SerializedName("school")
         private String school;
         @SerializedName("standing")
@@ -41,7 +53,7 @@ public class MemberListResponse {
         @SerializedName("minor")
         private String minor;
 
-        public MemberListData(Integer id, String thumbnail, String firstName, Integer age, String school, String standing, String major, String minor){
+        public MemberListData(Integer id, String thumbnail, String firstName, String age, String school, String standing, String major, String minor){
             this.id = id;
             this.thumbnail = thumbnail;
             this.firstName = firstName;
@@ -76,11 +88,11 @@ public class MemberListResponse {
             this.firstName = firstName;
         }
 
-        public Integer getAge() {
+        public String getAge() {
             return age;
         }
 
-        public void setAge(Integer age) {
+        public void setAge(String age) {
             this.age = age;
         }
 

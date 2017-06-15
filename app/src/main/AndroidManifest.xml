@@ -14,8 +14,7 @@
         <activity android:name=".SignUpActivity" />
         <activity android:name=".RegisterActivity" />
         <activity android:name=".SignUpPathActivity" />
-        <activity
-            android:name=".ListActivity">
+        <activity android:name=".ListActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

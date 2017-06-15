@@ -20,6 +20,9 @@ import com.campusconnection.rest.ApiClient;
 import com.campusconnection.rest.ApiInterface;
 import com.campusconnection.util.AppUtils;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -72,35 +75,25 @@ public class LoginActivity extends AppCompatActivity{
     }
 
     private void attemptLogin() {
-
-        mEmail.setError(null);
-        mPassword.setError(null);
-
         String email = mEmail.getText().toString();
         String password = mPassword.getText().toString();
 
-        boolean cancel = false;
-        View focusView = null;
+        ArrayList<EditText> fields = new ArrayList<>(Arrays.asList(mEmail, mPassword));
+        AppUtils.ValidInput validInput = AppUtils.isInputsValid(fields);
+        View focusView;
 
-        if (TextUtils.isEmpty(password)) {
-            mPassword.setError(getString(R.string.error_field_required));
-            focusView = mPassword;
-            cancel = true;
-        }
-
-        if (TextUtils.isEmpty(email)) {
-            mEmail.setError(getString(R.string.error_field_required));
-            focusView = mEmail;
-            cancel = true;
-        } else if (!AppUtils.isEmailValid(email)) {
-            mEmail.setError(getString(R.string.error_invalid_email));
-            focusView = mEmail;
-            cancel = true;
-        }
-
-        if (cancel) {
+        if (validInput.getIsBlank()){
+            validInput.getField().setError(getString(R.string.error_field_required));
+            focusView = validInput.getField();
             focusView.requestFocus();
+
+        } else if (validInput.getIsValidEmail()){
+            validInput.getField().setError(getString(R.string.error_invalid_email));
+            focusView = validInput.getField();
+            focusView.requestFocus();
+
         } else {
+
             ApiInterface apiService = ApiClient.getClient().create(ApiInterface.class);
             Call<GenericResponse> call = apiService.checkLogin(new LoginRequest(email, password));
             mProgress.setVisibility(View.VISIBLE);
@@ -112,10 +105,9 @@ public class LoginActivity extends AppCompatActivity{
                     Boolean error = res.getError();
                     String message = res.getMessage();
                     mProgress.setVisibility(View.INVISIBLE);
-                    if(!error){
+                    if (!error) {
                         //Goto home activity
-                    }
-                    else{
+                    } else {
                         alertResponse.setMessage(message);
                         alertResponse.setPositiveButton(R.string.popup_ok, new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int id) {
@@ -125,6 +117,7 @@ public class LoginActivity extends AppCompatActivity{
                         alertResponse.show();
                     }
                 }
+
                 @Override
                 public void onFailure(Call call, Throwable t) {
                     call.cancel();

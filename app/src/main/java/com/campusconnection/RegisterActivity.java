@@ -25,6 +25,9 @@ import com.campusconnection.rest.ApiClient;
 import com.campusconnection.rest.ApiInterface;
 import com.campusconnection.util.AppUtils;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -77,26 +80,22 @@ public class RegisterActivity extends AppCompatActivity {
     }
 
     private void register(){
-        mEmail.setError(null);
-
         String email = mEmail.getText().toString();
-        boolean cancel = false;
-        View focusView = null;
 
-        if (TextUtils.isEmpty(email)) {
-            mEmail.setError(getString(R.string.error_field_required));
-            focusView = mEmail;
-            cancel = true;
-        }
-        //TODO remove after testing
-//        } else if (!AppUtils.isEmailValid(email)) {
-//            mEmail.setError(getString(R.string.error_invalid_email));
-//            focusView = mEmail;
-//            cancel = true;
-//        }
+        ArrayList<EditText> fields = new ArrayList<>(Arrays.asList(mEmail));
+        AppUtils.ValidInput validInput = AppUtils.isInputsValid(fields);
+        View focusView;
 
-        if (cancel) {
+        if (validInput.getIsBlank()) {
+            validInput.getField().setError(getString(R.string.error_field_required));
+            focusView = validInput.getField();
             focusView.requestFocus();
+
+        } else if (validInput.getIsValidEmail()){
+            validInput.getField().setError(getString(R.string.error_invalid_email));
+            focusView = validInput.getField();
+            focusView.requestFocus();
+
         } else {
             ApiInterface apiService = ApiClient.getClient().create(ApiInterface.class);
             Call<GenericResponse> call = apiService.register(new RegisterRequest(email));

@@ -24,7 +24,11 @@ import com.campusconnection.model.LoginRequest;
 import com.campusconnection.model.SignupRequest;
 import com.campusconnection.rest.ApiClient;
 import com.campusconnection.rest.ApiInterface;
+import com.campusconnection.util.AppUtils;
 import com.campusconnection.util.DatePickerFragment;
+
+import java.util.ArrayList;
+import java.util.Arrays;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -114,15 +118,6 @@ public class SignUpActivity extends AppCompatActivity {
     }
 
     private void attemptSignUp() {
-        mFirstName.setError(null);
-        mLastName.setError(null);
-        mPassword.setError(null);
-        mCity.setError(null);
-        mSchool.setError(null);
-        mMajor.setError(null);
-        mMinor.setError(null);
-        mBithday.setError(null);
-
         String firstName = mFirstName.getText().toString();
         String lastName = mLastName.getText().toString();
         String password = mPassword.getText().toString();
@@ -133,55 +128,18 @@ public class SignUpActivity extends AppCompatActivity {
         String minor = mMinor.getText().toString();
         String birthday = mBithday.getText().toString();
 
-        boolean cancel = false;
-        View focusView = null;
+        ArrayList<EditText> textFields = new ArrayList<>(Arrays.asList(mFirstName, mLastName,
+                                                            mPassword, mCity, mSchool,
+                                                            mMajor, mBithday));
+        AppUtils.ValidInput validInput = AppUtils.isInputsValid(textFields);
+        View focusView;
 
-        if (TextUtils.isEmpty(firstName)) {
-            mFirstName.setError(getString(R.string.error_field_required));
-            focusView = mFirstName;
-            cancel = true;
-        }
-        if (TextUtils.isEmpty(lastName)) {
-            mLastName.setError(getString(R.string.error_field_required));
-            focusView = mLastName;
-            cancel = true;
-        }
-        if (TextUtils.isEmpty(password)) {
-            mPassword.setError(getString(R.string.error_field_required));
-            focusView = mPassword;
-            cancel = true;
-        }
-        if (TextUtils.isEmpty(city)) {
-            mCity.setError(getString(R.string.error_field_required));
-            focusView = mCity;
-            cancel = true;
-        }
-        if (mState.getSelectedItemPosition() == 0) {
-            focusView = mState;
-            cancel = true;
-        }
-        if (TextUtils.isEmpty(school)) {
-            mSchool.setError(getString(R.string.error_field_required));
-            focusView = mSchool;
-            cancel = true;
-        }
-        if (TextUtils.isEmpty(major)) {
-            mMajor.setError(getString(R.string.error_field_required));
-            focusView = mMajor;
-            cancel = true;
-        }
-        if (TextUtils.isEmpty(birthday)) {
-            mBithday.setError(getString(R.string.error_field_required));
-            focusView = mBithday;
-            cancel = true;
-        }
-        if (TextUtils.isEmpty(gender)) {
-            focusView = mGender;
-            cancel = true;
-        }
-
-        if (cancel) {
+        //TODO validate radio button and state selector
+        if (validInput.getIsBlank()) {
+            validInput.getField().setError(getString(R.string.error_field_required));
+            focusView = validInput.getField();
             focusView.requestFocus();
+
         } else {
             ApiInterface apiService = ApiClient.getClient().create(ApiInterface.class);
             Call<GenericResponse> call = apiService.signup(new SignupRequest(code, firstName, lastName, password,

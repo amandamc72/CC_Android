@@ -1,0 +1,218 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.campusconnection.ProfileActivity">
+
+
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/profileToolbar"
+        android:layout_width="match_parent"
+        android:layout_height="42dp"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:background="?attr/colorPrimary"
+        android:minHeight="?attr/actionBarSize"
+        android:theme="?attr/actionBarTheme" />
+
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/profileToolbar"
+        android:fillViewport="true">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <ImageView
+                android:id="@+id/imageView3"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Amanda Leigh McCarty"
+                android:layout_marginLeft="20dp"
+                android:layout_marginStart="20dp"
+                android:layout_marginTop="10dp"
+                android:layout_below="@+id/imageView3"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true"
+                android:id="@+id/profileName" />
+
+            <TextView
+                android:id="@+id/profileAge"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignBaseline="@+id/profileName"
+                android:layout_alignBottom="@+id/profileName"
+                android:layout_marginLeft="15dp"
+                android:layout_marginStart="15dp"
+                android:layout_toEndOf="@+id/profileName"
+                android:layout_toRightOf="@+id/profileName"
+                android:text="26" />
+
+            <TextView
+                android:id="@+id/profileSchool"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Eastern Michigan University"
+                android:layout_below="@+id/profileName"
+                android:layout_alignLeft="@+id/profileName"
+                android:layout_alignStart="@+id/profileName"
+                android:layout_marginTop="10dp" />
+
+            <Button
+                android:id="@+id/profileMessageButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="15dp"
+                android:layout_marginRight="15dp"
+                android:text="Button"
+                android:layout_above="@+id/line1"
+                android:layout_alignParentRight="true"
+                android:layout_alignParentEnd="true" />
+
+            <View
+                android:id="@+id/line1"
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@android:color/darker_gray"
+                android:layout_below="@+id/profileSchool"
+                android:layout_marginTop="10dp"/>
+
+            <View
+                android:id="@+id/line2"
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_below="@+id/profileStanding"
+                android:layout_marginTop="10dp"
+                android:background="@android:color/darker_gray" />
+
+            <View
+                android:id="@+id/line3"
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_below="@+id/profileAbout"
+                android:layout_marginTop="10dp"
+                android:background="@android:color/darker_gray" />
+
+            <TextView
+                android:id="@+id/profileMajor"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="14dp"
+                android:text="Computer Science"
+                android:layout_below="@+id/line1"
+                android:layout_alignLeft="@+id/profileSchool"
+                android:layout_alignStart="@+id/profileSchool" />
+
+            <TextView
+                android:id="@+id/profileMinor"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignLeft="@+id/profileMajor"
+                android:layout_alignStart="@+id/profileMajor"
+                android:layout_alignTop="@+id/profileMajor"
+                android:layout_marginTop="28dp"
+                android:text="Computer Information Systems" />
+
+            <TextView
+                android:id="@+id/profileCity"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:text="San Jose"
+                android:layout_below="@+id/profileMinor"
+                android:layout_alignLeft="@+id/profileMinor"
+                android:layout_alignStart="@+id/profileMinor" />
+
+            <TextView
+                android:id="@+id/profileState"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignBaseline="@+id/profileCity"
+                android:layout_alignBottom="@+id/profileCity"
+                android:layout_marginLeft="21dp"
+                android:layout_marginStart="21dp"
+                android:layout_toEndOf="@+id/profileStanding"
+                android:layout_toRightOf="@+id/profileStanding"
+                android:text="CA" />
+
+            <TextView
+                android:id="@+id/profileStanding"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Standing"
+                android:layout_marginTop="12dp"
+                android:layout_below="@+id/profileCity"
+                android:layout_alignLeft="@+id/profileSchool"
+                android:layout_alignStart="@+id/profileSchool" />
+
+            <TextView
+                android:id="@+id/profileAbout"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="This is some sample text for an about section. This will display a short written blib about the user. Some text text text text text yesh. More more more more text. yea this seems like enough test chars now."
+                android:layout_marginTop="10dp"
+                android:layout_below="@+id/line2"
+                android:layout_alignLeft="@+id/profileStanding"
+                android:layout_alignStart="@+id/profileStanding"
+                android:layout_alignRight="@+id/profileMessageButton"
+                android:layout_alignEnd="@+id/profileMessageButton" />
+
+            <TextView
+                android:id="@+id/profileCurrentCourses"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignLeft="@+id/profileAbout"
+                android:layout_alignStart="@+id/profileAbout"
+                android:layout_below="@+id/line3"
+                android:layout_marginTop="8dp"
+                android:text="Current Courses" />
+
+            <ListView
+                android:id="@+id/courseList"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignEnd="@+id/profileAbout"
+                android:layout_alignLeft="@+id/profileCurrentCourses"
+                android:layout_alignRight="@+id/profileAbout"
+                android:layout_alignStart="@+id/profileCurrentCourses"
+                android:layout_below="@+id/profileCurrentCourses"
+                android:layout_marginTop="10dp" />
+
+            <TextView
+                android:id="@+id/profileInterests"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Interests"
+                android:layout_marginTop="10dp"
+                android:layout_alignTop="@+id/courseList"
+                android:layout_alignLeft="@+id/courseList"
+                android:layout_alignStart="@+id/courseList" />
+
+            <ListView
+                android:id="@+id/interestList"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignEnd="@+id/courseList"
+                android:layout_alignLeft="@+id/profileInterests"
+                android:layout_alignRight="@+id/courseList"
+                android:layout_alignStart="@+id/profileInterests"
+                android:layout_below="@+id/profileInterests"
+                android:layout_marginTop="16dp" />
+
+
+        </RelativeLayout>
+
+    </ScrollView>
+
+
+</RelativeLayout>

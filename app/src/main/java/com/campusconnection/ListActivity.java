@@ -3,7 +3,6 @@ package com.campusconnection;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
-import android.util.Log;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -15,12 +14,9 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.*;
 
-import com.campusconnection.model.GenericResponse;
 import com.campusconnection.model.MemberListResponse;
-import com.campusconnection.model.RegisterRequest;
 import com.campusconnection.rest.ApiClient;
 import com.campusconnection.rest.ApiInterface;
-import com.google.gson.GsonBuilder;
 
 import java.util.ArrayList;
 
@@ -129,9 +125,9 @@ public class ListActivity extends AppCompatActivity
 
                 ArrayList<MemberListResponse.MemberListData> members = res.getMemberList();
 
-                ListAdapter listAdapter = new ListAdapter(ListActivity.this, members);
+                UsersListAdapter usersListAdapter = new UsersListAdapter(ListActivity.this, members);
                 ListView listView = (ListView) findViewById(R.id.memberListView);
-                listView.setAdapter(listAdapter);
+                listView.setAdapter(usersListAdapter);
             }
             @Override
             public void onFailure(Call call, Throwable t) {

@@ -15,12 +15,12 @@ import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 
-public class ListAdapter extends BaseAdapter {
+public class UsersListAdapter extends BaseAdapter {
 
     private Context context;
     private ArrayList<MemberListResponse.MemberListData> listItems;
 
-    public ListAdapter(Context context, ArrayList<MemberListResponse.MemberListData> listItems){
+    public UsersListAdapter(Context context, ArrayList<MemberListResponse.MemberListData> listItems){
         this.context = context;
         this.listItems = listItems;
     }

@@ -7,16 +7,20 @@ import java.util.List;
 
 public class MemberResponse {
 
+    @SerializedName("error")
+    private Boolean error;
     @SerializedName("id")
     private Integer id;
     @SerializedName("thumbnail")
     private String thumbnail;
-    @SerializedName("subPics")
+    @SerializedName("picture")
     private List subPics = new ArrayList();
     @SerializedName("name")
     private String name;
     @SerializedName("city")
     private String city;
+    @SerializedName("state")
+    private String state;
     @SerializedName("school")
     private String school;
     @SerializedName("standing")
@@ -34,8 +38,9 @@ public class MemberResponse {
     @SerializedName("interests")
     private List interests = new ArrayList();
 
-    public MemberResponse(Integer id, String thumbnail, List subPics, String name, String city, String school,
+    public MemberResponse(Boolean error, Integer id, String thumbnail, List subPics, String name, String city, String school,
                           String standing, String major, String minor, Integer age, String about, List courses, List interests){
+        this.error = error;
         this.id = id;
         this.thumbnail = thumbnail;
         this.subPics = subPics;
@@ -51,6 +56,9 @@ public class MemberResponse {
         this.interests = interests;
     }
 
+    public Boolean getError() {return error;}
+
+    public void setError(Boolean error) {this.error = error;}
 
     public Integer getId() {
         return id;
@@ -90,6 +98,14 @@ public class MemberResponse {
 
     public void setCity(String city) {
         this.city = city;
+    }
+
+    public String getState() {
+        return state;
+    }
+
+    public void setState(String state) {
+        this.state = state;
     }
 
     public String getSchool() {

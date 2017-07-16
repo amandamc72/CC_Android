@@ -5,7 +5,6 @@ import android.content.Intent;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.text.TextUtils;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
@@ -31,7 +30,7 @@ public class LoginActivity extends AppCompatActivity{
 
     private EditText mEmail;
     private EditText mPassword;
-    private AlertDialog.Builder alertResponse;
+    private AlertDialog.Builder mAlertResponse;
     private ProgressBar mProgress;
 
     @Override
@@ -42,7 +41,7 @@ public class LoginActivity extends AppCompatActivity{
 
         mProgress = (ProgressBar) findViewById(R.id.loginProgressBar);
         mProgress.setVisibility(View.INVISIBLE);
-        alertResponse = new AlertDialog.Builder(this);
+        mAlertResponse = new AlertDialog.Builder(this);
 
         mEmail = (EditText) findViewById(R.id.loginEmailInput);
         mPassword = (EditText) findViewById(R.id.loginPassInput);
@@ -108,13 +107,13 @@ public class LoginActivity extends AppCompatActivity{
                     if (!error) {
                         //Goto home activity
                     } else {
-                        alertResponse.setMessage(message);
-                        alertResponse.setPositiveButton(R.string.popup_ok, new DialogInterface.OnClickListener() {
+                        mAlertResponse.setMessage(message);
+                        mAlertResponse.setPositiveButton(R.string.popup_ok, new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int id) {
                                 // User clicked OK button
                             }
                         });
-                        alertResponse.show();
+                        mAlertResponse.show();
                     }
                 }
 

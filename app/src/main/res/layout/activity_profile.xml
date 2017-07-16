@@ -30,7 +30,7 @@
             android:layout_height="wrap_content">
 
             <ImageView
-                android:id="@+id/imageView3"
+                android:id="@+id/profileImage"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" />
 
@@ -41,7 +41,7 @@
                 android:layout_marginLeft="20dp"
                 android:layout_marginStart="20dp"
                 android:layout_marginTop="10dp"
-                android:layout_below="@+id/imageView3"
+                android:layout_below="@+id/profileImage"
                 android:layout_alignParentLeft="true"
                 android:layout_alignParentStart="true"
                 android:id="@+id/profileName" />
@@ -139,8 +139,8 @@
                 android:layout_height="wrap_content"
                 android:layout_alignBaseline="@+id/profileCity"
                 android:layout_alignBottom="@+id/profileCity"
-                android:layout_marginLeft="21dp"
-                android:layout_marginStart="21dp"
+                android:layout_marginLeft="0dp"
+                android:layout_marginStart="0dp"
                 android:layout_toEndOf="@+id/profileStanding"
                 android:layout_toRightOf="@+id/profileStanding"
                 android:text="CA" />
@@ -168,46 +168,24 @@
                 android:layout_alignEnd="@+id/profileMessageButton" />
 
             <TextView
-                android:id="@+id/profileCurrentCourses"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignLeft="@+id/profileAbout"
-                android:layout_alignStart="@+id/profileAbout"
-                android:layout_below="@+id/line3"
-                android:layout_marginTop="8dp"
-                android:text="Current Courses" />
-
-            <ListView
-                android:id="@+id/courseList"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignEnd="@+id/profileAbout"
-                android:layout_alignLeft="@+id/profileCurrentCourses"
-                android:layout_alignRight="@+id/profileAbout"
-                android:layout_alignStart="@+id/profileCurrentCourses"
-                android:layout_below="@+id/profileCurrentCourses"
-                android:layout_marginTop="10dp" />
-
-            <TextView
                 android:id="@+id/profileInterests"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Interests"
                 android:layout_marginTop="10dp"
-                android:layout_alignTop="@+id/courseList"
-                android:layout_alignLeft="@+id/courseList"
-                android:layout_alignStart="@+id/courseList" />
+                android:layout_alignTop="@+id/line3"
+                android:layout_alignLeft="@+id/profileAbout"
+                android:layout_alignStart="@+id/profileAbout" />
 
-            <ListView
-                android:id="@+id/interestList"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignEnd="@+id/courseList"
-                android:layout_alignLeft="@+id/profileInterests"
-                android:layout_alignRight="@+id/courseList"
-                android:layout_alignStart="@+id/profileInterests"
+            <com.campusconnection.views.ProfileInterestTags
+                android:id="@+id/profileInterestsTags"
+                style="@style/TagGroup"
                 android:layout_below="@+id/profileInterests"
-                android:layout_marginTop="16dp" />
+                android:layout_marginTop="10dp"
+                android:layout_alignLeft="@+id/profileAbout"
+                android:layout_alignStart="@+id/profileAbout"
+                android:layout_alignRight="@+id/profileAbout"
+                android:layout_alignEnd="@+id/profileAbout" />
 
 
         </RelativeLayout>

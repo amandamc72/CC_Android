@@ -102,10 +102,6 @@ public class ListActivity extends AppCompatActivity
 
         } else if (id == R.id.nav_manage) {
 
-        } else if (id == R.id.nav_share) {
-
-        } else if (id == R.id.nav_send) {
-
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -125,9 +121,9 @@ public class ListActivity extends AppCompatActivity
 
                 ArrayList<MemberListResponse.MemberListData> members = res.getMemberList();
 
-                UsersListAdapter usersListAdapter = new UsersListAdapter(ListActivity.this, members);
+                MembersListAdapter membersListAdapter = new MembersListAdapter(ListActivity.this, members);
                 ListView listView = (ListView) findViewById(R.id.memberListView);
-                listView.setAdapter(usersListAdapter);
+                listView.setAdapter(membersListAdapter);
             }
             @Override
             public void onFailure(Call call, Throwable t) {

@@ -1,7 +1,6 @@
 package com.campusconnection;
 
 import android.app.Activity;
-import android.media.Image;
 import android.view.LayoutInflater;
 import android.widget.BaseAdapter;
 import android.content.Context;
@@ -15,12 +14,12 @@ import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 
-public class UsersListAdapter extends BaseAdapter {
+public class MembersListAdapter extends BaseAdapter {
 
     private Context context;
     private ArrayList<MemberListResponse.MemberListData> listItems;
 
-    public UsersListAdapter(Context context, ArrayList<MemberListResponse.MemberListData> listItems){
+    public MembersListAdapter(Context context, ArrayList<MemberListResponse.MemberListData> listItems){
         this.context = context;
         this.listItems = listItems;
     }
@@ -45,7 +44,7 @@ public class UsersListAdapter extends BaseAdapter {
         if (convertView == null) {
             LayoutInflater mInflater = (LayoutInflater)
                     context.getSystemService(Activity.LAYOUT_INFLATER_SERVICE);
-            convertView = mInflater.inflate(R.layout.list_row, null);
+            convertView = mInflater.inflate(R.layout.member_list_row, null);
         }
 
         int id = listItems.get(position).getId();

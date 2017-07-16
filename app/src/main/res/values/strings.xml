@@ -4,6 +4,8 @@
     <string name="popup_ok">OK</string>
     <string name="code_key">code</string>
 
+    <string name="add_tag">Add Interest</string>
+
     <!-- LoginRequest Strings -->
     <string name="prompt_email">Student Email</string>
     <string name="prompt_password">Password</string>
@@ -79,6 +81,12 @@
     <!--Error Strings -->
     <string name="error_invalid_email">This email address is invalid</string>
     <string name="error_field_required">This field is required</string>
+
+    <!--Menu Strings -->
+    <string name="label_menu_profile">My Info</string>
+    <string name="label_menu_search">Browse</string>
+    <string name="label_menu_settings">Settings</string>
+    <string name="label_menu_social">Social</string>
 
     <!--States Array -->
     <string-array name="states_array">

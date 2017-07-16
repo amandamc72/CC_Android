@@ -40,10 +40,10 @@ public interface ApiInterface {
 //
 //    @GET("member")
 //    Call<MemberSessionResponse> getSession();
-//
-//    @GET("profile/{id}")
-//    Call<MemberResponse> getProfile(@Path("id") int id);
-//
+
+    @GET("profile/{id}")
+    Call<MemberResponse> getProfile(@Path("id") int id);
+
 //    @PUT("profile/{id}")
 //    Call<MemberResponse> updateProfile(@Path("id") int id, @Body MemberResponse memberResponse);
 }

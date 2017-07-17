@@ -3,6 +3,8 @@ package com.campusconnection;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -19,6 +21,7 @@ import com.campusconnection.rest.ApiClient;
 import com.campusconnection.rest.ApiInterface;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -27,6 +30,9 @@ import retrofit2.Response;
 public class ListActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
+    private RecyclerView mMembersList;
+    private RecyclerView.LayoutManager mLayoutManager;
+    private RecyclerView.Adapter mMembersListAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -121,9 +127,14 @@ public class ListActivity extends AppCompatActivity
 
                 ArrayList<MemberListResponse.MemberListData> members = res.getMemberList();
 
-                MembersListAdapter membersListAdapter = new MembersListAdapter(ListActivity.this, members);
-                ListView listView = (ListView) findViewById(R.id.memberListView);
-                listView.setAdapter(membersListAdapter);
+                mMembersList = (RecyclerView) findViewById(R.id.memberListView);
+                mMembersList.setHasFixedSize(true);
+
+                mLayoutManager = new LinearLayoutManager(ListActivity.this);
+                mMembersList.setLayoutManager(mLayoutManager);
+
+                mMembersListAdapter = new MembersListAdapter(ListActivity.this, members);
+                mMembersList.setAdapter(mMembersListAdapter);
             }
             @Override
             public void onFailure(Call call, Throwable t) {

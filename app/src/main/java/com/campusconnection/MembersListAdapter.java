@@ -1,8 +1,11 @@
 package com.campusconnection;
 
 import android.app.Activity;
+import android.content.Intent;
+import android.database.Observable;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.widget.BaseAdapter;
 import android.content.Context;
@@ -10,6 +13,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.campusconnection.model.MemberListResponse;
 import com.squareup.picasso.Picasso;
@@ -21,7 +25,6 @@ public class MembersListAdapter extends RecyclerView.Adapter<MembersListAdapter.
     private Context mContext;
     private ArrayList<MemberListResponse.MemberListData> mListItems;
 
-
     // Provide a suitable constructor (depends on the kind of dataset)
     public MembersListAdapter(Context mContext, ArrayList<MemberListResponse.MemberListData> mListItems) {
         this.mContext = mContext;
@@ -30,7 +33,7 @@ public class MembersListAdapter extends RecyclerView.Adapter<MembersListAdapter.
 
     // Create new views (invoked by the layout manager)
     @Override
-    public MembersListAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
 
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.member_list_row, parent, false);
         // create a new view
@@ -47,7 +50,9 @@ public class MembersListAdapter extends RecyclerView.Adapter<MembersListAdapter.
         holder.school.setText(mListItems.get(position).getSchool());
         holder.major.setText(mListItems.get(position).getMajor());
 
+        holder.bindUserId(mListItems.get(position).getId());
     }
+
 
     // Return the size of your dataset (invoked by the layout manager)
     @Override
@@ -56,9 +61,8 @@ public class MembersListAdapter extends RecyclerView.Adapter<MembersListAdapter.
     }
 
 
-
     // Provide a reference to the views for each data item
-    public static class ViewHolder extends RecyclerView.ViewHolder {
+    public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
         public int id;
         public ImageView thumbnail;
         public TextView firstName;
@@ -66,17 +70,32 @@ public class MembersListAdapter extends RecyclerView.Adapter<MembersListAdapter.
         public TextView school;
         public TextView major;
 
-        public ViewHolder (View v) {
+        public ViewHolder(View v) {
             super(v);
             thumbnail = (ImageView) v.findViewById(R.id.thumbnail);
             firstName = (TextView) v.findViewById(R.id.firstName);
             age = (TextView) v.findViewById(R.id.age);
             school = (TextView) v.findViewById(R.id.school);
             major = (TextView) v.findViewById(R.id.major);
+            v.setOnClickListener(this);
+
+        }
+
+        public void bindUserId(int id){
+            this.id = id;
+        }
+
+        @Override
+        public void onClick(View v) {
+            Log.d("D","CODE is: " +  id);
+            Intent intent = new Intent(mContext, ProfileActivity.class);
+            intent.putExtra("id", id);
+            mContext.startActivity(intent);
+            ((Activity) mContext).overridePendingTransition(R.anim.anim_slide_in_left, R.anim.anim_slide_out_left);
         }
     }
 
-
+}
     ///////////////////////////////////// OLD CODe ///////////////////////////
 
 //    public MembersListAdapter(Context context, ArrayList<MemberListResponse.MemberListData> listItems){
@@ -126,4 +145,3 @@ public class MembersListAdapter extends RecyclerView.Adapter<MembersListAdapter.
 //
 //        return convertView;
 //    }
-}

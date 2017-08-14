@@ -4,6 +4,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -59,6 +60,16 @@ public class ProfileActivity extends AppCompatActivity {
         mStanding = (TextView) findViewById(R.id.profileStanding);
         mAbout = (TextView) findViewById(R.id.profileAbout);
         mInterestsTags = (ProfileInterestTags) findViewById(R.id.profileInterestsTags);
+        Toolbar toolbar = (Toolbar) findViewById(R.id.profileToolbar);
+        setSupportActionBar(toolbar);
+        toolbar.setNavigationIcon(R.drawable.ic_nav_back);
+
+        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onBackPressed();
+            }
+        });
 
         Button messageButton = (Button) findViewById(R.id.profileMessageButton);
         messageButton.setOnClickListener(new View.OnClickListener() {
@@ -73,10 +84,25 @@ public class ProfileActivity extends AppCompatActivity {
 
     }
 
+    public int profileId() {
+        if (getIntent() != null) {
+            Bundle extras = getIntent().getExtras();
+            return extras != null ? extras.getInt("id") : 0;
+        }
+        return 0;
+    }
+
+
+    @Override
+    public void onBackPressed() {
+        finish();
+        overridePendingTransition(R.anim.anim_slide_in_right, R.anim.anim_slide_out_right);
+    }
+
     private void getProfile() {
 
         ApiInterface apiService = ApiClient.getClient().create(ApiInterface.class);
-        Call<MemberResponse> call = apiService.getProfile(1001);
+        Call<MemberResponse> call = apiService.getProfile(profileId());
 
         call.enqueue(new Callback<MemberResponse>() {
             @Override

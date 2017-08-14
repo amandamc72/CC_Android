@@ -1,10 +1,13 @@
 package com.campusconnection;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.provider.SearchRecentSuggestions;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -17,6 +20,7 @@ import android.view.MenuItem;
 import android.widget.*;
 
 import com.campusconnection.model.MemberListResponse;
+import com.campusconnection.model.SearchRequest;
 import com.campusconnection.rest.ApiClient;
 import com.campusconnection.rest.ApiInterface;
 
@@ -40,7 +44,6 @@ public class ListActivity extends AppCompatActivity
         setContentView(R.layout.activity_list);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-
         getMembersListAdapter();
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
@@ -60,6 +63,19 @@ public class ListActivity extends AppCompatActivity
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
+    }
+
+    public boolean isSearchActivity() {
+      if (getIntent() != null) {
+          Bundle extras = getIntent().getExtras();
+          return extras != null && extras.getBoolean("isSearch");
+      }
+      return false;
+    }
+
+    public SearchRequest getUserSearch() {
+        Bundle extras = getIntent().getExtras();
+        return (SearchRequest) extras.getParcelable("searchRequest");
     }
 
     @Override
@@ -100,14 +116,16 @@ public class ListActivity extends AppCompatActivity
         // Handle navigation view item clicks here.
         int id = item.getItemId();
 
-        if (id == R.id.nav_camera) {
-            // Handle the camera action
-        } else if (id == R.id.nav_gallery) {
+        if (id == R.id.nav_my_info) {
 
-        } else if (id == R.id.nav_slideshow) {
+        } else if (id == R.id.nav_search) {
+            Intent intent = new Intent(this, SearchActivity.class);
+            startActivity(intent);
+        } else if (id == R.id.nav_social) {
 
-        } else if (id == R.id.nav_manage) {
-
+        } else if (id == R.id.nav_settings) {
+            Intent intent = new Intent(this, SettingsActivity.class);
+            startActivity(intent);
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -115,16 +133,21 @@ public class ListActivity extends AppCompatActivity
         return true;
     }
 
-    public void getMembersListAdapter(){
-        int offset = 0;
+    public void getMembersListAdapter() {
+        int offset = 0; //TODO so something with this
         ApiInterface apiService = ApiClient.getClient().create(ApiInterface.class);
-        Call<MemberListResponse> call = apiService.getMembers(offset);
+        Call<MemberListResponse> call;
+
+        if(isSearchActivity()) {
+            call = apiService.createSearch(getUserSearch());
+        } else {
+            call = apiService.getMembers(offset);
+        }
 
         call.enqueue(new Callback<MemberListResponse>() {
             @Override
             public void onResponse(Call<MemberListResponse> call, Response<MemberListResponse> response) {
-                MemberListResponse res = response.body();
-
+                MemberListResponse res = response.body(); //TODO handel null case!!
                 ArrayList<MemberListResponse.MemberListData> members = res.getMemberList();
 
                 mMembersList = (RecyclerView) findViewById(R.id.memberListView);

@@ -1,0 +1,184 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:rsb="http://schemas.android.com/apk/res-auto"
+    tools:context="com.campusconnection.SearchActivity">
+
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/searchToolbar"
+        android:layout_width="match_parent"
+        android:layout_height="42dp"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:background="?attr/colorPrimary"
+        android:minHeight="?attr/actionBarSize"
+        android:theme="?attr/actionBarTheme" />
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:paddingBottom="@dimen/activity_vertical_margin"
+        android:paddingLeft="@dimen/activity_horizontal_margin"
+        android:paddingRight="@dimen/activity_horizontal_margin"
+        android:paddingTop="@dimen/activity_vertical_margin">
+
+        <TextView
+            android:id="@+id/search_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="26dp"
+            android:text="@string/label_search_title"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:layout_alignParentTop="true"
+            android:layout_centerHorizontal="true" />
+
+
+        <EditText
+            android:id="@+id/searchSchoolInput"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentTop="true"
+            android:layout_marginTop="75dp"
+            android:ems="10"
+            android:hint="@string/label_school"
+            android:inputType="text" />
+
+        <EditText
+            android:id="@+id/searchMajorInput"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:inputType="text"
+            android:hint="@string/label_major"
+            android:layout_marginTop="5dp"
+            android:layout_below="@+id/searchSchoolInput"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true" />
+
+        <EditText
+            android:id="@+id/searchMinorInput"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:inputType="text"
+            android:hint="@string/label_minor"
+            android:layout_marginTop="5dp"
+            android:layout_below="@+id/searchMajorInput"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true" />
+
+        <TextView
+            android:id="@+id/searchageLabel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/label_age_range"
+            android:layout_marginTop="10dp"
+            android:layout_marginStart="4dp"
+            android:layout_below="@+id/searchMinorInput"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_marginLeft="4dp" />
+
+
+
+
+        <org.florescu.android.rangeseekbar.RangeSeekBar
+            android:id="@+id/searchAgeInput"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            rsb:absoluteMaxValue="55"
+            rsb:absoluteMinValue="18"
+            rsb:alwaysActive="true"
+            rsb:activateOnDefaultValues="true"
+            rsb:showLabels="false"
+            rsb:barHeight="3dp"
+            android:layout_below="@+id/searchageLabel" />
+
+
+        <TextView
+            android:id="@+id/searchGenderLabel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/label_gender"
+            android:layout_marginTop="10dp"
+            android:layout_marginStart="4dp"
+            android:layout_marginLeft="4dp"
+            android:layout_below="@+id/searchAgeInput"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true" />
+
+
+        <RadioGroup
+            android:id="@+id/searchGenderRadioGroup"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="7dp"
+            android:layout_centerInParent="false"
+            android:orientation="horizontal"
+            android:layout_below="@+id/searchGenderLabel">
+
+            <RadioButton
+                android:id="@+id/searchAnyGenderBtn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/label_any" />
+
+            <RadioButton
+                android:id="@+id/searchMaleGenderBtn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="20dp"
+                android:layout_marginLeft="20dp"
+                android:text="@string/label_male" />
+
+            <RadioButton
+                android:id="@+id/searchFemaleGenderBtn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="20dp"
+                android:layout_marginLeft="20dp"
+                android:text="@string/label_female" />
+
+        </RadioGroup>
+
+        <EditText
+            android:id="@+id/searchCityInput"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:inputType="text"
+            android:hint="@string/label_city"
+            android:layout_marginTop="5dp"
+            android:layout_below="@+id/searchGenderRadioGroup"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true" />
+
+        <Spinner
+            android:id="@+id/searchStateInput"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:layout_marginTop="5dp"
+            android:layout_below="@+id/searchCityInput"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true" />
+
+        <Button
+            android:id="@+id/searchBtn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/action_search"
+            android:layout_marginTop="5dp"
+            android:layout_below="@+id/searchStateInput"
+            android:layout_centerHorizontal="true" />
+
+    </RelativeLayout>
+
+
+
+</RelativeLayout>

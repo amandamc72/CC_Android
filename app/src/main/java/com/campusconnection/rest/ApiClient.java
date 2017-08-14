@@ -1,25 +1,26 @@
 package com.campusconnection.rest;
 
-import java.io.IOException;
 
-import okhttp3.Interceptor;
 import okhttp3.OkHttpClient;
 import okhttp3.Response;
+import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
 public class ApiClient {
 
-    public static final String BASE_URL = "http://24.4.63.249:8080/CCService/v1/index.php/";
+    public static final String BASE_URL = "http://campusconnection.ddns.net:8080/CCService/v1/index.php/";
     private static Retrofit retrofit = null;
 
-
-    //TODO read on how to use OkHttpClient and intercepters
-
     public static Retrofit getClient() {
+        HttpLoggingInterceptor interceptor = new HttpLoggingInterceptor();
+        interceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
+        OkHttpClient client = new OkHttpClient.Builder().addInterceptor(interceptor).build();
+
         if (retrofit==null) {
             retrofit = new Retrofit.Builder()
                     .baseUrl(BASE_URL)
+                    .client(client)
                     .addConverterFactory(GsonConverterFactory.create())
                     .build();
         }

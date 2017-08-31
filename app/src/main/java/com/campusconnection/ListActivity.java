@@ -1,10 +1,12 @@
 package com.campusconnection;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.provider.SearchRecentSuggestions;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -32,11 +34,15 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 public class ListActivity extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener {
+        implements NavigationView.OnNavigationItemSelectedListener, SwipeFragment.OnFragmentInteractionListener, RecyclerViewFragment.OnFragmentInteractionListener {
 
-    private RecyclerView mMembersList;
-    private RecyclerView.LayoutManager mLayoutManager;
-    private RecyclerView.Adapter mMembersListAdapter;
+
+    private RecyclerViewFragment mRecyclerViewFragment;
+    private SwipeFragment mSwipeFragment;
+    private MemberListResponse mMembersResponse;
+
+    private boolean on;
+    private boolean off;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,14 +50,41 @@ public class ListActivity extends AppCompatActivity
         setContentView(R.layout.activity_list);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        getMembersListAdapter();
+        getMembersListAdapter(savedInstanceState);
+
+//        ArrayList<MemberListResponse.MemberListData> list = new ArrayList<>();
+//        list.add(new MemberListResponse.MemberListData(1,"http://i.imgur.com/EuMVwcl.jpg","Mittons","7","Purr School","Noobie","Cat Doctor","Minor"));
+//        list.add(new MemberListResponse.MemberListData(2,"http://i.imgur.com/EuMVwcl.jpg","Cat","8","Purr School","Pro","Major","Minor"));
+//        list.add(new MemberListResponse.MemberListData(3,"http://i.imgur.com/QehnWOn.jpg","Mittons","3","Purr School","Noobie","Cat Doctor","Minor"));
+//        list.add(new MemberListResponse.MemberListData(4,"http://i.imgur.com/rMkgeuD.jpg","Mittons","7","Purr School","Pro","Mouse Chaser","Minor"));
+//        list.add(new MemberListResponse.MemberListData(5,"http://i.imgur.com/ky8e6hP.jpg","Mittons","9","Mitten collage","Noobie","Cat","Minor"));
+
+        //MemberListResponse tempList = new MemberListResponse(false, list);
+
+        on = true;
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
+
+                if (on) {
+                    Log.d("D","ON");
+                    off = true;
+                    on = false;
+                    FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+                    transaction.replace(R.id.memberViewFragmentContainer, mSwipeFragment);
+                    transaction.addToBackStack(null);
+                    transaction.commit();
+                } else if (off){
+                    Log.d("D","OFF");
+                    on = true;
+                    off = false;
+                    FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+                    transaction.replace(R.id.memberViewFragmentContainer, mRecyclerViewFragment);
+                    transaction.addToBackStack(null);
+                    transaction.commit();
+                }
             }
         });
 
@@ -65,7 +98,7 @@ public class ListActivity extends AppCompatActivity
         navigationView.setNavigationItemSelectedListener(this);
     }
 
-    public boolean isSearchActivity() {
+    public boolean isSearchList() {
       if (getIntent() != null) {
           Bundle extras = getIntent().getExtras();
           return extras != null && extras.getBoolean("isSearch");
@@ -133,12 +166,13 @@ public class ListActivity extends AppCompatActivity
         return true;
     }
 
-    public void getMembersListAdapter() {
+    public void getMembersListAdapter(Bundle savedInstanceState) {
         int offset = 0; //TODO so something with this
+        final Bundle state = savedInstanceState;
         ApiInterface apiService = ApiClient.getClient().create(ApiInterface.class);
         Call<MemberListResponse> call;
 
-        if(isSearchActivity()) {
+        if(isSearchList()) {
             call = apiService.createSearch(getUserSearch());
         } else {
             call = apiService.getMembers(offset);
@@ -147,22 +181,30 @@ public class ListActivity extends AppCompatActivity
         call.enqueue(new Callback<MemberListResponse>() {
             @Override
             public void onResponse(Call<MemberListResponse> call, Response<MemberListResponse> response) {
-                MemberListResponse res = response.body(); //TODO handel null case!!
-                ArrayList<MemberListResponse.MemberListData> members = res.getMemberList();
+                mMembersResponse = response.body(); //// TODO: handel null case
+                if (findViewById(R.id.memberViewFragmentContainer) != null) {
 
-                mMembersList = (RecyclerView) findViewById(R.id.memberListView);
-                mMembersList.setHasFixedSize(true);
+                    // so we don't end up with overlapping fragments.
+                    if (state != null) {
+                        return;
+                    }
 
-                mLayoutManager = new LinearLayoutManager(ListActivity.this);
-                mMembersList.setLayoutManager(mLayoutManager);
+                    mRecyclerViewFragment = new RecyclerViewFragment().newInstance(mMembersResponse);
+                    mSwipeFragment = new SwipeFragment().newInstance(mMembersResponse);
 
-                mMembersListAdapter = new MembersListAdapter(ListActivity.this, members);
-                mMembersList.setAdapter(mMembersListAdapter);
+                    getSupportFragmentManager().beginTransaction()
+                            .add(R.id.memberViewFragmentContainer, mRecyclerViewFragment).commit();
+                }
             }
             @Override
             public void onFailure(Call call, Throwable t) {
                 call.cancel();
             }
         });
+    }
+
+    @Override
+    public void onFragmentInteraction(Uri uri) {
+
     }
 }

@@ -43,7 +43,7 @@ public class MembersListAdapter extends RecyclerView.Adapter<MembersListAdapter.
     // Replace the contents of a view (invoked by the layout manager)
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
-
+        //String nameAgeText = mListItems.get(position).getFirstName() + "," + mListItems.get(position).getAge();
         Picasso.with(mContext).load(mListItems.get(position).getThumbnail()).into(holder.thumbnail);
         holder.firstName.setText(mListItems.get(position).getFirstName());
         holder.age.setText(mListItems.get(position).getAge());
@@ -96,52 +96,3 @@ public class MembersListAdapter extends RecyclerView.Adapter<MembersListAdapter.
     }
 
 }
-    ///////////////////////////////////// OLD CODe ///////////////////////////
-
-//    public MembersListAdapter(Context context, ArrayList<MemberListResponse.MemberListData> listItems){
-//        this.context = context;
-//        this.listItems = listItems;
-//    }
-//
-//    @Override
-//    public int getCount() {
-//        return listItems.size();
-//    }
-//
-//    @Override
-//    public Object getItem(int position) {
-//        return listItems.get(position);
-//    }
-//
-//    @Override
-//    public long getItemId(int position) {
-//        return position;
-//    }
-//
-//    @Override
-//    public View getView(int position, View convertView, ViewGroup parent) {
-//        if (convertView == null) {
-//            LayoutInflater mInflater = (LayoutInflater)
-//                    context.getSystemService(Activity.LAYOUT_INFLATER_SERVICE);
-//            convertView = mInflater.inflate(R.layout.member_list_row, null);
-//        }
-//
-//        int id = listItems.get(position).getId();
-//
-//        ImageView thumbnail = (ImageView) convertView.findViewById(R.id.thumbnail);
-//        Picasso.with(context).load(listItems.get(position).getThumbnail()).into(thumbnail);
-//
-//        TextView firstName = (TextView) convertView.findViewById(R.id.firstName);
-//        firstName.setText(listItems.get(position).getFirstName());
-//
-//        TextView age = (TextView) convertView.findViewById(R.id.age);
-//        age.setText(listItems.get(position).getAge());
-//
-//        TextView school = (TextView) convertView.findViewById(R.id.school);
-//        school.setText(listItems.get(position).getSchool());
-//
-//        TextView major = (TextView) convertView.findViewById(R.id.major);
-//        major.setText(listItems.get(position).getMajor());
-//
-//        return convertView;
-//    }

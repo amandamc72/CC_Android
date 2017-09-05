@@ -50,16 +50,22 @@ public class ListActivity extends AppCompatActivity
         setContentView(R.layout.activity_list);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        getMembersListAdapter(savedInstanceState);
+        //getMembersListAdapter(savedInstanceState);
 
-//        ArrayList<MemberListResponse.MemberListData> list = new ArrayList<>();
-//        list.add(new MemberListResponse.MemberListData(1,"http://i.imgur.com/EuMVwcl.jpg","Mittons","7","Purr School","Noobie","Cat Doctor","Minor"));
-//        list.add(new MemberListResponse.MemberListData(2,"http://i.imgur.com/EuMVwcl.jpg","Cat","8","Purr School","Pro","Major","Minor"));
-//        list.add(new MemberListResponse.MemberListData(3,"http://i.imgur.com/QehnWOn.jpg","Mittons","3","Purr School","Noobie","Cat Doctor","Minor"));
-//        list.add(new MemberListResponse.MemberListData(4,"http://i.imgur.com/rMkgeuD.jpg","Mittons","7","Purr School","Pro","Mouse Chaser","Minor"));
-//        list.add(new MemberListResponse.MemberListData(5,"http://i.imgur.com/ky8e6hP.jpg","Mittons","9","Mitten collage","Noobie","Cat","Minor"));
+        ArrayList<MemberListResponse.MemberListData> list = new ArrayList<>();
+        list.add(new MemberListResponse.MemberListData(1,"http://i.imgur.com/EuMVwcl.jpg","Mittons","7","Purr School","Noobie","Cat Doctor","Minor"));
+        list.add(new MemberListResponse.MemberListData(2,"http://i.imgur.com/EuMVwcl.jpg","Cat","8","Purr School","Pro","Major","Minor"));
+        list.add(new MemberListResponse.MemberListData(3,"http://i.imgur.com/QehnWOn.jpg","Mittons","3","Purr School","Noobie","Cat Doctor","Minor"));
+        list.add(new MemberListResponse.MemberListData(4,"http://i.imgur.com/rMkgeuD.jpg","Mittons","7","Purr School","Pro","Mouse Chaser","Minor"));
+        list.add(new MemberListResponse.MemberListData(5,"http://i.imgur.com/ky8e6hP.jpg","Mittons","9","Mitten collage","Noobie","Cat","Minor"));
 
-        //MemberListResponse tempList = new MemberListResponse(false, list);
+        MemberListResponse tempList = new MemberListResponse(false, list);
+
+        mRecyclerViewFragment = new RecyclerViewFragment().newInstance(tempList);
+        mSwipeFragment = new SwipeFragment().newInstance(tempList);
+
+        getSupportFragmentManager().beginTransaction()
+                .add(R.id.memberViewFragmentContainer, mRecyclerViewFragment).commit();
 
         on = true;
 

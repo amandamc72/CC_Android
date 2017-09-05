@@ -8,6 +8,7 @@ import com.campusconnection.model.MemberSessionResponse;
 import com.campusconnection.model.RegisterRequest;
 import com.campusconnection.model.SearchRequest;
 import com.campusconnection.model.SignupRequest;
+import com.campusconnection.model.SwipeRequest;
 
 import java.util.List;
 
@@ -43,5 +44,8 @@ public interface ApiInterface {
 
     @GET("profile/{id}")
     Call<MemberResponse> getProfile(@Path("id") int id);
+
+    @POST("swipe")
+    Call<GenericResponse> addSwipe(@Body SwipeRequest swipe);
 
 }

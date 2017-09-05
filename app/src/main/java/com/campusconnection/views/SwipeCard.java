@@ -1,14 +1,23 @@
 package com.campusconnection.views;
 
+import android.app.Activity;
 import android.content.Context;
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Parcel;
 import android.os.Parcelable;
+import android.support.v7.app.AlertDialog;
 import android.util.Log;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.campusconnection.ProfileActivity;
 import com.campusconnection.R;
+import com.campusconnection.model.GenericResponse;
 import com.campusconnection.model.MemberListResponse;
+import com.campusconnection.model.SwipeRequest;
+import com.campusconnection.rest.ApiClient;
+import com.campusconnection.rest.ApiInterface;
 import com.mindorks.placeholderview.SwipePlaceHolderView;
 import com.mindorks.placeholderview.annotations.Click;
 import com.mindorks.placeholderview.annotations.Layout;
@@ -21,6 +30,10 @@ import com.mindorks.placeholderview.annotations.swipe.SwipeInState;
 import com.mindorks.placeholderview.annotations.swipe.SwipeOut;
 import com.mindorks.placeholderview.annotations.swipe.SwipeOutState;
 import com.squareup.picasso.Picasso;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+
 
 @NonReusable
 @Layout(R.layout.swipe_card_view)
@@ -41,6 +54,7 @@ public class SwipeCard implements Parcelable {
     private MemberListResponse.MemberListData mProfile;
     private Context mContext;
     private SwipePlaceHolderView mSwipeView;
+    private int mMemberId;
 
     public SwipeCard(Context context, MemberListResponse.MemberListData profile, SwipePlaceHolderView swipeView) {
         mContext = context;
@@ -54,6 +68,7 @@ public class SwipeCard implements Parcelable {
 
     @Resolve
     private void onResolved() {
+        mMemberId = mProfile.getId();
         Picasso.with(mContext).load(mProfile.getThumbnail()).into(swipeProfileImage);
         swipeNameAgeLabel.setText(mProfile.getFirstName() + ", " + mProfile.getAge());
         swipeSchoolLabel.setText(mProfile.getSchool());
@@ -61,13 +76,18 @@ public class SwipeCard implements Parcelable {
     }
 
     @Click(R.id.swipeProfileImage)
-    private void onClick(){
+    private void onClick() {
         Log.d("EVENT", "onClick");
+        Intent intent = new Intent(mContext, ProfileActivity.class);
+        intent.putExtra("id", mMemberId);
+        mContext.startActivity(intent);
+        ((Activity) mContext).overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
     }
 
     @SwipeOut
     private void onSwipedOut(){
         Log.d("EVENT", "onSwipedOut");
+        setSwipeStateApiCall(0);
     }
 
     @SwipeCancelState
@@ -78,6 +98,7 @@ public class SwipeCard implements Parcelable {
     @SwipeIn
     private void onSwipeIn(){
         Log.d("EVENT", "onSwipedIn");
+        setSwipeStateApiCall(1);
     }
 
     @SwipeInState
@@ -90,6 +111,38 @@ public class SwipeCard implements Parcelable {
         Log.d("EVENT", "onSwipeOutState");
     }
 
+    public void setSwipeStateApiCall(int direction) {
+
+        ApiInterface apiService = ApiClient.getClient().create(ApiInterface.class);
+        Call<GenericResponse> call = apiService.addSwipe(new SwipeRequest(mMemberId, direction));
+
+        call.enqueue(new Callback<GenericResponse>() {
+            @Override
+            public void onResponse(Call<GenericResponse> call, Response<GenericResponse> response) {
+                GenericResponse res = response.body();
+                Boolean mutualLike = res.getError();
+                if (mutualLike) {
+                    //Show popup
+                    AlertDialog.Builder alertResponse = new AlertDialog.Builder(mContext);
+                    alertResponse.setMessage("It's a match!!!");
+                    alertResponse.setPositiveButton(R.string.popup_ok, new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int id) {
+                            // User clicked OK button
+                        }
+                    });
+                    alertResponse.show();
+                }
+            }
+
+            @Override
+            public void onFailure(Call call, Throwable t) {
+                call.cancel();
+            }
+        });
+
+
+    }
+
     private SwipeCard(Parcel in) {
         swipeProfileImage = (ImageView) in.readValue(ImageView.class.getClassLoader());
         swipeNameAgeLabel = (TextView) in.readValue(TextView.class.getClassLoader());
@@ -98,6 +151,7 @@ public class SwipeCard implements Parcelable {
         mProfile = (MemberListResponse.MemberListData) in.readValue(MemberListResponse.MemberListData.class.getClassLoader());
         mContext = (Context) in.readValue(Context.class.getClassLoader());
         mSwipeView = (SwipePlaceHolderView) in.readValue(SwipePlaceHolderView.class.getClassLoader());
+        mMemberId = in.readInt();
     }
 
     @Override
@@ -114,6 +168,7 @@ public class SwipeCard implements Parcelable {
         dest.writeValue(mProfile);
         dest.writeValue(mContext);
         dest.writeValue(mSwipeView);
+        dest.writeInt(mMemberId);
     }
 
     @SuppressWarnings("unused")

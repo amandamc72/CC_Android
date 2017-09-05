@@ -84,6 +84,7 @@ public class SwipeFragment extends Fragment {
         rootView.findViewById(R.id.rejectBtn).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                Log.d("D","doSwipe false");
                 mSwipeView.doSwipe(false);
             }
         });
@@ -91,6 +92,7 @@ public class SwipeFragment extends Fragment {
         rootView.findViewById(R.id.acceptBtn).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                Log.d("D","doSwipe true");
                 mSwipeView.doSwipe(true);
             }
         });

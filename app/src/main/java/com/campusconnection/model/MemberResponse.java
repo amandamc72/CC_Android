@@ -1,11 +1,14 @@
 package com.campusconnection.model;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import com.google.gson.annotations.SerializedName;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class MemberResponse {
+public class MemberResponse implements Parcelable {
 
     @SerializedName("error")
     private Boolean error;
@@ -171,4 +174,93 @@ public class MemberResponse {
     public void setInterests(List interests) {
         this.interests = interests;
     }
+
+    private MemberResponse(Parcel in) {
+        byte errorVal = in.readByte();
+        error = errorVal == 0x02 ? null : errorVal != 0x00;
+        id = in.readByte() == 0x00 ? null : in.readInt();
+        thumbnail = in.readString();
+        name = in.readString();
+        city = in.readString();
+        state = in.readString();
+        school = in.readString();
+        standing = in.readString();
+        major = in.readString();
+        minor = in.readString();
+        age = in.readByte() == 0x00 ? null : in.readInt();
+        about = in.readString();
+        if (in.readByte() == 0x01) {
+            courses = new ArrayList<>();
+            in.readList(courses, getClass().getClassLoader());
+        } else {
+            courses = null;
+        }
+        if (in.readByte() == 0x01) {
+            interests = new ArrayList<>();
+            in.readList(interests, getClass().getClassLoader());
+
+        } else {
+            interests = null;
+        }
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        if (error == null) {
+            dest.writeByte((byte) (0x02));
+        } else {
+            dest.writeByte((byte) (error ? 0x01 : 0x00));
+        }
+        if (id == null) {
+            dest.writeByte((byte) (0x00));
+        } else {
+            dest.writeByte((byte) (0x01));
+            dest.writeInt(id);
+        }
+        dest.writeString(thumbnail);
+        dest.writeString(name);
+        dest.writeString(city);
+        dest.writeString(state);
+        dest.writeString(school);
+        dest.writeString(standing);
+        dest.writeString(major);
+        dest.writeString(minor);
+        if (age == null) {
+            dest.writeByte((byte) (0x00));
+        } else {
+            dest.writeByte((byte) (0x01));
+            dest.writeInt(age);
+        }
+        dest.writeString(about);
+        if (courses == null) {
+            dest.writeByte((byte) (0x00));
+        } else {
+            dest.writeByte((byte) (0x01));
+            dest.writeList(courses);
+        }
+        if (interests == null) {
+            dest.writeByte((byte) (0x00));
+        } else {
+            dest.writeByte((byte) (0x01));
+            dest.writeList(interests);
+        }
+    }
+
+    @SuppressWarnings("unused")
+    public static final Parcelable.Creator<MemberResponse> CREATOR = new Parcelable.Creator<MemberResponse>() {
+        @Override
+        public MemberResponse createFromParcel(Parcel in) {
+            return new MemberResponse(in);
+        }
+
+        @Override
+        public MemberResponse[] newArray(int size) {
+            return new MemberResponse[size];
+        }
+    };
 }

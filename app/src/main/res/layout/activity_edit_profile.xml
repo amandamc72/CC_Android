@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.campusconnection.EditProfileActivity">
+
+
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/editProfileToolbar"
+        android:layout_width="match_parent"
+        android:layout_height="42dp"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:background="?attr/colorPrimary"
+        android:minHeight="?attr/actionBarSize"
+        android:theme="?attr/actionBarTheme" />
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/editProfileToolbar"
+        android:fillViewport="true">
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <FrameLayout
+                android:layout_width="match_parent"
+                android:layout_height="250dp"
+                android:id="@+id/gridFragmentContainer"/>
+
+            <TextView
+                android:id="@+id/editSchoolTextLabel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/label_school"/>
+
+            <EditText
+                android:id="@+id/editSchoolText"
+                android:inputType="text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+
+            <TextView
+                android:id="@+id/editMajorTextLabel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/label_major"/>
+
+            <EditText
+                android:id="@+id/editMajorText"
+                android:inputType="text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+
+            <TextView
+                android:id="@+id/editMinorTextLabel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/label_minor"/>
+
+            <EditText
+                android:id="@+id/editMinorText"
+                android:inputType="text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+
+            <TextView
+                android:id="@+id/editLocationTextLabel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/label_current_location"/>
+
+            <EditText
+                android:id="@+id/editLocation"
+                android:inputType="text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+
+            <EditText
+                android:id="@+id/editStandingText"
+                android:inputType="text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+
+            <TextView
+                android:id="@+id/editStandingTextLabel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/label_class_standing"/>
+
+            <TextView
+                android:id="@+id/editAboutTextLabel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/label_about_me"/>
+
+            <EditText
+                android:id="@+id/editAboutText"
+                android:inputType="text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+
+
+            <TextView
+                android:id="@+id/editInterestsTextLabel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/label_my_interests"/>
+
+
+            <com.campusconnection.views.ProfileInterestTags
+                android:id="@+id/editInterests"
+                style="@style/TagGroup"
+                atg_isAppendMode="true" />
+
+        </LinearLayout>
+
+    </ScrollView>
+
+</RelativeLayout>

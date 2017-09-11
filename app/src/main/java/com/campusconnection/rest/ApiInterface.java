@@ -48,4 +48,7 @@ public interface ApiInterface {
     @POST("swipe")
     Call<GenericResponse> addSwipe(@Body SwipeRequest swipe);
 
+    @PUT("profile/{id}")
+    Call<GenericResponse> updateProfile(@Path("id") int id, @Body MemberResponse updatedMember);
+
 }

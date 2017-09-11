@@ -1,5 +1,6 @@
 package com.campusconnection;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -29,6 +30,7 @@ import com.campusconnection.rest.ApiInterface;
 import java.util.ArrayList;
 import java.util.List;
 
+import de.hdodenhof.circleimageview.CircleImageView;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -50,22 +52,7 @@ public class ListActivity extends AppCompatActivity
         setContentView(R.layout.activity_list);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        //getMembersListAdapter(savedInstanceState);
-
-        ArrayList<MemberListResponse.MemberListData> list = new ArrayList<>();
-        list.add(new MemberListResponse.MemberListData(1,"http://i.imgur.com/EuMVwcl.jpg","Mittons","7","Purr School","Noobie","Cat Doctor","Minor"));
-        list.add(new MemberListResponse.MemberListData(2,"http://i.imgur.com/EuMVwcl.jpg","Cat","8","Purr School","Pro","Major","Minor"));
-        list.add(new MemberListResponse.MemberListData(3,"http://i.imgur.com/QehnWOn.jpg","Mittons","3","Purr School","Noobie","Cat Doctor","Minor"));
-        list.add(new MemberListResponse.MemberListData(4,"http://i.imgur.com/rMkgeuD.jpg","Mittons","7","Purr School","Pro","Mouse Chaser","Minor"));
-        list.add(new MemberListResponse.MemberListData(5,"http://i.imgur.com/ky8e6hP.jpg","Mittons","9","Mitten collage","Noobie","Cat","Minor"));
-
-        MemberListResponse tempList = new MemberListResponse(false, list);
-
-        mRecyclerViewFragment = new RecyclerViewFragment().newInstance(tempList);
-        mSwipeFragment = new SwipeFragment().newInstance(tempList);
-
-        getSupportFragmentManager().beginTransaction()
-                .add(R.id.memberViewFragmentContainer, mRecyclerViewFragment).commit();
+        getMembersListAdapter(savedInstanceState);
 
         on = true;
 
@@ -102,6 +89,17 @@ public class ListActivity extends AppCompatActivity
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
+
+        View headerview = navigationView.getHeaderView(0);
+
+        CircleImageView myInfoPicView = (CircleImageView) headerview.findViewById(R.id.my_info_nav_header_pic);
+
+        myInfoPicView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                gotoMyProfile();
+            }
+        });
     }
 
     public boolean isSearchList() {
@@ -156,12 +154,12 @@ public class ListActivity extends AppCompatActivity
         int id = item.getItemId();
 
         if (id == R.id.nav_my_info) {
-
+            gotoMyProfile();
         } else if (id == R.id.nav_search) {
             Intent intent = new Intent(this, SearchActivity.class);
             startActivity(intent);
         } else if (id == R.id.nav_social) {
-
+            //TODO
         } else if (id == R.id.nav_settings) {
             Intent intent = new Intent(this, SettingsActivity.class);
             startActivity(intent);
@@ -170,6 +168,13 @@ public class ListActivity extends AppCompatActivity
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
+    }
+
+    public void gotoMyProfile() {
+        Intent intent = new Intent(this, ProfileActivity.class);
+        intent.putExtra("id", 1001); //todo My id for testing
+        startActivity(intent);
+        overridePendingTransition(R.anim.anim_slide_in_left, R.anim.anim_slide_out_left);
     }
 
     public void getMembersListAdapter(Bundle savedInstanceState) {

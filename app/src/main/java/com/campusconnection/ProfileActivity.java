@@ -6,6 +6,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.GridView;
@@ -99,16 +101,40 @@ public class ProfileActivity extends AppCompatActivity {
         overridePendingTransition(R.anim.anim_slide_in_right, R.anim.anim_slide_out_right);
     }
 
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.edit_action_bar, menu); //TODO only show this when im viewing my own profile
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        Intent intent = new Intent(this, EditProfileActivity.class);
+        startActivity(intent);
+
+        // Handle action bar item clicks here. The action bar will
+        // automatically handle clicks on the Home/Up button, so long
+        // as you specify a parent activity in AndroidManifest.xml.
+        int id = item.getItemId();
+
+        //noinspection SimplifiableIfStatement
+        if (id == R.id.action_settings) {
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
     private void getProfile() {
 
         ApiInterface apiService = ApiClient.getClient().create(ApiInterface.class);
         Call<MemberResponse> call = apiService.getProfile(profileId());
-
+        Log.d("D","I MADE IT HERE");
         call.enqueue(new Callback<MemberResponse>() {
             @Override
             public void onResponse(Call<MemberResponse> call, Response<MemberResponse> response) {
-                MemberResponse res = response.body();
 
+                MemberResponse res = response.body();
                 Picasso.with(ProfileActivity.this).load(res.getThumbnail()).into(mImage);
                 Log.d("D","thumb is: " +res.getThumbnail());
                 mName.setText(res.getName());

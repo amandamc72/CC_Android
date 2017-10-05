@@ -49,6 +49,7 @@ public class SearchActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 onBackPressed();
+                overridePendingTransition(R.anim.anim_slide_in_right, R.anim.anim_slide_out_right);
             }
         });
 
@@ -101,7 +102,7 @@ public class SearchActivity extends AppCompatActivity {
         String city = mSearchCity.getText().toString();
         String state = mSearchState.getSelectedItem().toString();
 
-        Intent intent = new Intent(this, ListActivity.class);
+        Intent intent = new Intent(this, HomeActivity.class);
         Bundle extras = new Bundle();
         extras.putBoolean("isSearch", true);
         extras.putParcelable("searchRequest", new SearchRequest(0, school, major, minor, ageLow, ageHigh, mSearchGenderValue, city, state));

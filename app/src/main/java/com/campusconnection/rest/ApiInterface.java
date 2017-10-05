@@ -1,22 +1,24 @@
 package com.campusconnection.rest;
 
+import com.campusconnection.model.DeletePictureRequest;
 import com.campusconnection.model.GenericResponse;
 import com.campusconnection.model.LoginRequest;
 import com.campusconnection.model.MemberListResponse;
 import com.campusconnection.model.MemberResponse;
-import com.campusconnection.model.MemberSessionResponse;
 import com.campusconnection.model.RegisterRequest;
 import com.campusconnection.model.SearchRequest;
+import com.campusconnection.model.SettingsBody;
 import com.campusconnection.model.SignupRequest;
 import com.campusconnection.model.SwipeRequest;
 
-import java.util.List;
-
+import okhttp3.MultipartBody;
+import okhttp3.RequestBody;
 import retrofit2.Call;
 import retrofit2.http.Body;
-import retrofit2.http.Field;
-import retrofit2.http.FormUrlEncoded;
-import retrofit2.http.Headers;
+import retrofit2.http.DELETE;
+import retrofit2.http.HTTP;
+import retrofit2.http.Multipart;
+import retrofit2.http.Part;
 import retrofit2.http.Path;
 import retrofit2.http.GET;
 import retrofit2.http.PUT;
@@ -50,5 +52,18 @@ public interface ApiInterface {
 
     @PUT("profile/{id}")
     Call<GenericResponse> updateProfile(@Path("id") int id, @Body MemberResponse updatedMember);
+
+    @GET("settings/{id}")
+    Call<SettingsBody> getSettings(@Path("id") int id);
+
+    @POST("settings/{id}")
+    Call<GenericResponse> postSettings(@Path("id") int id, @Body SettingsBody settings);
+
+    @Multipart
+    @POST("upload")
+    Call<GenericResponse> uploadPicture(@Part("isDefault") RequestBody isDefault, @Part MultipartBody.Part file);
+
+    @HTTP(method = "DELETE", path = "upload", hasBody = true)
+    Call<GenericResponse> deletePicture(@Body DeletePictureRequest picture);
 
 }

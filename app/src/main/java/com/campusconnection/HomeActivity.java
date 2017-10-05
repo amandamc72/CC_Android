@@ -35,7 +35,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class ListActivity extends AppCompatActivity
+public class HomeActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener, SwipeFragment.OnFragmentInteractionListener, RecyclerViewFragment.OnFragmentInteractionListener {
 
 
@@ -97,7 +97,8 @@ public class ListActivity extends AppCompatActivity
         myInfoPicView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                gotoMyProfile();
+                Intent intent = new Intent(getApplicationContext(), ProfileActivity.class);
+                drawerIntentNav(intent);
             }
         });
     }
@@ -154,15 +155,16 @@ public class ListActivity extends AppCompatActivity
         int id = item.getItemId();
 
         if (id == R.id.nav_my_info) {
-            gotoMyProfile();
+            Intent intent = new Intent(this, ProfileActivity.class);
+            drawerIntentNav(intent);
         } else if (id == R.id.nav_search) {
             Intent intent = new Intent(this, SearchActivity.class);
-            startActivity(intent);
+            drawerIntentNav(intent);
         } else if (id == R.id.nav_social) {
             //TODO
         } else if (id == R.id.nav_settings) {
             Intent intent = new Intent(this, SettingsActivity.class);
-            startActivity(intent);
+            drawerIntentNav(intent);
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -170,9 +172,8 @@ public class ListActivity extends AppCompatActivity
         return true;
     }
 
-    public void gotoMyProfile() {
-        Intent intent = new Intent(this, ProfileActivity.class);
-        intent.putExtra("id", 1001); //todo My id for testing
+    public void drawerIntentNav(Intent intent) {
+        intent.putExtra("id", 1001); //todo My id for testing need to get from phone storage
         startActivity(intent);
         overridePendingTransition(R.anim.anim_slide_in_left, R.anim.anim_slide_out_left);
     }

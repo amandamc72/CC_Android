@@ -1,9 +1,12 @@
 package com.campusconnection.util;
 
+import android.content.Context;
+import android.content.DialogInterface;
 import android.widget.EditText;
 
 import java.util.ArrayList;
 import android.text.TextUtils;
+import android.support.v7.app.AlertDialog;
 
 import com.campusconnection.R;
 
@@ -69,6 +72,16 @@ public class AppUtils {
             }
         }
         return new ValidInput(false, false, null);
+    }
+
+    public static void showPopMessage(Context context, String message) {
+        AlertDialog.Builder alertResponse = new AlertDialog.Builder(context);
+        alertResponse.setMessage(message);
+        alertResponse.setPositiveButton(R.string.popup_ok, new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int id) {
+            }
+        });
+        alertResponse.show();
     }
 
 

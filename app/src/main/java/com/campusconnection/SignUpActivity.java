@@ -2,6 +2,7 @@ package com.campusconnection;
 
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 import android.support.v4.app.DialogFragment;
@@ -46,7 +47,6 @@ public class SignUpActivity extends AppCompatActivity {
     private EditText mBithday;
     private RadioGroup mGender;
     private String gender;
-    private AlertDialog.Builder alertResponse;
     private ProgressBar mProgress;
     private SharedPreferences prefs;
     private String code;
@@ -61,7 +61,6 @@ public class SignUpActivity extends AppCompatActivity {
         code = prefs.getString(getString(R.string.code_key), "");
         Log.d("D","CODE is: " +  code);
 
-        alertResponse = new AlertDialog.Builder(this);
 
         mFirstName = (EditText) findViewById(R.id.signupFirstNameInput);
         mLastName = (EditText) findViewById(R.id.signupLastNameInput);
@@ -155,16 +154,12 @@ public class SignUpActivity extends AppCompatActivity {
                     //mProgress.setVisibility(View.INVISIBLE);
                     if(!error){
                         //TODO Goto home activity
-                        Log.d("D","IT WORKED!!!!!!!!!");
+                        Intent intent = new Intent(SignUpActivity.this, HomeActivity.class);
+                        startActivity(intent);
+                        overridePendingTransition(R.anim.anim_slide_in_left, R.anim.anim_slide_out_left);
                     }
                     else{
-                        alertResponse.setMessage(message);
-                        alertResponse.setPositiveButton(R.string.popup_ok, new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int id) {
-                                // User clicked OK button
-                            }
-                        });
-                        alertResponse.show();
+                        AppUtils.showPopMessage(SignUpActivity.this, message);
                     }
                 }
                 @Override

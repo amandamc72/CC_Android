@@ -6,6 +6,6 @@
     android:layout_height="match_parent"
     android:id="@+id/memberViewFragmentContainer"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
-    tools:context="com.campusconnection.ListActivity"
+    tools:context="com.campusconnection.HomeActivity"
     tools:showIn="@layout/app_bar_list">
 </RelativeLayout>

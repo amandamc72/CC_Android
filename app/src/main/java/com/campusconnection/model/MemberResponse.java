@@ -2,18 +2,18 @@ package com.campusconnection.model;
 
 import android.os.Parcel;
 import android.os.Parcelable;
+import android.util.Log;
 
 import com.google.gson.annotations.SerializedName;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 public class MemberResponse implements Parcelable {
 
     @SerializedName("error")
     private Boolean error;
-    @SerializedName("id")
-    private Integer id;
     @SerializedName("thumbnail")
     private String thumbnail;
     @SerializedName("picture")
@@ -41,10 +41,9 @@ public class MemberResponse implements Parcelable {
     @SerializedName("interests")
     private List interests = new ArrayList();
 
-    public MemberResponse(Boolean error, Integer id, String thumbnail, List subPics, String name, String city, String school,
+    public MemberResponse(Boolean error, String thumbnail, List subPics, String name, String city, String school,
                           String standing, String major, String minor, Integer age, String about, List courses, List interests){
         this.error = error;
-        this.id = id;
         this.thumbnail = thumbnail;
         this.subPics = subPics;
         this.name = name;
@@ -59,17 +58,21 @@ public class MemberResponse implements Parcelable {
         this.interests = interests;
     }
 
+    //Constrctor to update profile data
+    public MemberResponse(String school, String major, String minor, String city, String state, String standing, String about, List interests) {
+        this.city = city;
+        this.state = state;
+        this.school = school;
+        this.standing = standing;
+        this.major = major;
+        this.minor = minor;
+        this.about = about;
+        this.interests = interests;
+    }
+
     public Boolean getError() {return error;}
 
     public void setError(Boolean error) {this.error = error;}
-
-    public Integer getId() {
-        return id;
-    }
-
-    public void setId(Integer id) {
-        this.id = id;
-    }
 
     public String getThumbnail() {
         return thumbnail;
@@ -175,10 +178,22 @@ public class MemberResponse implements Parcelable {
         this.interests = interests;
     }
 
+    public ArrayList<String> formatAllPicsToArray() {
+        ArrayList<String> formatedPics = new ArrayList<>();
+        for (int i = 0; i < getSubPics().size(); i++) {
+            HashMap<String,String> currentPicMap = (HashMap<String,String>)getSubPics().get(i);
+            formatedPics.add(i , currentPicMap.get("relPath"));
+        }
+        formatedPics.add(0, getThumbnail());
+        for (int i = formatedPics.size()-1; i > 5; i--) {
+            formatedPics.remove(i);
+        }
+        return formatedPics;
+    }
+
     private MemberResponse(Parcel in) {
         byte errorVal = in.readByte();
         error = errorVal == 0x02 ? null : errorVal != 0x00;
-        id = in.readByte() == 0x00 ? null : in.readInt();
         thumbnail = in.readString();
         name = in.readString();
         city = in.readString();
@@ -189,6 +204,12 @@ public class MemberResponse implements Parcelable {
         minor = in.readString();
         age = in.readByte() == 0x00 ? null : in.readInt();
         about = in.readString();
+        if (in.readByte() == 0x01) {
+            subPics = new ArrayList<>();
+            in.readList(subPics, getClass().getClassLoader());
+        } else {
+            subPics = null;
+        }
         if (in.readByte() == 0x01) {
             courses = new ArrayList<>();
             in.readList(courses, getClass().getClassLoader());
@@ -216,12 +237,6 @@ public class MemberResponse implements Parcelable {
         } else {
             dest.writeByte((byte) (error ? 0x01 : 0x00));
         }
-        if (id == null) {
-            dest.writeByte((byte) (0x00));
-        } else {
-            dest.writeByte((byte) (0x01));
-            dest.writeInt(id);
-        }
         dest.writeString(thumbnail);
         dest.writeString(name);
         dest.writeString(city);
@@ -237,6 +252,12 @@ public class MemberResponse implements Parcelable {
             dest.writeInt(age);
         }
         dest.writeString(about);
+        if (subPics == null) {
+            dest.writeByte((byte) (0x00));
+        } else {
+            dest.writeByte((byte) (0x01));
+            dest.writeList(subPics);
+        }
         if (courses == null) {
             dest.writeByte((byte) (0x00));
         } else {

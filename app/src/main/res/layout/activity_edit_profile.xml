@@ -24,101 +24,172 @@
         android:layout_below="@+id/editProfileToolbar"
         android:fillViewport="true">
 
-
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:focusable="true"
+            android:focusableInTouchMode="true">
 
             <FrameLayout
                 android:layout_width="match_parent"
                 android:layout_height="250dp"
-                android:id="@+id/gridFragmentContainer"/>
+                android:id="@+id/gridFragmentContainer"
+                android:padding="10dp"/>
 
             <TextView
                 android:id="@+id/editSchoolTextLabel"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/label_school"/>
+                android:text="@string/label_school"
+                android:textColor="@color/teal_blue"
+                android:paddingLeft="5dp"
+                android:paddingStart="5dp"
+                android:layout_marginBottom="3dp"/>
 
             <EditText
                 android:id="@+id/editSchoolText"
                 android:inputType="text"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
+                android:textColor="@color/gray"
+                android:hint="Enter school"
+                android:textAppearance="@style/TextAppearance.AppCompat.Small"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingLeft="5dp"
+                android:paddingStart="5dp" />
 
             <TextView
                 android:id="@+id/editMajorTextLabel"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/label_major"/>
+                android:text="@string/label_major"
+                android:textColor="@color/teal_blue"
+                android:paddingLeft="5dp"
+                android:paddingStart="5dp"
+                android:layout_marginBottom="3dp"
+                android:layout_marginTop="10dp"/>
 
             <EditText
                 android:id="@+id/editMajorText"
                 android:inputType="text"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
+                android:textColor="@color/gray"
+                android:hint="Enter Major"
+                android:textAppearance="@style/TextAppearance.AppCompat.Small"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingLeft="5dp"
+                android:paddingStart="5dp"/>
 
             <TextView
                 android:id="@+id/editMinorTextLabel"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/label_minor"/>
+                android:text="@string/label_minor"
+                android:textColor="@color/teal_blue"
+                android:paddingLeft="5dp"
+                android:paddingStart="5dp"
+                android:layout_marginBottom="3dp"
+                android:layout_marginTop="10dp"/>
 
             <EditText
                 android:id="@+id/editMinorText"
                 android:inputType="text"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
+                android:textColor="@color/gray"
+                android:hint="Enter Minor"
+                android:textAppearance="@style/TextAppearance.AppCompat.Small"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingLeft="5dp"
+                android:paddingStart="5dp"/>
 
             <TextView
                 android:id="@+id/editLocationTextLabel"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/label_current_location"/>
+                android:text="@string/label_current_location"
+                android:textColor="@color/teal_blue"
+                android:paddingLeft="5dp"
+                android:paddingStart="5dp"
+                android:layout_marginBottom="3dp"
+                android:layout_marginTop="10dp"/>
 
             <EditText
                 android:id="@+id/editLocation"
                 android:inputType="text"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
-
-            <EditText
-                android:id="@+id/editStandingText"
-                android:inputType="text"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
+                android:textColor="@color/gray"
+                android:hint="Set Location"
+                android:textAppearance="@style/TextAppearance.AppCompat.Small"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingLeft="5dp"
+                android:paddingStart="5dp"/>
 
             <TextView
                 android:id="@+id/editStandingTextLabel"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/label_class_standing"/>
+                android:text="@string/label_class_standing"
+                android:textColor="@color/teal_blue"
+                android:paddingLeft="5dp"
+                android:paddingStart="5dp"
+                android:layout_marginBottom="3dp"
+                android:layout_marginTop="10dp"/>
+
+            <EditText
+                android:id="@+id/editStandingText"
+                android:inputType="text"
+                android:textColor="@color/gray"
+                android:hint="Class level"
+                android:textAppearance="@style/TextAppearance.AppCompat.Small"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingLeft="5dp"
+                android:paddingStart="5dp"/>
+
 
             <TextView
                 android:id="@+id/editAboutTextLabel"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/label_about_me"/>
+                android:text="@string/label_about_me"
+                android:textColor="@color/teal_blue"
+                android:paddingLeft="5dp"
+                android:paddingStart="5dp"
+                android:layout_marginBottom="3dp"
+                android:layout_marginTop="10dp" />
 
             <EditText
                 android:id="@+id/editAboutText"
-                android:inputType="text"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
+                android:inputType="textMultiLine"
+                android:textColor="@color/gray"
+                android:hint="About you"
+                android:gravity="top"
+                android:textAppearance="@style/TextAppearance.AppCompat.Small"
+                android:layout_width="match_parent"
+                android:layout_height="80dp"
+                android:paddingLeft="5dp"
+                android:paddingStart="5dp"/>
 
 
             <TextView
                 android:id="@+id/editInterestsTextLabel"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/label_my_interests"/>
+                android:text="@string/label_my_interests"
+                android:textColor="@color/teal_blue"
+                android:paddingLeft="5dp"
+                android:paddingStart="5dp"
+                android:layout_marginBottom="3dp"
+                android:layout_marginTop="10dp"/>
 
 
             <com.campusconnection.views.ProfileInterestTags
                 android:id="@+id/editInterests"
                 style="@style/TagGroup"
-                atg_isAppendMode="true" />
+                app:atg_isAppendMode="true"
+                android:layout_marginBottom="15dp"
+                android:paddingLeft="5dp"
+                android:paddingStart="5dp" />
 
         </LinearLayout>
 

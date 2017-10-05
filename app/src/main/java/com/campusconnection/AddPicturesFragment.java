@@ -1,15 +1,42 @@
 package com.campusconnection;
 
 import android.content.Context;
+import android.content.Intent;
+import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.GridView;
 
+import com.campusconnection.model.DeletePictureRequest;
+import com.campusconnection.model.GenericResponse;
+import com.campusconnection.rest.ApiClient;
+import com.campusconnection.rest.ApiInterface;
+import com.campusconnection.util.AppUtils;
+import com.theartofdev.edmodo.cropper.CropImage;
+import com.theartofdev.edmodo.cropper.CropImageView;
+
+import org.json.JSONObject;
+
+import java.io.File;
+import java.net.URI;
 import java.util.ArrayList;
+import java.util.List;
+
+import okhttp3.MediaType;
+import okhttp3.MultipartBody;
+import okhttp3.RequestBody;
+import okhttp3.ResponseBody;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+
+import static android.app.Activity.RESULT_OK;
 
 
 /*
@@ -26,11 +53,14 @@ import java.util.ArrayList;
 
  */
 
-public class AddPicturesFragment extends Fragment {
+public class AddPicturesFragment extends Fragment implements GridViewAdapter.MediaPath, GridViewAdapter.RemovePicture {
     private static final String ARG_PARAM1 = "pictureUrls";
 
     private ArrayList<String> mImages;
     private OnFragmentInteractionListener mListener;
+    private int mPhotoPos;
+    private GridView mEditPicsGrid;
+    private GridViewAdapter mGridViewAdapter;
 
     public AddPicturesFragment() {
         // Required empty public constructor
@@ -49,17 +79,16 @@ public class AddPicturesFragment extends Fragment {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
             mImages = getArguments().getStringArrayList(ARG_PARAM1);
-
         }
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-
+        mGridViewAdapter = new GridViewAdapter(this, this, getActivity(), mImages);
         View rootView = inflater.inflate(R.layout.fragment_add_pictures, container, false);
-        GridView editPicsGrid = (GridView) rootView.findViewById(R.id.editProfilePicGrid);
-        editPicsGrid.setAdapter(new GridViewAdapter(getActivity(), mImages));
+        mEditPicsGrid = (GridView) rootView.findViewById(R.id.editProfilePicGrid);
+        mEditPicsGrid.setAdapter(mGridViewAdapter);
         return rootView;
     }
 
@@ -85,6 +114,104 @@ public class AddPicturesFragment extends Fragment {
     public void onDetach() {
         super.onDetach();
         mListener = null;
+    }
+
+    @Override
+    public void onSelect(int value, int pos) {
+        Log.d("D", "in add pic frag value is: " + value + " and pos is " + pos);
+        mPhotoPos = pos;
+        if (value == 0) {
+            CropImage.activity()
+                    .start(getContext(), this);
+        }
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE) {
+            CropImage.ActivityResult result = CropImage.getActivityResult(data);
+            if (resultCode == RESULT_OK) {
+                Uri resultUri = result.getUri();
+                Log.d("D", "resultUri: " + resultUri);
+                uploadFile(resultUri);
+
+            } else if (resultCode == CropImage.CROP_IMAGE_ACTIVITY_RESULT_ERROR_CODE) {
+                Exception error = result.getError();
+            }
+        }
+    }
+
+    public String setIsDefaultFlag(int pos) {
+        String isDefault = "false";
+        if (pos == 0) {
+            isDefault = "true";
+        }
+        return isDefault;
+    }
+
+    @Override
+    public void onRemove(String path, int pos) {
+        final int imgPos = pos;
+        ApiInterface apiService = ApiClient.getClient().create(ApiInterface.class);
+        Call<GenericResponse> call = apiService.deletePicture(new DeletePictureRequest(path, setIsDefaultFlag(pos)));
+        call.enqueue(new Callback<GenericResponse>() {
+            @Override
+            public void onResponse(Call<GenericResponse> call, Response<GenericResponse> response) {
+                GenericResponse res = response.body();
+                Boolean error = res.getError();
+                String message = res.getMessage();
+                if (error) {
+                    AppUtils.showPopMessage(getActivity(), message);
+                } else {
+                    mImages.remove(imgPos);
+                    mGridViewAdapter.notifyDataSetChanged();
+                    mEditPicsGrid.setAdapter(mGridViewAdapter);
+                }
+            }
+
+            @Override
+            public void onFailure(Call call, Throwable t) {
+                call.cancel();
+            }
+        });
+    }
+
+    private void uploadFile(Uri fileUri) {
+        File file = new File(fileUri.getPath());
+        RequestBody requestFile = RequestBody.create(MediaType.parse("multipart/form-data"), file);
+
+        MultipartBody.Part body =
+                MultipartBody.Part.createFormData("uploaded_file", file.getName(), requestFile);
+
+        RequestBody isDefaultBody =
+                RequestBody.create(
+                        okhttp3.MultipartBody.FORM, setIsDefaultFlag(mPhotoPos));
+
+        ApiInterface apiService = ApiClient.getClient().create(ApiInterface.class);
+        Call<GenericResponse> call = apiService.uploadPicture(isDefaultBody, body);
+
+        call.enqueue(new Callback<GenericResponse>() {
+            @Override
+            public void onResponse(Call<GenericResponse> call, Response<GenericResponse> response) {
+                GenericResponse res = response.body();
+                Log.d("D", "RESponse is: " + res);
+                if (!res.getError()) {
+                    List uploadedImgPath = res.getImg();
+
+                    String s = uploadedImgPath.get(0).toString();
+                    s = s.substring(s.lastIndexOf("="));
+                    Log.d("D", "RESponse is: " + s);
+                    mImages.add(mPhotoPos, s);
+                    mGridViewAdapter.notifyDataSetChanged();
+                    mEditPicsGrid.setAdapter(mGridViewAdapter);
+                }
+            }
+
+            @Override
+            public void onFailure(Call call, Throwable t) {
+                call.cancel();
+            }
+        });
     }
 
     /**

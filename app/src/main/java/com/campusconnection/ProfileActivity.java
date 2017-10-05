@@ -34,16 +34,15 @@ import retrofit2.Response;
 public class ProfileActivity extends AppCompatActivity {
 
     private ImageView mImage;
-    private TextView mName;
-    private TextView mAge;
+    private TextView mNameAndAge;
     private TextView mSchool;
     private TextView mMajor;
     private TextView mMinor;
-    private TextView mCity;
-    private TextView mState;
+    private TextView mLocation;
     private TextView mStanding;
     private TextView mAbout;
     private ProfileInterestTags mInterestsTags;
+    private MemberResponse mMemberResponse;
 
 
     @Override
@@ -52,13 +51,11 @@ public class ProfileActivity extends AppCompatActivity {
         setContentView(R.layout.activity_profile);
 
         mImage = (ImageView) findViewById(R.id.profileImage);
-        mName = (TextView) findViewById(R.id.profileName);
-        mAge = (TextView) findViewById(R.id.profileAge);
+        mNameAndAge = (TextView) findViewById(R.id.profileNameAndAge);
         mSchool = (TextView) findViewById(R.id.profileSchool);
         mMajor = (TextView) findViewById(R.id.profileMajor);
         mMinor = (TextView) findViewById(R.id.profileMinor);
-        mCity = (TextView) findViewById(R.id.profileCity);
-        mState = (TextView) findViewById(R.id.profileState);
+        mLocation = (TextView) findViewById(R.id.profileLocation);
         mStanding = (TextView) findViewById(R.id.profileStanding);
         mAbout = (TextView) findViewById(R.id.profileAbout);
         mInterestsTags = (ProfileInterestTags) findViewById(R.id.profileInterestsTags);
@@ -70,17 +67,9 @@ public class ProfileActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 onBackPressed();
+                overridePendingTransition(R.anim.anim_slide_in_right, R.anim.anim_slide_out_right);
             }
         });
-
-        Button messageButton = (Button) findViewById(R.id.profileMessageButton);
-        messageButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-
-            }
-        });
-
 
         getProfile();
 
@@ -96,61 +85,44 @@ public class ProfileActivity extends AppCompatActivity {
 
 
     @Override
-    public void onBackPressed() {
-        finish();
-        overridePendingTransition(R.anim.anim_slide_in_right, R.anim.anim_slide_out_right);
-    }
-
-    @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.edit_action_bar, menu); //TODO only show this when im viewing my own profile
         return true;
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
+        Bundle extras = new Bundle();
         Intent intent = new Intent(this, EditProfileActivity.class);
+        extras.putParcelable("memberResponse", mMemberResponse);
+        extras.putInt("id", profileId());
+        intent.putExtras(extras);
         startActivity(intent);
-
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
-        }
         return super.onOptionsItemSelected(item);
     }
 
     private void getProfile() {
-
         ApiInterface apiService = ApiClient.getClient().create(ApiInterface.class);
         Call<MemberResponse> call = apiService.getProfile(profileId());
-        Log.d("D","I MADE IT HERE");
+
         call.enqueue(new Callback<MemberResponse>() {
             @Override
             public void onResponse(Call<MemberResponse> call, Response<MemberResponse> response) {
 
-                MemberResponse res = response.body();
-                Picasso.with(ProfileActivity.this).load(res.getThumbnail()).into(mImage);
-                Log.d("D","thumb is: " +res.getThumbnail());
-                mName.setText(res.getName());
-                mAge.setText(res.getAge().toString());
-                mSchool.setText(res.getSchool());
-                mMajor.setText(res.getMajor());
-                mMinor.setText(res.getMinor());
-                mCity.setText(res.getCity().concat(","));
-                mState.setText(res.getState());
-                mStanding.setText(res.getStanding());
-                mAbout.setText(res.getAbout());
+                mMemberResponse = response.body();
+                Picasso.with(ProfileActivity.this).load(mMemberResponse.getThumbnail()).into(mImage);
+                mNameAndAge.setText(mMemberResponse.getName() + ", " + mMemberResponse.getAge().toString());
+                mSchool.setText(mMemberResponse.getSchool());
+                mMajor.setText(mMemberResponse.getMajor());
+                mMinor.setText(mMemberResponse.getMinor());
+                mLocation.setText(mMemberResponse.getCity() + ", " + mMemberResponse.getState());
+                mStanding.setText(mMemberResponse.getStanding());
+                mAbout.setText(mMemberResponse.getAbout());
 
-                List interestsPreClean = res.getInterests();
+                List interestsPreClean = mMemberResponse.getInterests();
                 ArrayList<String> interests = new ArrayList<>();
 
-                for (int i = 0; i < interestsPreClean.size(); i++){
+                for (int i = 0; i < interestsPreClean.size(); i++) {
                     interests.add(interestsPreClean.get(i).toString().replace("[", "").replace("]", ""));
                 }
                 mInterestsTags.setTags(interests);
@@ -162,7 +134,4 @@ public class ProfileActivity extends AppCompatActivity {
             }
         });
     }
-
-
-
 }

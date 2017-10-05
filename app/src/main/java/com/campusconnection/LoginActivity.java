@@ -1,5 +1,6 @@
 package com.campusconnection;
 
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.support.v7.app.AlertDialog;
@@ -30,7 +31,6 @@ public class LoginActivity extends AppCompatActivity{
 
     private EditText mEmail;
     private EditText mPassword;
-    private AlertDialog.Builder mAlertResponse;
     private ProgressBar mProgress;
 
     @Override
@@ -41,7 +41,6 @@ public class LoginActivity extends AppCompatActivity{
 
         mProgress = (ProgressBar) findViewById(R.id.loginProgressBar);
         mProgress.setVisibility(View.INVISIBLE);
-        mAlertResponse = new AlertDialog.Builder(this);
 
         mEmail = (EditText) findViewById(R.id.loginEmailInput);
         mPassword = (EditText) findViewById(R.id.loginPassInput);
@@ -92,7 +91,6 @@ public class LoginActivity extends AppCompatActivity{
             focusView.requestFocus();
 
         } else {
-
             ApiInterface apiService = ApiClient.getClient().create(ApiInterface.class);
             Call<GenericResponse> call = apiService.checkLogin(new LoginRequest(email, password));
             mProgress.setVisibility(View.VISIBLE);
@@ -105,15 +103,11 @@ public class LoginActivity extends AppCompatActivity{
                     String message = res.getMessage();
                     mProgress.setVisibility(View.INVISIBLE);
                     if (!error) {
-                        //Goto home activity
+                        Intent intent = new Intent(LoginActivity.this, HomeActivity.class);
+                        startActivity(intent);
+                        overridePendingTransition(R.anim.anim_slide_in_left, R.anim.anim_slide_out_left);
                     } else {
-                        mAlertResponse.setMessage(message);
-                        mAlertResponse.setPositiveButton(R.string.popup_ok, new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int id) {
-                                // User clicked OK button
-                            }
-                        });
-                        mAlertResponse.show();
+                        AppUtils.showPopMessage(LoginActivity.this, message);
                     }
                 }
 

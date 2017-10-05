@@ -36,7 +36,6 @@ public class RegisterActivity extends AppCompatActivity {
 
     private EditText mEmail;
     private ProgressBar mProgress;
-    private AlertDialog.Builder alertResponse;
     private SharedPreferences prefs;
 
     //TODO check status on act load NEED TO TEST!!!
@@ -56,7 +55,6 @@ public class RegisterActivity extends AppCompatActivity {
 
         mProgress = (ProgressBar) findViewById(R.id.registerProgressBar);
         mProgress.setVisibility(View.INVISIBLE);
-        alertResponse = new AlertDialog.Builder(this);
 
         mEmail = (EditText) findViewById(R.id.registerEmailInput);
         mEmail.setOnEditorActionListener(new EditText.OnEditorActionListener() {
@@ -115,13 +113,7 @@ public class RegisterActivity extends AppCompatActivity {
 
                     mProgress.setVisibility(View.INVISIBLE);
                     //TODO want response message in text field not pop up
-                    alertResponse.setMessage(message);
-                    alertResponse.setPositiveButton(R.string.popup_ok, new DialogInterface.OnClickListener() {
-                        public void onClick(DialogInterface dialog, int id) {
-                            // User clicked OK button
-                        }
-                    });
-                    alertResponse.show();
+                    AppUtils.showPopMessage(RegisterActivity.this, message);
                 }
                 @Override
                 public void onFailure(Call call, Throwable t) {

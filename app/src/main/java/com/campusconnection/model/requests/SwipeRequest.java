@@ -1,7 +1,6 @@
-package com.campusconnection.model;
+package com.campusconnection.model.requests;
 
 
-import com.campusconnection.SwipeFragment;
 import com.google.gson.annotations.SerializedName;
 
 public class SwipeRequest {

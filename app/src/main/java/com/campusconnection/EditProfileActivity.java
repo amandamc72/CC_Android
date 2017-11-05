@@ -1,25 +1,24 @@
 package com.campusconnection;
 
-import android.graphics.Color;
-import android.graphics.PorterDuff;
+import android.content.Context;
 import android.net.Uri;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
-import android.widget.GridView;
 
-import com.campusconnection.model.GenericResponse;
-import com.campusconnection.model.MemberResponse;
+import com.campusconnection.fragments.AddPicturesFragment;
+import com.campusconnection.model.responses.GenericResponse;
+import com.campusconnection.model.responses.MemberResponse;
+import com.campusconnection.model.requests.RemoveRequest;
 import com.campusconnection.rest.ApiClient;
 import com.campusconnection.rest.ApiInterface;
+import com.campusconnection.util.AppUtils;
 import com.campusconnection.views.ProfileInterestTags;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashMap;
 import java.util.List;
 
 import retrofit2.Call;
@@ -64,32 +63,32 @@ public class EditProfileActivity extends AppCompatActivity implements AddPicture
 
 
         //Todo for testing
-        List list = new ArrayList();
-
-        HashMap<String, String> o = new HashMap<String, String>();
-        o.put("relPath", "https://i.imgur.com/suiOWyN.jpg");
-        HashMap<String, String> b = new HashMap<String, String>();
-        b.put("relPath", "https://i.imgur.com/Nnz9Bwl.jpg");
-        HashMap<String, String> p = new HashMap<String, String>();
-        p.put("relPath", "http://placehold.it/150x150");
-
-
-        list.add(o);
-        list.add(o);
-        list.add(b);
-        list.add(p);
-        list.add(p);
-        list.add(p);
-
-        List w = new ArrayList();
-        w.add("Cool");
-        w.add("Rad");
-        w.add("Nice");
-        w.add("Yep");
-        List courses = new ArrayList();
-        mCurrentMember = new MemberResponse(false,"https://i.imgur.com/suiOWyN.jpg", list,"Amanda",
-                                            "New Boston", "EMU", "ok", "CIS", "Comp",
-                                            22, "fhysf gdsyfhjds f", w,courses);
+//        List list = new ArrayList();
+//
+//        HashMap<String, String> o = new HashMap<String, String>();
+//        o.put("relPath", "https://i.imgur.com/suiOWyN.jpg");
+//        HashMap<String, String> b = new HashMap<String, String>();
+//        b.put("relPath", "https://i.imgur.com/Nnz9Bwl.jpg");
+//        HashMap<String, String> p = new HashMap<String, String>();
+//        p.put("relPath", "http://placehold.it/150x150");
+//
+//
+//        list.add(o);
+//        list.add(o);
+//        list.add(b);
+//        list.add(p);
+//        list.add(p);
+//        list.add(p);
+//
+//        List w = new ArrayList();
+//        w.add("Cool");
+//        w.add("Rad");
+//        w.add("Nice");
+//        w.add("Yep");
+//        List courses = new ArrayList();
+//        mCurrentMember = new MemberResponse(false,"https://i.imgur.com/suiOWyN.jpg", list,"Amanda",
+//                                            "New Boston", "EMU", "ok", "CIS", "Comp",
+//                                            22, "fhysf gdsyfhjds f", w,courses);
 
 
         if(mCurrentMember != null) {
@@ -130,6 +129,8 @@ public class EditProfileActivity extends AppCompatActivity implements AddPicture
                 interests.add(interestsPreClean.get(i).toString().replace("[", "").replace("]", ""));
             }
             mEditTags.setTags(interests);
+
+
         } else {
             //TODO handel error;
         }
@@ -161,7 +162,6 @@ public class EditProfileActivity extends AppCompatActivity implements AddPicture
     public void saveProfile() {
         List<String> newTags = Arrays.asList(mEditTags.getTags());
         String [] keepEmSeparated = mEditLocation.getText().toString().split(","); //TODO validate that comma
-        ApiInterface apiService = ApiClient.getClient().create(ApiInterface.class);
         MemberResponse updatedMember = new MemberResponse(mEditSchool.getText().toString(),
                 mEditMajor.getText().toString(),
                 mEditMinor.getText().toString(),
@@ -170,12 +170,33 @@ public class EditProfileActivity extends AppCompatActivity implements AddPicture
                 mEditStanding.getText().toString(),
                 mEditAbout.getText().toString(),
                 newTags);
-        Call<GenericResponse> call = apiService.updateProfile(myId, updatedMember);
+        ApiInterface ApiService = ApiClient.getClient(this).create(ApiInterface.class);
+        Call<GenericResponse> call = ApiService.updateProfile(myId, updatedMember);
 
         call.enqueue(new Callback<GenericResponse>() {
             @Override
             public void onResponse(Call<GenericResponse> call, Response<GenericResponse> response) {
 
+            }
+
+            @Override
+            public void onFailure(Call<GenericResponse> call, Throwable t) {
+
+            }
+        });
+    }
+
+    public static void removeInterest(Context context, String name, String isInterest) {
+        final Context c = context;
+        ApiInterface ApiService = ApiClient.getClient(c).create(ApiInterface.class);
+        Call<GenericResponse> call = ApiService.remove(new RemoveRequest(name, isInterest));
+        call.enqueue(new Callback<GenericResponse>() {
+            @Override
+            public void onResponse(Call<GenericResponse> call, Response<GenericResponse> response) {
+                GenericResponse res = response.body();
+                if(res.getError()) {
+                    AppUtils.showPopMessage(c, res.getMessage());
+                }
             }
 
             @Override

@@ -1,22 +1,21 @@
-package com.campusconnection;
+package com.campusconnection.fragments;
 
 import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentTransaction;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.campusconnection.model.MemberListResponse;
+import com.campusconnection.R;
+import com.campusconnection.model.responses.MemberListResponse;
 import com.campusconnection.views.SwipeCard;
 import com.mindorks.placeholderview.SwipeDecor;
 import com.mindorks.placeholderview.SwipePlaceHolderView;
 
 import java.util.ArrayList;
-import java.util.List;
 
 
 public class SwipeFragment extends Fragment {

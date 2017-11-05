@@ -10,7 +10,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.RadioGroup;
 import android.widget.Spinner;
-import com.campusconnection.model.SearchRequest;
+import com.campusconnection.model.requests.SearchRequest;
 import org.florescu.android.rangeseekbar.RangeSeekBar;
 
 

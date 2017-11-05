@@ -7,9 +7,8 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.Switch;
 
-import com.campusconnection.model.GenericResponse;
-import com.campusconnection.model.SearchRequest;
-import com.campusconnection.model.SettingsBody;
+import com.campusconnection.model.responses.GenericResponse;
+import com.campusconnection.model.responses.SettingsBody;
 import com.campusconnection.rest.ApiClient;
 import com.campusconnection.rest.ApiInterface;
 
@@ -85,7 +84,7 @@ public class SettingsActivity extends AppCompatActivity {
     }
 
     public void getDefaultSettings() {
-        ApiInterface apiService = ApiClient.getClient().create(ApiInterface.class);
+        ApiInterface apiService = ApiClient.getClient(this).create(ApiInterface.class);
         Call<SettingsBody> call = apiService.getSettings(getProfileId());
 
         call.enqueue(new Callback<SettingsBody>() {
@@ -120,7 +119,7 @@ public class SettingsActivity extends AppCompatActivity {
 
     public void postDefaultSettings() {
 
-        ApiInterface apiService = ApiClient.getClient().create(ApiInterface.class);
+        ApiInterface apiService = ApiClient.getClient(this).create(ApiInterface.class);
         SettingsBody updatedSettings = new SettingsBody(schoolText.getText().toString(),
                 maleSwitch.isChecked() ? 1 : 0,
                 femaleSwitch.isChecked() ? 1 : 0,

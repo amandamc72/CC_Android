@@ -1,4 +1,4 @@
-package com.campusconnection;
+package com.campusconnection.adapters;
 
 
 import android.app.Activity;
@@ -17,6 +17,7 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 
+import com.campusconnection.R;
 import com.squareup.picasso.Picasso;
 import com.theartofdev.edmodo.cropper.CropImage;
 import com.theartofdev.edmodo.cropper.CropImageView;
@@ -93,6 +94,8 @@ public class GridViewAdapter extends ArrayAdapter {
                         builder.show();
                     }
                 });
+            } else {
+
             }
 
             convertView.setTag(viewHolder);

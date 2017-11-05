@@ -1,6 +1,6 @@
 package com.campusconnection;
 
-import android.content.DialogInterface;
+import android.content.Context;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -9,31 +9,33 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Button;
-import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.campusconnection.model.GenericResponse;
-import com.campusconnection.model.MemberListResponse;
-import com.campusconnection.model.MemberResponse;
+import com.campusconnection.model.responses.MemberResponse;
 import com.campusconnection.rest.ApiClient;
 import com.campusconnection.rest.ApiInterface;
 import com.campusconnection.views.ProfileInterestTags;
+import com.daimajia.slider.library.Animations.DescriptionAnimation;
+import com.daimajia.slider.library.Indicators.PagerIndicator;
+import com.daimajia.slider.library.SliderLayout;
+import com.daimajia.slider.library.SliderTypes.BaseSliderView;
+import com.daimajia.slider.library.SliderTypes.DefaultSliderView;
+import com.daimajia.slider.library.Tricks.ViewPagerEx;
+import com.google.gson.internal.LinkedTreeMap;
 import com.squareup.picasso.Picasso;
-
-import org.w3c.dom.Text;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class ProfileActivity extends AppCompatActivity {
+public class ProfileActivity extends AppCompatActivity implements BaseSliderView.OnSliderClickListener {
 
-    private ImageView mImage;
+    private SliderLayout mProfilePicSlider;
     private TextView mNameAndAge;
     private TextView mSchool;
     private TextView mMajor;
@@ -50,7 +52,8 @@ public class ProfileActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile);
 
-        mImage = (ImageView) findViewById(R.id.profileImage);
+        mProfilePicSlider = (SliderLayout)findViewById(R.id.profileImageSlider);
+        mProfilePicSlider.setCustomIndicator((PagerIndicator) findViewById(R.id.custom_indicator));
         mNameAndAge = (TextView) findViewById(R.id.profileNameAndAge);
         mSchool = (TextView) findViewById(R.id.profileSchool);
         mMajor = (TextView) findViewById(R.id.profileMajor);
@@ -102,30 +105,48 @@ public class ProfileActivity extends AppCompatActivity {
     }
 
     private void getProfile() {
-        ApiInterface apiService = ApiClient.getClient().create(ApiInterface.class);
+        ApiInterface apiService = ApiClient.getClient(this).create(ApiInterface.class);
         Call<MemberResponse> call = apiService.getProfile(profileId());
 
         call.enqueue(new Callback<MemberResponse>() {
             @Override
             public void onResponse(Call<MemberResponse> call, Response<MemberResponse> response) {
+                if(response.isSuccessful()) {
+                    mMemberResponse = response.body();
+                    ArrayList<String> pictures = mMemberResponse.formatAllPicsToArray();
 
-                mMemberResponse = response.body();
-                Picasso.with(ProfileActivity.this).load(mMemberResponse.getThumbnail()).into(mImage);
-                mNameAndAge.setText(mMemberResponse.getName() + ", " + mMemberResponse.getAge().toString());
-                mSchool.setText(mMemberResponse.getSchool());
-                mMajor.setText(mMemberResponse.getMajor());
-                mMinor.setText(mMemberResponse.getMinor());
-                mLocation.setText(mMemberResponse.getCity() + ", " + mMemberResponse.getState());
-                mStanding.setText(mMemberResponse.getStanding());
-                mAbout.setText(mMemberResponse.getAbout());
+                    //Put pictures in image slider
+                    for(int i = 0; i < 7; i++) {
+                        DefaultSliderView defaultSliderView = new DefaultSliderView(ProfileActivity.this);
+                        defaultSliderView
+                                .image(pictures.get(i))
+                                .setScaleType(BaseSliderView.ScaleType.Fit)
+                                .setOnSliderClickListener(ProfileActivity.this);
+                        mProfilePicSlider.addSlider(defaultSliderView);
+                    }
 
-                List interestsPreClean = mMemberResponse.getInterests();
-                ArrayList<String> interests = new ArrayList<>();
+                    mProfilePicSlider.setPresetIndicator(SliderLayout.PresetIndicators.Center_Bottom);
+                    mProfilePicSlider.stopAutoCycle();
 
-                for (int i = 0; i < interestsPreClean.size(); i++) {
-                    interests.add(interestsPreClean.get(i).toString().replace("[", "").replace("]", ""));
+                    //Picasso.with(ProfileActivity.this).load(mMemberResponse.getThumbnail()).into(mImage);
+                    mNameAndAge.setText(mMemberResponse.getName() + ", " + mMemberResponse.getAge().toString());
+                    mSchool.setText(mMemberResponse.getSchool());
+                    mMajor.setText(mMemberResponse.getMajor());
+                    mMinor.setText(mMemberResponse.getMinor());
+                    mLocation.setText(mMemberResponse.getCity() + ", " + mMemberResponse.getState());
+                    mStanding.setText(mMemberResponse.getStanding());
+                    mAbout.setText(mMemberResponse.getAbout());
+
+                    List interestsPreClean = mMemberResponse.getInterests();
+                    ArrayList<String> interests = new ArrayList<>();
+
+                    for (int i = 0; i < interestsPreClean.size(); i++) {
+                        interests.add(interestsPreClean.get(i).toString().replace("[", "").replace("]", ""));
+                    }
+                    mInterestsTags.setTags(interests);
+                } else {
+                    //TODO display not found
                 }
-                mInterestsTags.setTags(interests);
             }
 
             @Override
@@ -133,5 +154,10 @@ public class ProfileActivity extends AppCompatActivity {
                 call.cancel();
             }
         });
+    }
+
+    @Override
+    public void onSliderClick(BaseSliderView baseSliderView) {
+        Log.d("D","onSliderClick  : " + baseSliderView.getUrl());
     }
 }

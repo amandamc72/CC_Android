@@ -1,21 +1,19 @@
-package com.campusconnection;
+package com.campusconnection.adapters;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.database.Observable;
 import android.support.v7.widget.RecyclerView;
-import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
-import android.widget.BaseAdapter;
 import android.content.Context;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import com.campusconnection.model.MemberListResponse;
+import com.campusconnection.ProfileActivity;
+import com.campusconnection.R;
+import com.campusconnection.model.responses.MemberListResponse;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;

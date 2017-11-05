@@ -1,4 +1,4 @@
-package com.campusconnection.model;
+package com.campusconnection.model.requests;
 
 import android.os.Parcel;
 import android.os.Parcelable;

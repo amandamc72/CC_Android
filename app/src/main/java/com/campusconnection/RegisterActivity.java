@@ -1,11 +1,8 @@
 package com.campusconnection;
 
-import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.TextUtils;
@@ -18,9 +15,8 @@ import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
-import com.campusconnection.model.GenericResponse;
-import com.campusconnection.model.LoginRequest;
-import com.campusconnection.model.RegisterRequest;
+import com.campusconnection.model.responses.GenericResponse;
+import com.campusconnection.model.requests.RegisterRequest;
 import com.campusconnection.rest.ApiClient;
 import com.campusconnection.rest.ApiInterface;
 import com.campusconnection.util.AppUtils;
@@ -47,7 +43,7 @@ public class RegisterActivity extends AppCompatActivity {
 
 
         prefs = PreferenceManager.getDefaultSharedPreferences(this);
-        String code = prefs.getString(getString(R.string.code_key), "");
+        String code = prefs.getString("code", "");
         Log.d("D","CODE is: " +  code);
 
         if (!TextUtils.isEmpty(code))
@@ -95,7 +91,7 @@ public class RegisterActivity extends AppCompatActivity {
             focusView.requestFocus();
 
         } else {
-            ApiInterface apiService = ApiClient.getClient().create(ApiInterface.class);
+            ApiInterface apiService = ApiClient.getClient(this).create(ApiInterface.class);
             Call<GenericResponse> call = apiService.register(new RegisterRequest(email));
             mProgress.setVisibility(View.VISIBLE);
 
@@ -108,7 +104,7 @@ public class RegisterActivity extends AppCompatActivity {
                     Log.d("D","Recieved Code is: " + res.getCode());
 
                     SharedPreferences.Editor editor = prefs.edit();
-                    editor.putString(getString(R.string.code_key), res.getCode());
+                    editor.putString("code", res.getCode());
                     editor.apply();
 
                     mProgress.setVisibility(View.INVISIBLE);
@@ -125,7 +121,7 @@ public class RegisterActivity extends AppCompatActivity {
     }
 
     private void checkStatus(String code) {
-        ApiInterface apiService = ApiClient.getClient().create(ApiInterface.class);
+        ApiInterface apiService = ApiClient.getClient(this).create(ApiInterface.class);
         Call<GenericResponse> call = apiService.checkStatus(code);
 
         call.enqueue(new Callback<GenericResponse>() {

@@ -1,4 +1,4 @@
-package com.campusconnection.model;
+package com.campusconnection.model.requests;
 
 import com.google.gson.annotations.SerializedName;
 

@@ -1,28 +1,22 @@
 package com.campusconnection;
 
-import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 import android.support.v4.app.DialogFragment;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ProgressBar;
-import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Spinner;
 
-import com.campusconnection.model.GenericResponse;
-import com.campusconnection.model.LoginRequest;
-import com.campusconnection.model.SignupRequest;
+import com.campusconnection.model.responses.GenericResponse;
+import com.campusconnection.model.requests.SignupRequest;
 import com.campusconnection.rest.ApiClient;
 import com.campusconnection.rest.ApiInterface;
 import com.campusconnection.util.AppUtils;
@@ -58,7 +52,7 @@ public class SignUpActivity extends AppCompatActivity {
         setTheme(R.style.AppTheme);
 
         prefs = PreferenceManager.getDefaultSharedPreferences(this);
-        code = prefs.getString(getString(R.string.code_key), "");
+        code = prefs.getString("code", "");
         Log.d("D","CODE is: " +  code);
 
 
@@ -140,7 +134,7 @@ public class SignUpActivity extends AppCompatActivity {
             focusView.requestFocus();
 
         } else {
-            ApiInterface apiService = ApiClient.getClient().create(ApiInterface.class);
+            ApiInterface apiService = ApiClient.getClient(this).create(ApiInterface.class);
             Call<GenericResponse> call = apiService.signup(new SignupRequest(code, firstName, lastName, password,
                     city, state, school, major, minor, birthday, gender));
             //mProgress.setVisibility(View.VISIBLE);

@@ -1,15 +1,10 @@
 package com.campusconnection;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
-import android.provider.SearchRecentSuggestions;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v4.app.FragmentTransaction;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
 import android.support.design.widget.NavigationView;
@@ -20,15 +15,15 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.*;
 
-import com.campusconnection.model.MemberListResponse;
-import com.campusconnection.model.SearchRequest;
+import com.campusconnection.fragments.RecyclerViewFragment;
+import com.campusconnection.fragments.SwipeFragment;
+import com.campusconnection.model.responses.MemberListResponse;
+import com.campusconnection.model.requests.SearchRequest;
 import com.campusconnection.rest.ApiClient;
 import com.campusconnection.rest.ApiInterface;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 import retrofit2.Call;
@@ -181,7 +176,7 @@ public class HomeActivity extends AppCompatActivity
     public void getMembersListAdapter(Bundle savedInstanceState) {
         int offset = 0; //TODO so something with this
         final Bundle state = savedInstanceState;
-        ApiInterface apiService = ApiClient.getClient().create(ApiInterface.class);
+        ApiInterface apiService = ApiClient.getClient(this).create(ApiInterface.class);
         Call<MemberListResponse> call;
 
         if(isSearchList()) {
@@ -193,19 +188,21 @@ public class HomeActivity extends AppCompatActivity
         call.enqueue(new Callback<MemberListResponse>() {
             @Override
             public void onResponse(Call<MemberListResponse> call, Response<MemberListResponse> response) {
-                mMembersResponse = response.body(); //// TODO: handel null case
-                if (findViewById(R.id.memberViewFragmentContainer) != null) {
+                mMembersResponse = response.body();
+                if (!mMembersResponse.getError()) {
+                    if (findViewById(R.id.memberViewFragmentContainer) != null) {
 
-                    // so we don't end up with overlapping fragments.
-                    if (state != null) {
-                        return;
+                        // so we don't end up with overlapping fragments.
+                        if (state != null) {
+                            return;
+                        }
+
+                        mRecyclerViewFragment = new RecyclerViewFragment().newInstance(mMembersResponse);
+                        mSwipeFragment = new SwipeFragment().newInstance(mMembersResponse);
+
+                        getSupportFragmentManager().beginTransaction()
+                                .add(R.id.memberViewFragmentContainer, mRecyclerViewFragment).commit();
                     }
-
-                    mRecyclerViewFragment = new RecyclerViewFragment().newInstance(mMembersResponse);
-                    mSwipeFragment = new SwipeFragment().newInstance(mMembersResponse);
-
-                    getSupportFragmentManager().beginTransaction()
-                            .add(R.id.memberViewFragmentContainer, mRecyclerViewFragment).commit();
                 }
             }
             @Override

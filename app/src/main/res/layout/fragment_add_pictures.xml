@@ -2,13 +2,13 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.campusconnection.AddPicturesFragment">
+    tools:context="com.campusconnection.fragments.AddPicturesFragment">
 
     <GridView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:id="@+id/editProfilePicGrid"
-        android:columnWidth="90dp"
+        android:columnWidth="100dp"
         android:numColumns="auto_fit"
         android:verticalSpacing="10dp"
         android:horizontalSpacing="10dp"

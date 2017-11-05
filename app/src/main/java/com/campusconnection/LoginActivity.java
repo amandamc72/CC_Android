@@ -1,9 +1,8 @@
 package com.campusconnection;
 
-import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
-import android.support.v7.app.AlertDialog;
+import android.content.SharedPreferences;
+import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.KeyEvent;
@@ -14,8 +13,8 @@ import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
-import com.campusconnection.model.GenericResponse;
-import com.campusconnection.model.LoginRequest;
+import com.campusconnection.model.responses.GenericResponse;
+import com.campusconnection.model.requests.LoginRequest;
 import com.campusconnection.rest.ApiClient;
 import com.campusconnection.rest.ApiInterface;
 import com.campusconnection.util.AppUtils;
@@ -32,6 +31,7 @@ public class LoginActivity extends AppCompatActivity{
     private EditText mEmail;
     private EditText mPassword;
     private ProgressBar mProgress;
+    private SharedPreferences prefs;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,6 +42,7 @@ public class LoginActivity extends AppCompatActivity{
         mProgress = (ProgressBar) findViewById(R.id.loginProgressBar);
         mProgress.setVisibility(View.INVISIBLE);
 
+        prefs = PreferenceManager.getDefaultSharedPreferences(this);
         mEmail = (EditText) findViewById(R.id.loginEmailInput);
         mPassword = (EditText) findViewById(R.id.loginPassInput);
         mPassword.setOnEditorActionListener(new EditText.OnEditorActionListener() {
@@ -91,7 +92,7 @@ public class LoginActivity extends AppCompatActivity{
             focusView.requestFocus();
 
         } else {
-            ApiInterface apiService = ApiClient.getClient().create(ApiInterface.class);
+            ApiInterface apiService = ApiClient.getClient(this).create(ApiInterface.class);
             Call<GenericResponse> call = apiService.checkLogin(new LoginRequest(email, password));
             mProgress.setVisibility(View.VISIBLE);
 
@@ -101,8 +102,13 @@ public class LoginActivity extends AppCompatActivity{
                     GenericResponse res = response.body();
                     Boolean error = res.getError();
                     String message = res.getMessage();
+                    String JWT = res.getCode();
                     mProgress.setVisibility(View.INVISIBLE);
                     if (!error) {
+                        SharedPreferences.Editor editor = prefs.edit();
+                        editor.putString("jwt", JWT);
+                        editor.putBoolean("isLoggedIn", true);
+                        editor.apply();
                         Intent intent = new Intent(LoginActivity.this, HomeActivity.class);
                         startActivity(intent);
                         overridePendingTransition(R.anim.anim_slide_in_left, R.anim.anim_slide_out_left);

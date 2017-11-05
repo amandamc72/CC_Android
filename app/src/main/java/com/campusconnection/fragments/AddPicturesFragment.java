@@ -1,11 +1,9 @@
-package com.campusconnection;
+package com.campusconnection.fragments;
 
 import android.content.Context;
 import android.content.Intent;
-import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
-import android.provider.MediaStore;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -13,25 +11,22 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.GridView;
 
-import com.campusconnection.model.DeletePictureRequest;
-import com.campusconnection.model.GenericResponse;
+import com.campusconnection.R;
+import com.campusconnection.adapters.GridViewAdapter;
+import com.campusconnection.model.requests.DeletePictureRequest;
+import com.campusconnection.model.responses.GenericResponse;
 import com.campusconnection.rest.ApiClient;
 import com.campusconnection.rest.ApiInterface;
 import com.campusconnection.util.AppUtils;
 import com.theartofdev.edmodo.cropper.CropImage;
-import com.theartofdev.edmodo.cropper.CropImageView;
-
-import org.json.JSONObject;
 
 import java.io.File;
-import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
 
 import okhttp3.MediaType;
 import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
-import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -122,7 +117,9 @@ public class AddPicturesFragment extends Fragment implements GridViewAdapter.Med
         mPhotoPos = pos;
         if (value == 0) {
             CropImage.activity()
-                    .start(getContext(), this);
+                    .setMinCropResultSize(100,100)
+                    .setMaxCropResultSize(1000,1000)
+                    .start(getActivity(), this);
         }
     }
 
@@ -152,7 +149,7 @@ public class AddPicturesFragment extends Fragment implements GridViewAdapter.Med
     @Override
     public void onRemove(String path, int pos) {
         final int imgPos = pos;
-        ApiInterface apiService = ApiClient.getClient().create(ApiInterface.class);
+        ApiInterface apiService = ApiClient.getClient(getActivity()).create(ApiInterface.class);
         Call<GenericResponse> call = apiService.deletePicture(new DeletePictureRequest(path, setIsDefaultFlag(pos)));
         call.enqueue(new Callback<GenericResponse>() {
             @Override
@@ -187,7 +184,7 @@ public class AddPicturesFragment extends Fragment implements GridViewAdapter.Med
                 RequestBody.create(
                         okhttp3.MultipartBody.FORM, setIsDefaultFlag(mPhotoPos));
 
-        ApiInterface apiService = ApiClient.getClient().create(ApiInterface.class);
+        ApiInterface apiService = ApiClient.getClient(getActivity()).create(ApiInterface.class);
         Call<GenericResponse> call = apiService.uploadPicture(isDefaultBody, body);
 
         call.enqueue(new Callback<GenericResponse>() {

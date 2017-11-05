@@ -1,10 +1,11 @@
-package com.campusconnection.model;
+package com.campusconnection.model.responses;
 
 import android.os.Parcel;
 import android.os.Parcelable;
 import android.util.Log;
 
 import com.google.gson.annotations.SerializedName;
+import com.google.gson.internal.LinkedTreeMap;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -40,6 +41,8 @@ public class MemberResponse implements Parcelable {
     private List courses = new ArrayList();
     @SerializedName("interests")
     private List interests = new ArrayList();
+    //private String url = "http://campusconnection.ddns.net:8080/";
+
 
     public MemberResponse(Boolean error, String thumbnail, List subPics, String name, String city, String school,
                           String standing, String major, String minor, Integer age, String about, List courses, List interests){
@@ -181,13 +184,27 @@ public class MemberResponse implements Parcelable {
     public ArrayList<String> formatAllPicsToArray() {
         ArrayList<String> formatedPics = new ArrayList<>();
         for (int i = 0; i < getSubPics().size(); i++) {
-            HashMap<String,String> currentPicMap = (HashMap<String,String>)getSubPics().get(i);
-            formatedPics.add(i , currentPicMap.get("relPath"));
+            try {
+                LinkedTreeMap<String,String> currentPicMap = (LinkedTreeMap<String,String>)getSubPics().get(i);
+                formatedPics.add(i , currentPicMap.get("relPath"));
+            } catch (ClassCastException e) {
+                HashMap<String,String> currentPicMap = (HashMap<String,String>)getSubPics().get(i);
+                formatedPics.add(i , currentPicMap.get("relPath"));
+            }
         }
         formatedPics.add(0, getThumbnail());
-        for (int i = formatedPics.size()-1; i > 5; i--) {
-            formatedPics.remove(i);
+
+        for(int i = 0; i < formatedPics.size(); i++ ) {
+            //TODO we wont have to do this check once the backend sends our thumbnail path
+            if (!formatedPics.get(i).equals("http://placehold.it/150x150")) {
+                String fullPath = "http://campusconnection.ddns.net:8080/" + formatedPics.get(i);
+                formatedPics.set(i, fullPath);
+            }
         }
+        //SHould not matter if we have a cap on the grid adpeter size?
+//        for (int i = formatedPics.size()-1; i > 5; i--) {
+//            formatedPics.remove(i);
+//        }
         return formatedPics;
     }
 

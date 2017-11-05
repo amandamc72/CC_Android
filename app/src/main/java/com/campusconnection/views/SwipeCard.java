@@ -13,9 +13,9 @@ import android.widget.TextView;
 
 import com.campusconnection.ProfileActivity;
 import com.campusconnection.R;
-import com.campusconnection.model.GenericResponse;
-import com.campusconnection.model.MemberListResponse;
-import com.campusconnection.model.SwipeRequest;
+import com.campusconnection.model.responses.GenericResponse;
+import com.campusconnection.model.responses.MemberListResponse;
+import com.campusconnection.model.requests.SwipeRequest;
 import com.campusconnection.rest.ApiClient;
 import com.campusconnection.rest.ApiInterface;
 import com.mindorks.placeholderview.SwipePlaceHolderView;
@@ -113,7 +113,7 @@ public class SwipeCard implements Parcelable {
 
     public void setSwipeStateApiCall(int direction) {
 
-        ApiInterface apiService = ApiClient.getClient().create(ApiInterface.class);
+        ApiInterface apiService = ApiClient.getClient(mContext).create(ApiInterface.class);
         Call<GenericResponse> call = apiService.addSwipe(new SwipeRequest(mMemberId, direction));
 
         call.enqueue(new Callback<GenericResponse>() {

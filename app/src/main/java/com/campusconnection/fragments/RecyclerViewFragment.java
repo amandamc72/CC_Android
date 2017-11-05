@@ -1,4 +1,4 @@
-package com.campusconnection;
+package com.campusconnection.fragments;
 
 import android.content.Context;
 import android.net.Uri;
@@ -10,7 +10,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.campusconnection.model.MemberListResponse;
+import com.campusconnection.R;
+import com.campusconnection.adapters.MembersListAdapter;
+import com.campusconnection.model.responses.MemberListResponse;
 
 
 public class RecyclerViewFragment extends Fragment {

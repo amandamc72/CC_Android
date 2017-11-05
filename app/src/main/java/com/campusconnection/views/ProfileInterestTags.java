@@ -34,6 +34,7 @@ import android.view.inputmethod.InputConnectionWrapper;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import com.campusconnection.EditProfileActivity;
 import com.campusconnection.R;
 
 import java.util.ArrayList;
@@ -604,6 +605,7 @@ public class ProfileInterestTags extends ViewGroup {
     }
 
     protected void deleteTag(TagView tagView) {
+        EditProfileActivity.removeInterest(getContext(), tagView.getText().toString(), "true");
         removeView(tagView);
         if (mOnTagChangeListener != null) {
             mOnTagChangeListener.onDelete(ProfileInterestTags.this, tagView.getText().toString());

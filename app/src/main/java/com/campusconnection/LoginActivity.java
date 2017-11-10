@@ -18,6 +18,7 @@ import com.campusconnection.model.requests.LoginRequest;
 import com.campusconnection.rest.ApiClient;
 import com.campusconnection.rest.ApiInterface;
 import com.campusconnection.util.AppUtils;
+import com.campusconnection.util.PreferencesUtil;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -31,7 +32,7 @@ public class LoginActivity extends AppCompatActivity{
     private EditText mEmail;
     private EditText mPassword;
     private ProgressBar mProgress;
-    private SharedPreferences prefs;
+    private PreferencesUtil prefs;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,7 +43,7 @@ public class LoginActivity extends AppCompatActivity{
         mProgress = (ProgressBar) findViewById(R.id.loginProgressBar);
         mProgress.setVisibility(View.INVISIBLE);
 
-        prefs = PreferenceManager.getDefaultSharedPreferences(this);
+        prefs = new PreferencesUtil(this);
         mEmail = (EditText) findViewById(R.id.loginEmailInput);
         mPassword = (EditText) findViewById(R.id.loginPassInput);
         mPassword.setOnEditorActionListener(new EditText.OnEditorActionListener() {
@@ -105,10 +106,8 @@ public class LoginActivity extends AppCompatActivity{
                     String JWT = res.getCode();
                     mProgress.setVisibility(View.INVISIBLE);
                     if (!error) {
-                        SharedPreferences.Editor editor = prefs.edit();
-                        editor.putString("jwt", JWT);
-                        editor.putBoolean("isLoggedIn", true);
-                        editor.apply();
+                        prefs.setStringPreference(getString(R.string.jwtPref), JWT);
+                        prefs.setBooleanPreference(getString(R.string.isLoggedPref), true);
                         Intent intent = new Intent(LoginActivity.this, HomeActivity.class);
                         startActivity(intent);
                         overridePendingTransition(R.anim.anim_slide_in_left, R.anim.anim_slide_out_left);

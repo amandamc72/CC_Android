@@ -21,6 +21,7 @@ import com.campusconnection.rest.ApiClient;
 import com.campusconnection.rest.ApiInterface;
 import com.campusconnection.util.AppUtils;
 import com.campusconnection.util.DatePickerFragment;
+import com.campusconnection.util.PreferencesUtil;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -42,7 +43,7 @@ public class SignUpActivity extends AppCompatActivity {
     private RadioGroup mGender;
     private String gender;
     private ProgressBar mProgress;
-    private SharedPreferences prefs;
+    private PreferencesUtil prefs;
     private String code;
 
     @Override
@@ -51,8 +52,8 @@ public class SignUpActivity extends AppCompatActivity {
         setContentView(R.layout.activity_sign_up);
         setTheme(R.style.AppTheme);
 
-        prefs = PreferenceManager.getDefaultSharedPreferences(this);
-        code = prefs.getString("code", "");
+        prefs = new PreferencesUtil(this);
+        code = prefs.getStringPreference(getString(R.string.codePref));
         Log.d("D","CODE is: " +  code);
 
 

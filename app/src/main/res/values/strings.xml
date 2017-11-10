@@ -2,7 +2,9 @@
     <string name="app_name">Campus Connection</string>
     <string name="company">\u00A9 Company, Inc.</string>
     <string name="popup_ok">OK</string>
-
+    <string name="isLoggedPref">isLoggedIn</string>
+    <string name="jwtPref">jwt</string>
+    <string name="codePref">code</string>
     <string name="add_tag">Add Interest</string>
 
     <!-- LoginRequest Strings -->
@@ -154,7 +156,6 @@
     </string-array>
 
 
-
     <string name="choose_media">Media location</string>
     <string-array name="media_choices_array">
         <item>Gallery</item>
@@ -178,5 +179,6 @@
     <string name="permission_rationale">"Contacts permissions are needed for providing email
         completions."
     </string>
+
 
 </resources>

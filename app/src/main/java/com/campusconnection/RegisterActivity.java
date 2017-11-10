@@ -20,6 +20,7 @@ import com.campusconnection.model.requests.RegisterRequest;
 import com.campusconnection.rest.ApiClient;
 import com.campusconnection.rest.ApiInterface;
 import com.campusconnection.util.AppUtils;
+import com.campusconnection.util.PreferencesUtil;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -32,7 +33,7 @@ public class RegisterActivity extends AppCompatActivity {
 
     private EditText mEmail;
     private ProgressBar mProgress;
-    private SharedPreferences prefs;
+    private PreferencesUtil prefs;
 
     //TODO check status on act load NEED TO TEST!!!
     @Override
@@ -42,8 +43,8 @@ public class RegisterActivity extends AppCompatActivity {
         setTheme(R.style.AppTheme);
 
 
-        prefs = PreferenceManager.getDefaultSharedPreferences(this);
-        String code = prefs.getString("code", "");
+        prefs = new PreferencesUtil(this);
+        String code = prefs.getStringPreference(getString(R.string.codePref));
         Log.d("D","CODE is: " +  code);
 
         if (!TextUtils.isEmpty(code))
@@ -103,10 +104,7 @@ public class RegisterActivity extends AppCompatActivity {
 
                     Log.d("D","Recieved Code is: " + res.getCode());
 
-                    SharedPreferences.Editor editor = prefs.edit();
-                    editor.putString("code", res.getCode());
-                    editor.apply();
-
+                    prefs.setStringPreference((getString(R.string.codePref)), res.getCode());
                     mProgress.setVisibility(View.INVISIBLE);
                     //TODO want response message in text field not pop up
                     AppUtils.showPopMessage(RegisterActivity.this, message);

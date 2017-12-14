@@ -6,7 +6,6 @@ import com.campusconnection.model.requests.LoginRequest;
 import com.campusconnection.model.responses.MemberListResponse;
 import com.campusconnection.model.responses.MemberResponse;
 import com.campusconnection.model.requests.RegisterRequest;
-import com.campusconnection.model.requests.RemoveRequest;
 import com.campusconnection.model.requests.SearchRequest;
 import com.campusconnection.model.responses.SettingsBody;
 import com.campusconnection.model.requests.SignupRequest;
@@ -35,38 +34,36 @@ public interface ApiInterface {
     @POST("signup")
     Call<GenericResponse> signup(@Body SignupRequest signup);
 
-    @POST("search")
+    @POST("api/search")
     Call<MemberListResponse> createSearch(@Body SearchRequest search);
 
     @GET("status/{code}")
     Call<GenericResponse> checkStatus(@Path("code") String code);
 
-    @GET("members/list")
+    @GET("api/members/list")
     Call<MemberListResponse> getMembers(@Query("offset") int offset);
 
-    @GET("profile/{id}")
+    @GET("api/profile/{id}")
     Call<MemberResponse> getProfile(@Path("id") int id);
 
-    @POST("swipe")
+    @POST("api/swipe")
     Call<GenericResponse> addSwipe(@Body SwipeRequest swipe);
 
-    @PUT("profile/{id}")
-    Call<GenericResponse> updateProfile(@Path("id") int id, @Body MemberResponse updatedMember);
+    @PUT("api/profile")
+    Call<GenericResponse> updateProfile(@Body MemberResponse updatedMember);
 
-    @GET("settings/{id}")
-    Call<SettingsBody> getSettings(@Path("id") int id);
+    @GET("api/settings")
+    Call<SettingsBody> getSettings();
 
-    @POST("settings/{id}")
-    Call<GenericResponse> postSettings(@Path("id") int id, @Body SettingsBody settings);
+    @POST("api/settings")
+    Call<GenericResponse> postSettings(@Body SettingsBody settings);
 
     @Multipart
-    @POST("upload")
+    @POST("api/upload")
     Call<GenericResponse> uploadPicture(@Part("isDefault") RequestBody isDefault, @Part MultipartBody.Part file);
 
-    @HTTP(method = "DELETE", path = "upload", hasBody = true)
+    @HTTP(method = "DELETE", path = "api/upload", hasBody = true)
     Call<GenericResponse> deletePicture(@Body DeletePictureRequest picture);
 
-    @HTTP(method = "DELETE", path = "remove", hasBody = true)
-    Call<GenericResponse> remove(@Body RemoveRequest item);
 
 }

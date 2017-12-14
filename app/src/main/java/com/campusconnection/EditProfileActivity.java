@@ -11,7 +11,6 @@ import android.widget.EditText;
 import com.campusconnection.fragments.AddPicturesFragment;
 import com.campusconnection.model.responses.GenericResponse;
 import com.campusconnection.model.responses.MemberResponse;
-import com.campusconnection.model.requests.RemoveRequest;
 import com.campusconnection.rest.ApiClient;
 import com.campusconnection.rest.ApiInterface;
 import com.campusconnection.util.AppUtils;
@@ -35,7 +34,6 @@ public class EditProfileActivity extends AppCompatActivity implements AddPicture
     private EditText mEditAbout;
     private ProfileInterestTags mEditTags;
     private MemberResponse mCurrentMember;
-    private int myId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,35 +58,6 @@ public class EditProfileActivity extends AppCompatActivity implements AddPicture
         mEditStanding = (EditText) findViewById(R.id.editStandingText);
         mEditAbout = (EditText) findViewById(R.id.editAboutText);
         mEditTags = (ProfileInterestTags) findViewById(R.id.editInterests);
-
-
-        //Todo for testing
-//        List list = new ArrayList();
-//
-//        HashMap<String, String> o = new HashMap<String, String>();
-//        o.put("relPath", "https://i.imgur.com/suiOWyN.jpg");
-//        HashMap<String, String> b = new HashMap<String, String>();
-//        b.put("relPath", "https://i.imgur.com/Nnz9Bwl.jpg");
-//        HashMap<String, String> p = new HashMap<String, String>();
-//        p.put("relPath", "http://placehold.it/150x150");
-//
-//
-//        list.add(o);
-//        list.add(o);
-//        list.add(b);
-//        list.add(p);
-//        list.add(p);
-//        list.add(p);
-//
-//        List w = new ArrayList();
-//        w.add("Cool");
-//        w.add("Rad");
-//        w.add("Nice");
-//        w.add("Yep");
-//        List courses = new ArrayList();
-//        mCurrentMember = new MemberResponse(false,"https://i.imgur.com/suiOWyN.jpg", list,"Amanda",
-//                                            "New Boston", "EMU", "ok", "CIS", "Comp",
-//                                            22, "fhysf gdsyfhjds f", w,courses);
 
 
         if(mCurrentMember != null) {
@@ -154,7 +123,6 @@ public class EditProfileActivity extends AppCompatActivity implements AddPicture
             Bundle extras = getIntent().getExtras();
             if (extras != null) {
                 mCurrentMember = extras.getParcelable("memberResponse");
-                myId = extras.getInt("id");
             }
         }
     }
@@ -171,32 +139,12 @@ public class EditProfileActivity extends AppCompatActivity implements AddPicture
                 mEditAbout.getText().toString(),
                 newTags);
         ApiInterface ApiService = ApiClient.getClient(this).create(ApiInterface.class);
-        Call<GenericResponse> call = ApiService.updateProfile(myId, updatedMember);
+        Call<GenericResponse> call = ApiService.updateProfile(updatedMember);
 
         call.enqueue(new Callback<GenericResponse>() {
             @Override
             public void onResponse(Call<GenericResponse> call, Response<GenericResponse> response) {
 
-            }
-
-            @Override
-            public void onFailure(Call<GenericResponse> call, Throwable t) {
-
-            }
-        });
-    }
-
-    public static void removeInterest(Context context, String name, String isInterest) {
-        final Context c = context;
-        ApiInterface ApiService = ApiClient.getClient(c).create(ApiInterface.class);
-        Call<GenericResponse> call = ApiService.remove(new RemoveRequest(name, isInterest));
-        call.enqueue(new Callback<GenericResponse>() {
-            @Override
-            public void onResponse(Call<GenericResponse> call, Response<GenericResponse> response) {
-                GenericResponse res = response.body();
-                if(res.getError()) {
-                    AppUtils.showPopMessage(c, res.getMessage());
-                }
             }
 
             @Override

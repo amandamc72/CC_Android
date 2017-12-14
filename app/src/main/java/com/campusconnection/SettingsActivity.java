@@ -85,7 +85,7 @@ public class SettingsActivity extends AppCompatActivity {
 
     public void getDefaultSettings() {
         ApiInterface apiService = ApiClient.getClient(this).create(ApiInterface.class);
-        Call<SettingsBody> call = apiService.getSettings(getProfileId());
+        Call<SettingsBody> call = apiService.getSettings();
 
         call.enqueue(new Callback<SettingsBody>() {
             @Override
@@ -130,7 +130,7 @@ public class SettingsActivity extends AppCompatActivity {
                 matchesSwitch.isChecked() ? 1 : 0,
                 eventsSwitch.isChecked() ? 1 : 0);
         ;
-        Call<GenericResponse> call = apiService.postSettings(1001, updatedSettings); //TODO change back end to send back user id
+        Call<GenericResponse> call = apiService.postSettings(updatedSettings);
 
         call.enqueue(new Callback<GenericResponse>() {
             @Override

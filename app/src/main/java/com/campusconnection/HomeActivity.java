@@ -168,7 +168,7 @@ public class HomeActivity extends AppCompatActivity
     }
 
     public void drawerIntentNav(Intent intent) {
-        intent.putExtra("id", 1001); //todo My id for testing need to get from phone storage
+        intent.putExtra("id", 0);
         startActivity(intent);
         overridePendingTransition(R.anim.anim_slide_in_left, R.anim.anim_slide_out_left);
     }

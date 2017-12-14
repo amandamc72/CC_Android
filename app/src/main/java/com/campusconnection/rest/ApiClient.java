@@ -35,8 +35,7 @@ public class ApiClient {
         //Log requests and responses for debuggin
         HttpLoggingInterceptor loggingInterceptor = new HttpLoggingInterceptor();
         loggingInterceptor
-                .setLevel(HttpLoggingInterceptor.Level.BODY)
-                .setLevel(HttpLoggingInterceptor.Level.HEADERS);
+                .setLevel(HttpLoggingInterceptor.Level.BODY);
 
         OkHttpClient client = new OkHttpClient.Builder()
                 .addInterceptor(new Interceptor() {

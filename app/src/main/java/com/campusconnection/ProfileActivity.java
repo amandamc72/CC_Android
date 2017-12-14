@@ -113,37 +113,7 @@ public class ProfileActivity extends AppCompatActivity implements BaseSliderView
             public void onResponse(Call<MemberResponse> call, Response<MemberResponse> response) {
                 if(response.isSuccessful()) {
                     mMemberResponse = response.body();
-                    ArrayList<String> pictures = mMemberResponse.formatAllPicsToArray();
-
-                    //Put pictures in image slider
-                    for(int i = 0; i < 7; i++) {
-                        DefaultSliderView defaultSliderView = new DefaultSliderView(ProfileActivity.this);
-                        defaultSliderView
-                                .image(pictures.get(i))
-                                .setScaleType(BaseSliderView.ScaleType.Fit)
-                                .setOnSliderClickListener(ProfileActivity.this);
-                        mProfilePicSlider.addSlider(defaultSliderView);
-                    }
-
-                    mProfilePicSlider.setPresetIndicator(SliderLayout.PresetIndicators.Center_Bottom);
-                    mProfilePicSlider.stopAutoCycle();
-
-                    //Picasso.with(ProfileActivity.this).load(mMemberResponse.getThumbnail()).into(mImage);
-                    mNameAndAge.setText(mMemberResponse.getName() + ", " + mMemberResponse.getAge().toString());
-                    mSchool.setText(mMemberResponse.getSchool());
-                    mMajor.setText(mMemberResponse.getMajor());
-                    mMinor.setText(mMemberResponse.getMinor());
-                    mLocation.setText(mMemberResponse.getCity() + ", " + mMemberResponse.getState());
-                    mStanding.setText(mMemberResponse.getStanding());
-                    mAbout.setText(mMemberResponse.getAbout());
-
-                    List interestsPreClean = mMemberResponse.getInterests();
-                    ArrayList<String> interests = new ArrayList<>();
-
-                    for (int i = 0; i < interestsPreClean.size(); i++) {
-                        interests.add(interestsPreClean.get(i).toString().replace("[", "").replace("]", ""));
-                    }
-                    mInterestsTags.setTags(interests);
+                    setProfileViews();
                 } else {
                     //TODO display not found
                 }
@@ -154,6 +124,39 @@ public class ProfileActivity extends AppCompatActivity implements BaseSliderView
                 call.cancel();
             }
         });
+    }
+
+    public void setProfileViews() {
+        ArrayList<String> pictures = mMemberResponse.formatAllPicsToArray();
+
+        //Put pictures in image slider
+        for(int i = 0; i < pictures.size(); i++) {
+            DefaultSliderView defaultSliderView = new DefaultSliderView(ProfileActivity.this);
+            defaultSliderView
+                    .image(pictures.get(i))
+                    .setScaleType(BaseSliderView.ScaleType.Fit)
+                    .setOnSliderClickListener(ProfileActivity.this);
+            mProfilePicSlider.addSlider(defaultSliderView);
+        }
+
+        mProfilePicSlider.setPresetIndicator(SliderLayout.PresetIndicators.Center_Bottom);
+        mProfilePicSlider.stopAutoCycle();
+
+        mNameAndAge.setText(mMemberResponse.getName() + ", " + mMemberResponse.getAge().toString());
+        mSchool.setText(mMemberResponse.getSchool());
+        mMajor.setText(mMemberResponse.getMajor());
+        mMinor.setText(mMemberResponse.getMinor());
+        mLocation.setText(mMemberResponse.getCity() + ", " + mMemberResponse.getState());
+        mStanding.setText(mMemberResponse.getStanding());
+        mAbout.setText(mMemberResponse.getAbout());
+
+        List interestsPreClean = mMemberResponse.getInterests();
+        ArrayList<String> interests = new ArrayList<>();
+
+        for (int i = 0; i < interestsPreClean.size(); i++) {
+            interests.add(interestsPreClean.get(i).toString().replace("[", "").replace("]", ""));
+        }
+        mInterestsTags.setTags(interests);
     }
 
     @Override

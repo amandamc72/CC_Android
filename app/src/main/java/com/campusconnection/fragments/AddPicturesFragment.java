@@ -13,7 +13,7 @@ import android.widget.GridView;
 
 import com.campusconnection.R;
 import com.campusconnection.adapters.GridViewAdapter;
-import com.campusconnection.model.requests.DeletePictureRequest;
+import com.campusconnection.model.requests.RemoveRequest;
 import com.campusconnection.model.responses.GenericResponse;
 import com.campusconnection.rest.ApiClient;
 import com.campusconnection.rest.ApiInterface;
@@ -117,9 +117,9 @@ public class AddPicturesFragment extends Fragment implements GridViewAdapter.Med
         mPhotoPos = pos;
         if (value == 0) {
             CropImage.activity()
-                    .setMinCropResultSize(100,100)
-                    .setMaxCropResultSize(1000,1000)
-                    .start(getActivity(), this);
+                    .setMinCropResultSize(320,200)
+                    .setMaxCropResultSize(620,400)
+                    .start(getContext(), this);
         }
     }
 
@@ -150,7 +150,7 @@ public class AddPicturesFragment extends Fragment implements GridViewAdapter.Med
     public void onRemove(String path, int pos) {
         final int imgPos = pos;
         ApiInterface apiService = ApiClient.getClient(getActivity()).create(ApiInterface.class);
-        Call<GenericResponse> call = apiService.deletePicture(new DeletePictureRequest(path, setIsDefaultFlag(pos)));
+        Call<GenericResponse> call = apiService.deletePicture(new RemoveRequest(path, setIsDefaultFlag(pos)));
         call.enqueue(new Callback<GenericResponse>() {
             @Override
             public void onResponse(Call<GenericResponse> call, Response<GenericResponse> response) {

@@ -2,6 +2,7 @@ package com.campusconnection;
 
 import android.content.Context;
 import android.net.Uri;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
@@ -9,6 +10,7 @@ import android.view.View;
 import android.widget.EditText;
 
 import com.campusconnection.fragments.AddPicturesFragment;
+import com.campusconnection.model.requests.RemoveRequest;
 import com.campusconnection.model.responses.GenericResponse;
 import com.campusconnection.model.responses.MemberResponse;
 import com.campusconnection.rest.ApiClient;
@@ -145,6 +147,26 @@ public class EditProfileActivity extends AppCompatActivity implements AddPicture
             @Override
             public void onResponse(Call<GenericResponse> call, Response<GenericResponse> response) {
 
+            }
+
+            @Override
+            public void onFailure(Call<GenericResponse> call, Throwable t) {
+
+            }
+        });
+    }
+
+    public static void removeInterest(Context context, String name, String isInterest) {
+        final Context c = context;
+        ApiInterface ApiService = ApiClient.getClient(c).create(ApiInterface.class);
+        Call<GenericResponse> call = ApiService.remove(new RemoveRequest(name, isInterest));
+        call.enqueue(new Callback<GenericResponse>() {
+            @Override
+            public void onResponse(Call<GenericResponse> call, Response<GenericResponse> response) {
+                GenericResponse res = response.body();
+                if(res.getError()) {
+                    AppUtils.showPopMessage(c, res.getMessage());
+                }
             }
 
             @Override

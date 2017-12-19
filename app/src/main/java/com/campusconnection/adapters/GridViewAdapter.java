@@ -50,6 +50,11 @@ public class GridViewAdapter extends ArrayAdapter {
     public View getView(int pos, View convertView, ViewGroup parent) {
         ViewHolder viewHolder = new ViewHolder();
         final int imagePos = pos;
+        try{
+            mImageUrls.get(pos);
+        } catch (IndexOutOfBoundsException e){
+            mImageUrls.add("http://placehold.it/150x150");
+        }
         if (null == convertView) {
             convertView = mInflater.inflate(R.layout.gridview_item, parent, false);
             viewHolder.imageView = (ImageView) convertView.findViewById(R.id.editPicImg);
@@ -94,10 +99,7 @@ public class GridViewAdapter extends ArrayAdapter {
                         builder.show();
                     }
                 });
-            } else {
-
             }
-
             convertView.setTag(viewHolder);
         } else {
             viewHolder = (ViewHolder) convertView.getTag();

@@ -605,6 +605,7 @@ public class ProfileInterestTags extends ViewGroup {
     }
 
     protected void deleteTag(TagView tagView) {
+        EditProfileActivity.removeInterest(getContext(), tagView.getText().toString(), "true");
         removeView(tagView);
         if (mOnTagChangeListener != null) {
             mOnTagChangeListener.onDelete(ProfileInterestTags.this, tagView.getText().toString());

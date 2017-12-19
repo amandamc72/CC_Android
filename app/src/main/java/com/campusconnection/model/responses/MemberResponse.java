@@ -193,18 +193,6 @@ public class MemberResponse implements Parcelable {
             }
         }
         formatedPics.add(0, getThumbnail());
-
-        for(int i = 0; i < formatedPics.size(); i++ ) {
-            //TODO we wont have to do this check once the backend sends our thumbnail path
-            if (!formatedPics.get(i).equals("http://placehold.it/150x150")) {
-                String fullPath = "http://campusconnection.ddns.net:8080/" + formatedPics.get(i);
-                formatedPics.set(i, fullPath);
-            }
-        }
-        //SHould not matter if we have a cap on the grid adpeter size?
-//        for (int i = formatedPics.size()-1; i > 5; i--) {
-//            formatedPics.remove(i);
-//        }
         return formatedPics;
     }
 

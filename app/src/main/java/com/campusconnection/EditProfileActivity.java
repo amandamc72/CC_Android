@@ -1,6 +1,8 @@
 package com.campusconnection;
 
+import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.net.Uri;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -107,16 +109,15 @@ public class EditProfileActivity extends AppCompatActivity implements AddPicture
         }
     }
 
-    @Override
-    public void onPause() {
-        super.onPause();
-        saveProfile();
-    }
+//    @Override
+//    public void onPause() {
+//        super.onPause();
+//        saveProfile();
+//    }
 
 
     @Override
     public void onBackPressed() {
-        finish();
         saveProfile();
     }
 
@@ -131,8 +132,8 @@ public class EditProfileActivity extends AppCompatActivity implements AddPicture
 
     public void saveProfile() {
         List<String> newTags = Arrays.asList(mEditTags.getTags());
-        String [] keepEmSeparated = mEditLocation.getText().toString().split(","); //TODO validate that comma
-        MemberResponse updatedMember = new MemberResponse(mEditSchool.getText().toString(),
+        String[] keepEmSeparated = mEditLocation.getText().toString().split(","); //TODO validate that comma
+        final MemberResponse updatedMember = new MemberResponse(mEditSchool.getText().toString(),
                 mEditMajor.getText().toString(),
                 mEditMinor.getText().toString(),
                 keepEmSeparated[0].trim(),
@@ -140,13 +141,35 @@ public class EditProfileActivity extends AppCompatActivity implements AddPicture
                 mEditStanding.getText().toString(),
                 mEditAbout.getText().toString(),
                 newTags);
+
         ApiInterface ApiService = ApiClient.getClient(this).create(ApiInterface.class);
         Call<GenericResponse> call = ApiService.updateProfile(updatedMember);
 
         call.enqueue(new Callback<GenericResponse>() {
             @Override
             public void onResponse(Call<GenericResponse> call, Response<GenericResponse> response) {
+                Boolean error = true;
+                if (response.isSuccessful()) {
+                    GenericResponse res = response.body();
+                    if (!res.getError()) {
+                        error = false;
+                    }
+                }
+//                Bundle extras = new Bundle();
+//                Intent returnIntent = new Intent();
+//                extras.putParcelable("updatedProfile", updatedMember);
+//                returnIntent.putExtras(extras);
+//                returnIntent.putExtra("result", error);
+//                setResult(Activity.RESULT_OK, returnIntent);
+//                finish();
 
+
+                Bundle extras = new Bundle();
+                Intent returnIntent = new Intent();
+                extras.putParcelable("updatedProfile", updatedMember);
+                returnIntent.putExtras(extras);
+                setResult(Activity.RESULT_OK, returnIntent);
+                finish();
             }
 
             @Override

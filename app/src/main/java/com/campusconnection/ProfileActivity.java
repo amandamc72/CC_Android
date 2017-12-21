@@ -1,5 +1,6 @@
 package com.campusconnection;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
@@ -100,8 +101,26 @@ public class ProfileActivity extends AppCompatActivity implements BaseSliderView
         extras.putParcelable("memberResponse", mMemberResponse);
         extras.putInt("id", profileId());
         intent.putExtras(extras);
-        startActivity(intent);
+        //startActivity(intent);
+        startActivityForResult(intent, 1);
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        Log.d("D", "onActivityResult in add profile activity!!!!");
+        if (requestCode == 1) {
+            if(resultCode == Activity.RESULT_OK){
+                Bundle extras = getIntent().getExtras();
+                //Boolean result = data.getBooleanExtra("result", true);
+                //Log.d("D", "result  " + result);
+                MemberResponse m = (MemberResponse) data.getParcelableExtra("updatedProfile");
+                Log.d("D", "memberResponse  " + m);
+            }
+            if (resultCode == Activity.RESULT_CANCELED) {
+                //Write your code if there's no result
+            }
+        }
     }
 
     private void getProfile() {

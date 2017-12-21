@@ -125,6 +125,7 @@ public class AddPicturesFragment extends Fragment implements GridViewAdapter.Med
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        Log.d("D", "onActivityResult in add pic fragment!!!!");
         if (requestCode == CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE) {
             CropImage.ActivityResult result = CropImage.getActivityResult(data);
             if (resultCode == RESULT_OK) {

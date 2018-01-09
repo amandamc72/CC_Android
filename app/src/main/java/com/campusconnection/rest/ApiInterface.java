@@ -3,6 +3,7 @@ package com.campusconnection.rest;
 import com.campusconnection.model.requests.RemoveRequest;
 import com.campusconnection.model.responses.GenericResponse;
 import com.campusconnection.model.requests.LoginRequest;
+import com.campusconnection.model.responses.ImageUploadResponse;
 import com.campusconnection.model.responses.MemberListResponse;
 import com.campusconnection.model.responses.MemberResponse;
 import com.campusconnection.model.requests.RegisterRequest;
@@ -60,7 +61,7 @@ public interface ApiInterface {
 
     @Multipart
     @POST("api/upload")
-    Call<GenericResponse> uploadPicture(@Part("isDefault") RequestBody isDefault, @Part MultipartBody.Part file);
+    Call<ImageUploadResponse> uploadPicture(@Part("isDefault") RequestBody isDefault, @Part MultipartBody.Part file);
 
     @HTTP(method = "DELETE", path = "api/upload", hasBody = true)
     Call<GenericResponse> deletePicture(@Body RemoveRequest picture);

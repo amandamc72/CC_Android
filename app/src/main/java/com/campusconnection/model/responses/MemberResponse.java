@@ -19,6 +19,7 @@ public class MemberResponse implements Parcelable {
     private String thumbnail;
     @SerializedName("picture")
     private List subPics = new ArrayList();
+    private ArrayList<String> pictures = new ArrayList<>();
     @SerializedName("name")
     private String name;
     @SerializedName("city")
@@ -41,7 +42,6 @@ public class MemberResponse implements Parcelable {
     private List courses = new ArrayList();
     @SerializedName("interests")
     private List interests = new ArrayList();
-    //private String url = "http://campusconnection.ddns.net:8080/";
 
 
     public MemberResponse(Boolean error, String thumbnail, List subPics, String name, String city, String school,
@@ -58,18 +58,6 @@ public class MemberResponse implements Parcelable {
         this.age = age;
         this.about = about;
         this.courses = courses;
-        this.interests = interests;
-    }
-
-    //Constrctor to update profile data
-    public MemberResponse(String school, String major, String minor, String city, String state, String standing, String about, List interests) {
-        this.city = city;
-        this.state = state;
-        this.school = school;
-        this.standing = standing;
-        this.major = major;
-        this.minor = minor;
-        this.about = about;
         this.interests = interests;
     }
 
@@ -91,6 +79,14 @@ public class MemberResponse implements Parcelable {
 
     public void setSubPics(List subPics) {
         this.subPics = subPics;
+    }
+
+    public void setPictures(ArrayList<String> pics) {
+        this.pictures = pics;
+    }
+
+    public ArrayList<String> getPictures() {
+        return pictures;
     }
 
     public String getName() {
@@ -181,7 +177,7 @@ public class MemberResponse implements Parcelable {
         this.interests = interests;
     }
 
-    public ArrayList<String> formatAllPicsToArray() {
+    public void consolidateImages() {
         ArrayList<String> formatedPics = new ArrayList<>();
         for (int i = 0; i < getSubPics().size(); i++) {
             try {
@@ -193,7 +189,7 @@ public class MemberResponse implements Parcelable {
             }
         }
         formatedPics.add(0, getThumbnail());
-        return formatedPics;
+        setPictures(formatedPics);
     }
 
     private MemberResponse(Parcel in) {
@@ -209,6 +205,12 @@ public class MemberResponse implements Parcelable {
         minor = in.readString();
         age = in.readByte() == 0x00 ? null : in.readInt();
         about = in.readString();
+        if (in.readByte() == 0x01) {
+            pictures = new ArrayList<>();
+            in.readList(pictures, getClass().getClassLoader());
+        } else {
+            pictures = null;
+        }
         if (in.readByte() == 0x01) {
             subPics = new ArrayList<>();
             in.readList(subPics, getClass().getClassLoader());
@@ -257,6 +259,12 @@ public class MemberResponse implements Parcelable {
             dest.writeInt(age);
         }
         dest.writeString(about);
+        if (pictures == null) {
+            dest.writeByte((byte) (0x00));
+        } else {
+            dest.writeByte((byte) (0x01));
+            dest.writeList(pictures);
+        }
         if (subPics == null) {
             dest.writeByte((byte) (0x00));
         } else {

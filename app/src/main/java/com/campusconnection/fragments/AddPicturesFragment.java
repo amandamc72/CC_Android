@@ -15,6 +15,7 @@ import com.campusconnection.R;
 import com.campusconnection.adapters.GridViewAdapter;
 import com.campusconnection.model.requests.RemoveRequest;
 import com.campusconnection.model.responses.GenericResponse;
+import com.campusconnection.model.responses.ImageUploadResponse;
 import com.campusconnection.rest.ApiClient;
 import com.campusconnection.rest.ApiInterface;
 import com.campusconnection.util.AppUtils;
@@ -32,21 +33,6 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 import static android.app.Activity.RESULT_OK;
-
-
-/*
-    Starting this fragment
-    It needs the photo urls to display
-
-    Things that will happen in this fragment
-    Case 1. Click on an empty photo spot -> goto gallery to pick photo -> crop -> upload to server -> return to view of photos
-    Case 2. Click on delete icon over photo -> Send delete request to server -> poof photo gone
-    Case 3. Click on photo -> enlarge to full screen
-
-    Leaving this fragment
-    ??????
-
- */
 
 public class AddPicturesFragment extends Fragment implements GridViewAdapter.MediaPath, GridViewAdapter.RemovePicture {
     private static final String ARG_PARAM1 = "pictureUrls";
@@ -88,9 +74,9 @@ public class AddPicturesFragment extends Fragment implements GridViewAdapter.Med
     }
 
     // TODO: Rename method, update argument and hook method into UI event
-    public void onButtonPressed(Uri uri) {
+    public void onButtonPressed(ArrayList<String> imgs) {
         if (mListener != null) {
-            mListener.onFragmentInteraction(uri);
+            mListener.onImagePass(imgs);
         }
     }
 
@@ -164,6 +150,7 @@ public class AddPicturesFragment extends Fragment implements GridViewAdapter.Med
                     mImages.remove(imgPos);
                     mGridViewAdapter.notifyDataSetChanged();
                     mEditPicsGrid.setAdapter(mGridViewAdapter);
+                    passUpdatedImages(mImages);
                 }
             }
 
@@ -186,22 +173,24 @@ public class AddPicturesFragment extends Fragment implements GridViewAdapter.Med
                         okhttp3.MultipartBody.FORM, setIsDefaultFlag(mPhotoPos));
 
         ApiInterface apiService = ApiClient.getClient(getActivity()).create(ApiInterface.class);
-        Call<GenericResponse> call = apiService.uploadPicture(isDefaultBody, body);
+        Call<ImageUploadResponse> call = apiService.uploadPicture(isDefaultBody, body);
 
-        call.enqueue(new Callback<GenericResponse>() {
+        call.enqueue(new Callback<ImageUploadResponse>() {
             @Override
-            public void onResponse(Call<GenericResponse> call, Response<GenericResponse> response) {
-                GenericResponse res = response.body();
+            public void onResponse(Call<ImageUploadResponse> call, Response<ImageUploadResponse> response) {
+                ImageUploadResponse res = response.body();
                 Log.d("D", "RESponse is: " + res);
                 if (!res.getError()) {
-                    List uploadedImgPath = res.getImg();
+                    String uploadedImgPath = res.getImage();
 
-                    String s = uploadedImgPath.get(0).toString();
-                    s = s.substring(s.lastIndexOf("="));
-                    Log.d("D", "RESponse is: " + s);
-                    mImages.add(mPhotoPos, s);
+//                    String s = uploadedImgPath.get(0).toString();
+//                    Log.d("D", "before clean is: " + s);
+//                    s = s.substring(s.indexOf("=")+1, s.length()-1);
+//                    Log.d("D", "cleaned string is: " + s);
+                    mImages.add(mImages.size(), uploadedImgPath);
                     mGridViewAdapter.notifyDataSetChanged();
                     mEditPicsGrid.setAdapter(mGridViewAdapter);
+                    passUpdatedImages(mImages);
                 }
             }
 
@@ -212,18 +201,11 @@ public class AddPicturesFragment extends Fragment implements GridViewAdapter.Med
         });
     }
 
-    /**
-     * This interface must be implemented by activities that contain this
-     * fragment to allow an interaction in this fragment to be communicated
-     * to the activity and potentially other fragments contained in that
-     * activity.
-     * <p>
-     * See the Android Training lesson <a href=
-     * "http://developer.android.com/training/basics/fragments/communicating.html"
-     * >Communicating with Other Fragments</a> for more information.
-     */
+    public void passUpdatedImages(ArrayList<String> data) {
+        mListener.onImagePass(data);
+    }
+
     public interface OnFragmentInteractionListener {
-        // TODO: Update argument type and name
-        void onFragmentInteraction(Uri uri);
+        void onImagePass(ArrayList<String> imgs);
     }
 }

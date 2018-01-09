@@ -3,11 +3,10 @@ package com.campusconnection;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
-import android.net.Uri;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 
@@ -28,7 +27,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class EditProfileActivity extends AppCompatActivity implements AddPicturesFragment.OnFragmentInteractionListener{
+public class EditProfileActivity extends AppCompatActivity implements AddPicturesFragment.OnFragmentInteractionListener {
 
     private EditText mEditSchool;
     private EditText mEditMajor;
@@ -38,6 +37,7 @@ public class EditProfileActivity extends AppCompatActivity implements AddPicture
     private EditText mEditAbout;
     private ProfileInterestTags mEditTags;
     private MemberResponse mCurrentMember;
+    private ArrayList<String> mUpdatedImages;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,14 +64,14 @@ public class EditProfileActivity extends AppCompatActivity implements AddPicture
         mEditTags = (ProfileInterestTags) findViewById(R.id.editInterests);
 
 
-        if(mCurrentMember != null) {
+        if (mCurrentMember != null) {
             if (findViewById(R.id.gridFragmentContainer) != null) {
 
                 // so we don't end up with overlapping fragments.
                 if (savedInstanceState != null) {
                     return;
                 }
-                AddPicturesFragment addPicturesFragment = new AddPicturesFragment().newInstance(mCurrentMember.formatAllPicsToArray());
+                AddPicturesFragment addPicturesFragment = new AddPicturesFragment().newInstance(mCurrentMember.getPictures());
 
                 getSupportFragmentManager().beginTransaction()
                         .add(R.id.gridFragmentContainer, addPicturesFragment).commit();
@@ -98,7 +98,7 @@ public class EditProfileActivity extends AppCompatActivity implements AddPicture
             List interestsPreClean = mCurrentMember.getInterests();
             ArrayList<String> interests = new ArrayList<>();
 
-            for (int i = 0; i < interestsPreClean.size(); i++){
+            for (int i = 0; i < interestsPreClean.size(); i++) {
                 interests.add(interestsPreClean.get(i).toString().replace("[", "").replace("]", ""));
             }
             mEditTags.setTags(interests);
@@ -122,7 +122,7 @@ public class EditProfileActivity extends AppCompatActivity implements AddPicture
     }
 
     public void getCurrentProfileData() {
-        if(getIntent() != null) {
+        if (getIntent() != null) {
             Bundle extras = getIntent().getExtras();
             if (extras != null) {
                 mCurrentMember = extras.getParcelable("memberResponse");
@@ -133,17 +133,20 @@ public class EditProfileActivity extends AppCompatActivity implements AddPicture
     public void saveProfile() {
         List<String> newTags = Arrays.asList(mEditTags.getTags());
         String[] keepEmSeparated = mEditLocation.getText().toString().split(","); //TODO validate that comma
-        final MemberResponse updatedMember = new MemberResponse(mEditSchool.getText().toString(),
-                mEditMajor.getText().toString(),
-                mEditMinor.getText().toString(),
-                keepEmSeparated[0].trim(),
-                keepEmSeparated[1].trim(),
-                mEditStanding.getText().toString(),
-                mEditAbout.getText().toString(),
-                newTags);
+        if(mUpdatedImages != null){
+            mCurrentMember.setPictures(mUpdatedImages);
+        }
+        mCurrentMember.setSchool(mEditSchool.getText().toString());
+        mCurrentMember.setStanding(mEditStanding.getText().toString());
+        mCurrentMember.setMajor(mEditMajor.getText().toString());
+        mCurrentMember.setMinor(mEditMinor.getText().toString());
+        mCurrentMember.setCity(keepEmSeparated[0].trim());
+        mCurrentMember.setState(keepEmSeparated[1].trim());
+        mCurrentMember.setAbout(mEditAbout.getText().toString());
+        mCurrentMember.setInterests(newTags);
 
         ApiInterface ApiService = ApiClient.getClient(this).create(ApiInterface.class);
-        Call<GenericResponse> call = ApiService.updateProfile(updatedMember);
+        Call<GenericResponse> call = ApiService.updateProfile(mCurrentMember);
 
         call.enqueue(new Callback<GenericResponse>() {
             @Override
@@ -166,7 +169,7 @@ public class EditProfileActivity extends AppCompatActivity implements AddPicture
 
                 Bundle extras = new Bundle();
                 Intent returnIntent = new Intent();
-                extras.putParcelable("updatedProfile", updatedMember);
+                extras.putParcelable("updatedProfile", mCurrentMember);
                 returnIntent.putExtras(extras);
                 setResult(Activity.RESULT_OK, returnIntent);
                 finish();
@@ -187,7 +190,7 @@ public class EditProfileActivity extends AppCompatActivity implements AddPicture
             @Override
             public void onResponse(Call<GenericResponse> call, Response<GenericResponse> response) {
                 GenericResponse res = response.body();
-                if(res.getError()) {
+                if (res.getError()) {
                     AppUtils.showPopMessage(c, res.getMessage());
                 }
             }
@@ -200,7 +203,8 @@ public class EditProfileActivity extends AppCompatActivity implements AddPicture
     }
 
     @Override
-    public void onFragmentInteraction(Uri uri) {
-
+    public void onImagePass(ArrayList<String> imgs) {
+        Log.d("D", "DataSET changed!!! ");
+        mUpdatedImages = imgs;
     }
 }

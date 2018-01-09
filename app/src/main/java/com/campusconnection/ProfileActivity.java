@@ -1,7 +1,6 @@
 package com.campusconnection;
 
 import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -10,25 +9,18 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.campusconnection.model.responses.MemberResponse;
 import com.campusconnection.rest.ApiClient;
 import com.campusconnection.rest.ApiInterface;
 import com.campusconnection.views.ProfileInterestTags;
-import com.daimajia.slider.library.Animations.DescriptionAnimation;
-import com.daimajia.slider.library.Indicators.PagerIndicator;
 import com.daimajia.slider.library.SliderLayout;
 import com.daimajia.slider.library.SliderTypes.BaseSliderView;
 import com.daimajia.slider.library.SliderTypes.DefaultSliderView;
-import com.daimajia.slider.library.Tricks.ViewPagerEx;
-import com.google.gson.internal.LinkedTreeMap;
-import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -54,7 +46,6 @@ public class ProfileActivity extends AppCompatActivity implements BaseSliderView
         setContentView(R.layout.activity_profile);
 
         mProfilePicSlider = (SliderLayout)findViewById(R.id.profileImageSlider);
-        mProfilePicSlider.setCustomIndicator((PagerIndicator) findViewById(R.id.custom_indicator));
         mNameAndAge = (TextView) findViewById(R.id.profileNameAndAge);
         mSchool = (TextView) findViewById(R.id.profileSchool);
         mMajor = (TextView) findViewById(R.id.profileMajor);
@@ -111,11 +102,11 @@ public class ProfileActivity extends AppCompatActivity implements BaseSliderView
         Log.d("D", "onActivityResult in add profile activity!!!!");
         if (requestCode == 1) {
             if(resultCode == Activity.RESULT_OK){
-                Bundle extras = getIntent().getExtras();
+                //Bundle extras = getIntent().getExtras();
                 //Boolean result = data.getBooleanExtra("result", true);
                 //Log.d("D", "result  " + result);
-                MemberResponse m = (MemberResponse) data.getParcelableExtra("updatedProfile");
-                Log.d("D", "memberResponse  " + m);
+                mMemberResponse = (MemberResponse) data.getParcelableExtra("updatedProfile");
+                setProfileViews();
             }
             if (resultCode == Activity.RESULT_CANCELED) {
                 //Write your code if there's no result
@@ -132,6 +123,7 @@ public class ProfileActivity extends AppCompatActivity implements BaseSliderView
             public void onResponse(Call<MemberResponse> call, Response<MemberResponse> response) {
                 if(response.isSuccessful()) {
                     mMemberResponse = response.body();
+                    mMemberResponse.consolidateImages();
                     setProfileViews();
                 } else {
                     //TODO display not found
@@ -146,8 +138,8 @@ public class ProfileActivity extends AppCompatActivity implements BaseSliderView
     }
 
     public void setProfileViews() {
-        ArrayList<String> pictures = mMemberResponse.formatAllPicsToArray();
-
+        ArrayList<String> pictures = mMemberResponse.getPictures();
+        mProfilePicSlider.removeAllSliders();
         //Put pictures in image slider
         for(int i = 0; i < pictures.size(); i++) {
             DefaultSliderView defaultSliderView = new DefaultSliderView(ProfileActivity.this);
@@ -157,8 +149,6 @@ public class ProfileActivity extends AppCompatActivity implements BaseSliderView
                     .setOnSliderClickListener(ProfileActivity.this);
             mProfilePicSlider.addSlider(defaultSliderView);
         }
-
-        mProfilePicSlider.setPresetIndicator(SliderLayout.PresetIndicators.Center_Bottom);
         mProfilePicSlider.stopAutoCycle();
 
         mNameAndAge.setText(mMemberResponse.getName() + ", " + mMemberResponse.getAge().toString());

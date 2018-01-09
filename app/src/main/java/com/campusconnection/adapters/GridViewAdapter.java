@@ -50,26 +50,33 @@ public class GridViewAdapter extends ArrayAdapter {
     public View getView(int pos, View convertView, ViewGroup parent) {
         ViewHolder viewHolder = new ViewHolder();
         final int imagePos = pos;
-        try{
-            mImageUrls.get(pos);
-        } catch (IndexOutOfBoundsException e){
-            mImageUrls.add("http://placehold.it/150x150");
-        }
+
         if (null == convertView) {
             convertView = mInflater.inflate(R.layout.gridview_item, parent, false);
             viewHolder.imageView = (ImageView) convertView.findViewById(R.id.editPicImg);
             viewHolder.imageButton = (ImageButton) convertView.findViewById(R.id.editPicButton);
             viewHolder.imageButtonBackground = (View) convertView.findViewById(R.id.editPicButtonBackground);
+            try {
+                mImageUrls.get(pos);
+                Log.d("D", mImageUrls.get(pos));
+                Picasso.with(mContext)
+                        .load(mImageUrls.get(pos))
+                        .fit()
+                        .into(viewHolder.imageView);
+                viewHolder.imageButton.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        String relPath = mImageUrls.get(imagePos).substring(mImageUrls.get(imagePos).indexOf("aws.com")+7);
+                        Log.d("D", "Remove pic " + relPath);
+                        mRemovePicture.onRemove(relPath, imagePos);
+                    }
+                });
+            } catch (IndexOutOfBoundsException e) {
 
-            viewHolder.imageButton.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    Log.d("D", "Remove pic");
-                    mRemovePicture.onRemove(mImageUrls.get(imagePos), imagePos);
-                }
-            });
-            Log.d("D", mImageUrls.get(pos));
-            if (mImageUrls.get(pos).equals("http://placehold.it/150x150")) {
+                Picasso.with(mContext)
+                        .load("http://placehold.it/150x150")
+                        .fit()
+                        .into(viewHolder.imageView);
                 viewHolder.imageButton.setVisibility(View.GONE);
                 viewHolder.imageButtonBackground.setVisibility(View.GONE);
 
@@ -100,15 +107,11 @@ public class GridViewAdapter extends ArrayAdapter {
                     }
                 });
             }
+
             convertView.setTag(viewHolder);
         } else {
             viewHolder = (ViewHolder) convertView.getTag();
         }
-
-        Picasso.with(mContext)
-                .load(mImageUrls.get(pos))
-                .fit()
-                .into(viewHolder.imageView);
 
         return convertView;
     }

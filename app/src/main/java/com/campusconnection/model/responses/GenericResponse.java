@@ -14,15 +14,12 @@ public class GenericResponse {
     private String message;
     @SerializedName("code")
     private String code;
-    @SerializedName("imgs")
-    private List img = new ArrayList();
 
 
     public GenericResponse(Boolean error, String message, String code, List img){
         this.error = error;
         this.message = message;
         this.code = code;
-        this.img = img;
     }
 
     public Boolean getError() {
@@ -48,9 +45,5 @@ public class GenericResponse {
     public void setCode(String code) {
         this.code = code;
     }
-
-    public List getImg() { return img; }
-
-    public void setImg(List img) { this.img = img; }
 
 }

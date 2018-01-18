@@ -26,12 +26,7 @@ public class ApiClient {
     private static Retrofit retrofit = null;
 
     public static Retrofit getClient(Context context) {
-        //Get auth header stuff
-        PreferencesUtil prefs = new PreferencesUtil(context);
-        final boolean isLoggedIn = prefs.getBooleanPreference("isLoggedIn");
-        final String jwt = prefs.getStringPreference("jwt");
-        Log.d("D","apiclient isLoggedIn is: " +  isLoggedIn);
-        Log.d("D","apiclient jwt is: " +  jwt);
+        final Context actContext = context;
         //Log requests and responses for debuggin
         HttpLoggingInterceptor loggingInterceptor = new HttpLoggingInterceptor();
         loggingInterceptor
@@ -41,9 +36,17 @@ public class ApiClient {
                 .addInterceptor(new Interceptor() {
                     @Override
                     public Response intercept(Chain chain) throws IOException {
+                        //Get auth header stuff
+                        PreferencesUtil prefs = new PreferencesUtil(actContext);
+                        final boolean isLoggedIn = prefs.getBooleanPreference(actContext.getString(R.string.isLoggedPref));
+                        final String jwt = prefs.getStringPreference(actContext.getString(R.string.jwtPref));
+                        Log.d("D","apiclient isLoggedIn is: " +  isLoggedIn);
+                        Log.d("D","apiclient jwt is: " +  jwt);
+
                         Request.Builder ongoing = chain.request().newBuilder();
                         ongoing.addHeader("Accept", "application/json;versions=1");
                         if (isLoggedIn) {
+                            Log.d("D","WE ARE LOGGED IN");
                             ongoing.addHeader("Authorization", "Bearer " + jwt);
                         }
                         return chain.proceed(ongoing.build());

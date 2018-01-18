@@ -1,9 +1,11 @@
 package com.campusconnection;
 
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Switch;
 
@@ -11,6 +13,7 @@ import com.campusconnection.model.responses.GenericResponse;
 import com.campusconnection.model.responses.SettingsBody;
 import com.campusconnection.rest.ApiClient;
 import com.campusconnection.rest.ApiInterface;
+import com.campusconnection.util.PreferencesUtil;
 
 import org.florescu.android.rangeseekbar.RangeSeekBar;
 
@@ -21,14 +24,14 @@ import retrofit2.Response;
 public class SettingsActivity extends AppCompatActivity {
 
     private SettingsBody mSettingsResponse;
-    private EditText schoolText;
-    private Switch maleSwitch;
-    private Switch femaleSwitch;
-    private RangeSeekBar settingsDefaultAgeBar;
-    private Switch messagesSwitch;
-    private Switch matchesSwitch;
-    private Switch likesSwitch;
-    private Switch eventsSwitch;
+    private EditText mSchoolText;
+    private Switch mMaleSwitch;
+    private Switch mFemaleSwitch;
+    private RangeSeekBar mSettingsDefaultAgeBar;
+    private Switch mMessagesSwitch;
+    private Switch mMatchesSwitch;
+    private Switch mLikesSwitch;
+    private Switch mEventsSwitch;
 
 
     @Override
@@ -41,14 +44,15 @@ public class SettingsActivity extends AppCompatActivity {
 
         getDefaultSettings();
 
-        schoolText = (EditText) findViewById(R.id.settings_school_input);
-        maleSwitch = (Switch) findViewById(R.id.switch_male);
-        femaleSwitch = (Switch) findViewById(R.id.switch_female);
-        settingsDefaultAgeBar = (RangeSeekBar)findViewById(R.id.settingsAgeInput);
-        messagesSwitch = (Switch) findViewById(R.id.switch_messages_noti);
-        matchesSwitch = (Switch) findViewById(R.id.switch_matches_noti);
-        likesSwitch = (Switch) findViewById(R.id.switch_likes_noti);
-        eventsSwitch = (Switch) findViewById(R.id.switch_events_noti);
+        mSchoolText = (EditText) findViewById(R.id.settings_school_input);
+        mMaleSwitch = (Switch) findViewById(R.id.switch_male);
+        mFemaleSwitch = (Switch) findViewById(R.id.switch_female);
+        mSettingsDefaultAgeBar = (RangeSeekBar)findViewById(R.id.settingsAgeInput);
+        mMessagesSwitch = (Switch) findViewById(R.id.switch_messages_noti);
+        mMatchesSwitch = (Switch) findViewById(R.id.switch_matches_noti);
+        mLikesSwitch = (Switch) findViewById(R.id.switch_likes_noti);
+        mEventsSwitch = (Switch) findViewById(R.id.switch_events_noti);
+        Button logoutBtn = (Button) findViewById(R.id.settings_logout_btn);
 
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
@@ -57,13 +61,20 @@ public class SettingsActivity extends AppCompatActivity {
             }
         });
 
+        logoutBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                doLogout();
+            }
+        });
+
     }
 
-    @Override
-    public void onPause() {
-        super.onPause();
-        postDefaultSettings();
-    }
+//    @Override
+//    public void onPause() {
+//        super.onPause();
+//        postDefaultSettings();
+//    }
 
 
     @Override
@@ -95,18 +106,18 @@ public class SettingsActivity extends AppCompatActivity {
                 if(mSettingsResponse == null)
                     mSettingsResponse = new SettingsBody(true, "", 0,0,0,0,0,0,0,0); //TODO get copy from local storage?
 
-                schoolText.setText(mSettingsResponse.getSchool());
+                mSchoolText.setText(mSettingsResponse.getSchool());
 
-                maleSwitch.setChecked(mSettingsResponse.getMale() == 1);
-                femaleSwitch.setChecked(mSettingsResponse.getFemale() == 1);
+                mMaleSwitch.setChecked(mSettingsResponse.getMale() == 1);
+                mFemaleSwitch.setChecked(mSettingsResponse.getFemale() == 1);
 
-                settingsDefaultAgeBar.setSelectedMaxValue(mSettingsResponse.getAgeHigh());
-                settingsDefaultAgeBar.setSelectedMinValue(mSettingsResponse.getAgeLow());
+                mSettingsDefaultAgeBar.setSelectedMaxValue(mSettingsResponse.getAgeHigh());
+                mSettingsDefaultAgeBar.setSelectedMinValue(mSettingsResponse.getAgeLow());
 
-                messagesSwitch.setChecked(mSettingsResponse.getMessages() == 1);
-                matchesSwitch.setChecked(mSettingsResponse.getMatches() == 1);
-                likesSwitch.setChecked(mSettingsResponse.getLikes() == 1);
-                eventsSwitch.setChecked(mSettingsResponse.getEvents() == 1);
+                mMessagesSwitch.setChecked(mSettingsResponse.getMessages() == 1);
+                mMatchesSwitch.setChecked(mSettingsResponse.getMatches() == 1);
+                mLikesSwitch.setChecked(mSettingsResponse.getLikes() == 1);
+                mEventsSwitch.setChecked(mSettingsResponse.getEvents() == 1);
             }
 
             @Override
@@ -120,15 +131,15 @@ public class SettingsActivity extends AppCompatActivity {
     public void postDefaultSettings() {
 
         ApiInterface apiService = ApiClient.getClient(this).create(ApiInterface.class);
-        SettingsBody updatedSettings = new SettingsBody(schoolText.getText().toString(),
-                maleSwitch.isChecked() ? 1 : 0,
-                femaleSwitch.isChecked() ? 1 : 0,
-                (int) settingsDefaultAgeBar.getSelectedMinValue(),
-                (int) settingsDefaultAgeBar.getSelectedMaxValue(),
-                messagesSwitch.isChecked() ? 1 : 0,
-                likesSwitch.isChecked() ? 1 : 0,
-                matchesSwitch.isChecked() ? 1 : 0,
-                eventsSwitch.isChecked() ? 1 : 0);
+        SettingsBody updatedSettings = new SettingsBody(mSchoolText.getText().toString(),
+                mMaleSwitch.isChecked() ? 1 : 0,
+                mFemaleSwitch.isChecked() ? 1 : 0,
+                (int) mSettingsDefaultAgeBar.getSelectedMinValue(),
+                (int) mSettingsDefaultAgeBar.getSelectedMaxValue(),
+                mMessagesSwitch.isChecked() ? 1 : 0,
+                mLikesSwitch.isChecked() ? 1 : 0,
+                mMatchesSwitch.isChecked() ? 1 : 0,
+                mEventsSwitch.isChecked() ? 1 : 0);
         ;
         Call<GenericResponse> call = apiService.postSettings(updatedSettings);
 
@@ -144,5 +155,14 @@ public class SettingsActivity extends AppCompatActivity {
             }
         });
 
+    }
+
+    public void doLogout() {
+        PreferencesUtil prefs = new PreferencesUtil(this);
+        prefs.setStringPreference(getString(R.string.jwtPref), "");
+        prefs.setBooleanPreference(getString(R.string.isLoggedPref), false);
+
+        Intent i = new Intent(SettingsActivity.this, SplashScreenActivity.class);
+        startActivity(i);
     }
 }

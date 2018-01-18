@@ -188,20 +188,22 @@ public class HomeActivity extends AppCompatActivity
         call.enqueue(new Callback<MemberListResponse>() {
             @Override
             public void onResponse(Call<MemberListResponse> call, Response<MemberListResponse> response) {
-                mMembersResponse = response.body();
-                if (!mMembersResponse.getError()) {
-                    if (findViewById(R.id.memberViewFragmentContainer) != null) {
+                if(response.isSuccessful()) {
+                    mMembersResponse = response.body();
+                    if (!mMembersResponse.getError()) {
+                        if (findViewById(R.id.memberViewFragmentContainer) != null) {
 
-                        // so we don't end up with overlapping fragments.
-                        if (state != null) {
-                            return;
+                            // so we don't end up with overlapping fragments.
+                            if (state != null) {
+                                return;
+                            }
+
+                            mRecyclerViewFragment = new RecyclerViewFragment().newInstance(mMembersResponse);
+                            mSwipeFragment = new SwipeFragment().newInstance(mMembersResponse);
+
+                            getSupportFragmentManager().beginTransaction()
+                                    .add(R.id.memberViewFragmentContainer, mRecyclerViewFragment).commit();
                         }
-
-                        mRecyclerViewFragment = new RecyclerViewFragment().newInstance(mMembersResponse);
-                        mSwipeFragment = new SwipeFragment().newInstance(mMembersResponse);
-
-                        getSupportFragmentManager().beginTransaction()
-                                .add(R.id.memberViewFragmentContainer, mRecyclerViewFragment).commit();
                     }
                 }
             }

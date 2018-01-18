@@ -141,16 +141,18 @@ public class AddPicturesFragment extends Fragment implements GridViewAdapter.Med
         call.enqueue(new Callback<GenericResponse>() {
             @Override
             public void onResponse(Call<GenericResponse> call, Response<GenericResponse> response) {
-                GenericResponse res = response.body();
-                Boolean error = res.getError();
-                String message = res.getMessage();
-                if (error) {
-                    AppUtils.showPopMessage(getActivity(), message);
-                } else {
-                    mImages.remove(imgPos);
-                    mGridViewAdapter.notifyDataSetChanged();
-                    mEditPicsGrid.setAdapter(mGridViewAdapter);
-                    passUpdatedImages(mImages);
+                if(response.isSuccessful()) {
+                    GenericResponse res = response.body();
+                    Boolean error = res.getError();
+                    String message = res.getMessage();
+                    if (error) {
+                        AppUtils.showPopMessage(getActivity(), message);
+                    } else {
+                        mImages.remove(imgPos);
+                        mGridViewAdapter.notifyDataSetChanged();
+                        mEditPicsGrid.setAdapter(mGridViewAdapter);
+                        passUpdatedImages(mImages);
+                    }
                 }
             }
 

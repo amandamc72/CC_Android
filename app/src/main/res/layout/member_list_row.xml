@@ -27,40 +27,26 @@
             <ImageView
                 android:id="@+id/thumbnail"
                 android:layout_width="match_parent"
-                android:layout_height="250dp"
-                android:layout_centerHorizontal="true"
-                android:layout_marginTop="15dp"/>
+                android:layout_height="300dp"
+                android:layout_margin="12dp"/>
 
             <TextView
-                android:id="@+id/firstName"
-                android:text="FirstName"
+                android:id="@+id/firstNameAndAge"
+                android:text="FirstName, Age"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/thumbnail"
                 android:layout_alignLeft="@+id/thumbnail"
-                android:layout_alignStart="@+id/thumbnail"
-                android:layout_marginTop="20dp" />
-
-            <TextView
-                android:id="@+id/age"
-                android:text="Age"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="14dp"
-                android:layout_marginStart="14dp"
-                android:layout_alignBaseline="@+id/firstName"
-                android:layout_alignBottom="@+id/firstName"
-                android:layout_toRightOf="@+id/firstName"
-                android:layout_toEndOf="@+id/firstName" />
+                android:layout_alignStart="@+id/thumbnail" />
 
             <TextView
                 android:id="@+id/school"
                 android:text="School"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/firstName"
-                android:layout_alignLeft="@+id/firstName"
-                android:layout_alignStart="@+id/firstName"
+                android:layout_below="@+id/firstNameAndAge"
+                android:layout_alignLeft="@+id/firstNameAndAge"
+                android:layout_alignStart="@+id/firstNameAndAge"
                 android:layout_marginTop="2dp" />
 
             <TextView

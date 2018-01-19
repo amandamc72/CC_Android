@@ -14,6 +14,7 @@ import android.widget.TextView;
 import com.campusconnection.ProfileActivity;
 import com.campusconnection.R;
 import com.campusconnection.model.responses.MemberListResponse;
+import com.campusconnection.util.AppUtils;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
@@ -42,9 +43,11 @@ public class MembersListAdapter extends RecyclerView.Adapter<MembersListAdapter.
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
         //String nameAgeText = mListItems.get(position).getFirstName() + "," + mListItems.get(position).getAge();
-        Picasso.with(mContext).load(mListItems.get(position).getThumbnail()).into(holder.thumbnail);
-        holder.firstName.setText(mListItems.get(position).getFirstName());
-        holder.age.setText(mListItems.get(position).getAge());
+        String dob = mListItems.get(position).getAge();
+        String [] parts = dob.split("-");
+        String age = AppUtils.dateToAge( Integer.parseInt(parts[0]), Integer.parseInt(parts[1]), Integer.parseInt(parts[2]));
+        Picasso.with(mContext).load(mListItems.get(position).getThumbnail()).fit().into(holder.thumbnail);
+        holder.firstNameAndAge.setText(mListItems.get(position).getFirstName() + ", " + age);
         holder.school.setText(mListItems.get(position).getSchool());
         holder.major.setText(mListItems.get(position).getMajor());
 
@@ -63,16 +66,14 @@ public class MembersListAdapter extends RecyclerView.Adapter<MembersListAdapter.
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
         public int id;
         public ImageView thumbnail;
-        public TextView firstName;
-        public TextView age;
+        public TextView firstNameAndAge;
         public TextView school;
         public TextView major;
 
         public ViewHolder(View v) {
             super(v);
             thumbnail = (ImageView) v.findViewById(R.id.thumbnail);
-            firstName = (TextView) v.findViewById(R.id.firstName);
-            age = (TextView) v.findViewById(R.id.age);
+            firstNameAndAge = (TextView) v.findViewById(R.id.firstNameAndAge);
             school = (TextView) v.findViewById(R.id.school);
             major = (TextView) v.findViewById(R.id.major);
             v.setOnClickListener(this);

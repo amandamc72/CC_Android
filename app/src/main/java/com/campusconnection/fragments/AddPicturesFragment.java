@@ -104,7 +104,6 @@ public class AddPicturesFragment extends Fragment implements GridViewAdapter.Med
         if (value == 0) {
             CropImage.activity()
                     .setMinCropResultSize(320,200)
-                    .setMaxCropResultSize(620,400)
                     .start(getContext(), this);
         }
     }

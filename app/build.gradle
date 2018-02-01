@@ -37,7 +37,7 @@ dependencies {
     compile 'com.android.support:design:26.1.0'
     compile 'com.android.support:cardview-v7:26.1.0'
     compile 'org.florescu.android.rangeseekbar:rangeseekbar-library:0.3.0'
-    compile 'com.mindorks:placeholderview:0.7.0'
+    compile 'com.mindorks:placeholderview:0.7.2'
     compile 'com.android.support:recyclerview-v7:26.1.0'
     compile 'com.theartofdev.edmodo:android-image-cropper:2.5.+'
     compile 'com.nineoldandroids:library:2.4.0'

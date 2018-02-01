@@ -1,16 +1,19 @@
 package com.campusconnection.fragments;
 
 import android.content.Context;
+import android.graphics.Point;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.campusconnection.R;
 import com.campusconnection.model.responses.MemberListResponse;
+import com.campusconnection.util.AppUtils;
 import com.campusconnection.views.SwipeCard;
 import com.mindorks.placeholderview.SwipeDecor;
 import com.mindorks.placeholderview.SwipePlaceHolderView;
@@ -58,12 +61,21 @@ public class SwipeFragment extends Fragment {
 
         mSwipeView = (SwipePlaceHolderView)rootView.findViewById(R.id.swipeView);
 
+
+        int bottomMargin = AppUtils.dpToPx(160);
+        Point windowSize = AppUtils.getDisplaySize(getActivity().getWindowManager());
+
         mSwipeView.getBuilder()
-                .setDisplayViewCount(3)
+                .setDisplayViewCount(2)
+                .setWidthSwipeDistFactor(8)
+                .setHeightSwipeDistFactor(10)
                 .setSwipeDecor(new SwipeDecor()
-                        .setPaddingTop(20)
+                        .setViewWidth(windowSize.x)
+                        .setViewHeight(windowSize.y - bottomMargin)
+                        .setViewGravity(Gravity.TOP)
                         .setSwipeRotationAngle(5)
-                        .setRelativeScale(0.01f)
+                        .setSwipeMaxChangeAngle(2f)
+                        .setRelativeScale(0.001f)
                         .setSwipeInMsgLayoutId(R.layout.swipe_in_msg_view)
                         .setSwipeOutMsgLayoutId(R.layout.swipe_out_msg_view));
 

@@ -15,9 +15,11 @@ import com.campusconnection.model.responses.MemberResponse;
 import com.campusconnection.rest.ApiClient;
 import com.campusconnection.rest.ApiInterface;
 import com.campusconnection.views.ProfileInterestTags;
+import com.daimajia.slider.library.Indicators.PagerIndicator;
 import com.daimajia.slider.library.SliderLayout;
 import com.daimajia.slider.library.SliderTypes.BaseSliderView;
 import com.daimajia.slider.library.SliderTypes.DefaultSliderView;
+import com.daimajia.slider.library.Transformers.BaseTransformer;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -81,7 +83,9 @@ public class ProfileActivity extends AppCompatActivity implements BaseSliderView
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.edit_action_bar, menu); //TODO only show this when im viewing my own profile
+        if (profileId() == 0) {
+            getMenuInflater().inflate(R.menu.edit_action_bar, menu);
+        }
         return true;
     }
 
@@ -141,11 +145,20 @@ public class ProfileActivity extends AppCompatActivity implements BaseSliderView
         ArrayList<String> pictures = mMemberResponse.getPictures();
         mProfilePicSlider.removeAllSliders();
         //Put pictures in image slider
+        if (pictures.size() == 1) { //no swipe if one pic
+            mProfilePicSlider.setPagerTransformer(false, new BaseTransformer() {
+
+                @Override
+                public void onTransform(View view, float position) {
+                }
+
+            });
+        }
         for(int i = 0; i < pictures.size(); i++) {
             DefaultSliderView defaultSliderView = new DefaultSliderView(ProfileActivity.this);
             defaultSliderView
                     .image(pictures.get(i))
-                    .setScaleType(BaseSliderView.ScaleType.Fit)
+                    .setScaleType(BaseSliderView.ScaleType.CenterCrop)
                     .setOnSliderClickListener(ProfileActivity.this);
             mProfilePicSlider.addSlider(defaultSliderView);
         }

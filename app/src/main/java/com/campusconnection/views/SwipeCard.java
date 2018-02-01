@@ -18,7 +18,10 @@ import com.campusconnection.model.responses.MemberListResponse;
 import com.campusconnection.model.requests.SwipeRequest;
 import com.campusconnection.rest.ApiClient;
 import com.campusconnection.rest.ApiInterface;
+import com.campusconnection.util.AppUtils;
+import com.mindorks.placeholderview.Animation;
 import com.mindorks.placeholderview.SwipePlaceHolderView;
+import com.mindorks.placeholderview.annotations.Animate;
 import com.mindorks.placeholderview.annotations.Click;
 import com.mindorks.placeholderview.annotations.Layout;
 import com.mindorks.placeholderview.annotations.NonReusable;
@@ -68,9 +71,12 @@ public class SwipeCard implements Parcelable {
 
     @Resolve
     private void onResolved() {
+        String dob = mProfile.getAge();
+        String [] parts = dob.split("-");
+        String age = AppUtils.dateToAge( Integer.parseInt(parts[0]), Integer.parseInt(parts[1]), Integer.parseInt(parts[2]));
         mMemberId = mProfile.getId();
-        Picasso.with(mContext).load(mProfile.getThumbnail()).into(swipeProfileImage);
-        swipeNameAgeLabel.setText(mProfile.getFirstName() + ", " + mProfile.getAge());
+        Picasso.with(mContext).load(mProfile.getThumbnail()).fit().into(swipeProfileImage);
+        swipeNameAgeLabel.setText(mProfile.getFirstName() + ", " + age);
         swipeSchoolLabel.setText(mProfile.getSchool());
         swipeMajorLabel.setText(mProfile.getMajor());
     }

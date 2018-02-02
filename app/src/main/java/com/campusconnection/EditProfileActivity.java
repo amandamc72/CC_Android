@@ -45,6 +45,7 @@ public class EditProfileActivity extends AppCompatActivity implements AddPicture
         setContentView(R.layout.activity_edit_profile);
         Toolbar toolbar = (Toolbar) findViewById(R.id.editProfileToolbar);
         setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayShowTitleEnabled(false);
         toolbar.setNavigationIcon(R.drawable.ic_nav_back);
         getCurrentProfileData();
 

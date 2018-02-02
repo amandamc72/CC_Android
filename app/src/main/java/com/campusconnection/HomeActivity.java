@@ -47,6 +47,7 @@ public class HomeActivity extends AppCompatActivity
         setContentView(R.layout.activity_list);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayShowTitleEnabled(false);
         getMembersListAdapter(savedInstanceState);
 
         on = true;

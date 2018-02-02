@@ -58,6 +58,7 @@ public class ProfileActivity extends AppCompatActivity implements BaseSliderView
         mInterestsTags = (ProfileInterestTags) findViewById(R.id.profileInterestsTags);
         Toolbar toolbar = (Toolbar) findViewById(R.id.profileToolbar);
         setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayShowTitleEnabled(false);
         toolbar.setNavigationIcon(R.drawable.ic_nav_back);
 
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {

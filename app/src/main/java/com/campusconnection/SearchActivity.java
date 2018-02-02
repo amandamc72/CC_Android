@@ -43,6 +43,7 @@ public class SearchActivity extends AppCompatActivity {
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.searchToolbar);
         setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayShowTitleEnabled(false);
         toolbar.setNavigationIcon(R.drawable.ic_nav_back);
 
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {

@@ -14,6 +14,7 @@ import android.widget.TextView;
 import com.campusconnection.model.responses.MemberResponse;
 import com.campusconnection.rest.ApiClient;
 import com.campusconnection.rest.ApiInterface;
+import com.campusconnection.util.PreferencesUtil;
 import com.campusconnection.views.ProfileInterestTags;
 import com.daimajia.slider.library.Indicators.PagerIndicator;
 import com.daimajia.slider.library.SliderLayout;
@@ -40,6 +41,7 @@ public class ProfileActivity extends AppCompatActivity implements BaseSliderView
     private TextView mAbout;
     private ProfileInterestTags mInterestsTags;
     private MemberResponse mMemberResponse;
+    private PreferencesUtil mPrefs;
 
 
     @Override
@@ -60,6 +62,8 @@ public class ProfileActivity extends AppCompatActivity implements BaseSliderView
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayShowTitleEnabled(false);
         toolbar.setNavigationIcon(R.drawable.ic_nav_back);
+
+        mPrefs = new PreferencesUtil(this);
 
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
@@ -112,6 +116,9 @@ public class ProfileActivity extends AppCompatActivity implements BaseSliderView
                 //Log.d("D", "result  " + result);
                 mMemberResponse = (MemberResponse) data.getParcelableExtra("updatedProfile");
                 setProfileViews();
+                mPrefs.setStringPreference((getString(R.string.picPref)), mMemberResponse.getThumbnail());
+                mPrefs.setStringPreference((getString(R.string.namePref)), mMemberResponse.getName());
+                mPrefs.setStringPreference((getString(R.string.schoolPref)), mMemberResponse.getSchool());
             }
             if (resultCode == Activity.RESULT_CANCELED) {
                 //Write your code if there's no result

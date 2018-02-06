@@ -179,6 +179,9 @@
     <string name="permission_rationale">"Contacts permissions are needed for providing email
         completions."
     </string>
+    <string name="picPref">sideNavPicPref</string>
+    <string name="namePref">sideNavNamePref</string>
+    <string name="schoolPref">sideNacSchoolPref</string>
 
 
 </resources>

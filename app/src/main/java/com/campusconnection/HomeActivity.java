@@ -15,6 +15,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.campusconnection.fragments.RecyclerViewFragment;
 import com.campusconnection.fragments.SwipeFragment;
@@ -22,6 +24,10 @@ import com.campusconnection.model.responses.MemberListResponse;
 import com.campusconnection.model.requests.SearchRequest;
 import com.campusconnection.rest.ApiClient;
 import com.campusconnection.rest.ApiInterface;
+import com.campusconnection.util.PreferencesUtil;
+import com.squareup.picasso.Picasso;
+
+import org.w3c.dom.Text;
 
 import java.util.ArrayList;
 
@@ -49,6 +55,8 @@ public class HomeActivity extends AppCompatActivity
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayShowTitleEnabled(false);
         getMembersListAdapter(savedInstanceState);
+
+        PreferencesUtil prefs = new PreferencesUtil(this);
 
         on = true;
 
@@ -88,9 +96,16 @@ public class HomeActivity extends AppCompatActivity
 
         View headerview = navigationView.getHeaderView(0);
 
-        CircleImageView myInfoPicView = (CircleImageView) headerview.findViewById(R.id.my_info_nav_header_pic);
+        ImageView sideNavPic = (ImageView) headerview.findViewById(R.id.sideNavPic);
+        TextView sideNavname = (TextView) headerview.findViewById(R.id.sideNavName);
+        TextView sideNavSchool = (TextView) headerview.findViewById(R.id.sideNavSchool);
 
-        myInfoPicView.setOnClickListener(new View.OnClickListener() {
+        Picasso.with(this.getApplicationContext()).load(prefs.getStringPreference(getString(R.string.picPref))).into(sideNavPic);
+        sideNavname.setText(prefs.getStringPreference(getString(R.string.namePref)));
+        sideNavSchool.setText(prefs.getStringPreference(getString(R.string.schoolPref)));
+
+
+        sideNavPic.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(getApplicationContext(), ProfileActivity.class);

@@ -872,6 +872,19 @@ public class ProfileInterestTags extends ViewGroup {
             if (state == STATE_INPUT) {
                 //requestFocus();
 
+
+                // Handle Edit text tag has been left
+                // remove for now because it effects other listener submits
+                setOnFocusChangeListener(new View.OnFocusChangeListener() {
+                    @Override
+                    public void onFocusChange(View v, boolean hasFocus)
+                    {
+                        if (!hasFocus) {
+                            //submitTag();
+                        }
+                    }
+                });
+
                 // Handle the ENTER key down.
                 setOnEditorActionListener(new OnEditorActionListener() {
                     @Override
@@ -914,35 +927,6 @@ public class ProfileInterestTags extends ViewGroup {
 
                         }
                         return true;   // Consume the event
-                    }
-                });
-
-                // Handle the BACKSPACE key down.
-                setOnKeyListener(new OnKeyListener() {
-                    @Override
-                    public boolean onKey(View v, int keyCode, KeyEvent event) {
-                        if (keyCode == KeyEvent.KEYCODE_DEL && event.getAction() == KeyEvent.ACTION_DOWN) {
-                            // If the input content is empty, check or remove the last NORMAL state tag.
-                            if (TextUtils.isEmpty(getText().toString())) {
-                                TagView lastNormalTagView = getLastNormalTagView();
-                                if (lastNormalTagView != null) {
-                                    if (lastNormalTagView.isChecked) {
-                                        removeView(lastNormalTagView);
-                                        if (mOnTagChangeListener != null) {
-                                            mOnTagChangeListener.onDelete(ProfileInterestTags.this, lastNormalTagView.getText().toString());
-                                        }
-                                    } else {
-                                        final TagView checkedTagView = getCheckedTag();
-                                        if (checkedTagView != null) {
-                                            checkedTagView.setChecked(false);
-                                        }
-                                        lastNormalTagView.setChecked(true);
-                                    }
-                                    return true;
-                                }
-                            }
-                        }
-                        return false;
                     }
                 });
 
@@ -1217,32 +1201,6 @@ public class ProfileInterestTags extends ViewGroup {
                 }
             }
             return super.onTouchEvent(event);
-        }
-
-        @Override
-        public InputConnection onCreateInputConnection(EditorInfo outAttrs) {
-            return new ZanyInputConnection(super.onCreateInputConnection(outAttrs), true);
-        }
-
-        /**
-         * Solve edit text delete(backspace) key detect, see<a href="http://stackoverflow.com/a/14561345/3790554">
-         * Android: Backspace in WebView/BaseInputConnection</a>
-         */
-        private class ZanyInputConnection extends InputConnectionWrapper {
-            public ZanyInputConnection(android.view.inputmethod.InputConnection target, boolean mutable) {
-                super(target, mutable);
-            }
-
-            @Override
-            public boolean deleteSurroundingText(int beforeLength, int afterLength) {
-                // magic: in latest Android, deleteSurroundingText(1, 0) will be called for backspace
-                if (beforeLength == 1 && afterLength == 0) {
-                    // backspace
-                    return sendKeyEvent(new KeyEvent(KeyEvent.ACTION_DOWN, KeyEvent.KEYCODE_DEL))
-                            && sendKeyEvent(new KeyEvent(KeyEvent.ACTION_UP, KeyEvent.KEYCODE_DEL));
-                }
-                return super.deleteSurroundingText(beforeLength, afterLength);
-            }
         }
     }
 }

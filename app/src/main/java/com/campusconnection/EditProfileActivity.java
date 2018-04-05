@@ -134,7 +134,7 @@ public class EditProfileActivity extends AppCompatActivity implements AddPicture
     public void saveProfile() {
         List<String> newTags = Arrays.asList(mEditTags.getTags());
         String[] keepEmSeparated = mEditLocation.getText().toString().split(","); //TODO validate that comma
-        if(mUpdatedImages != null){
+        if(mUpdatedImages != null) {
             mCurrentMember.setPictures(mUpdatedImages);
         }
         mCurrentMember.setSchool(mEditSchool.getText().toString());

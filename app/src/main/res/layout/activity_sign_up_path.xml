@@ -45,15 +45,14 @@ tools:context="com.campusconnection.SignUpPathActivity">
             android:layout_marginTop="30dp"
             android:textAlignment="center"/>
 
-        <Button
+
+        <com.facebook.login.widget.LoginButton
             android:id="@+id/signupFacebookButton"
             android:layout_width="match_parent"
             android:layout_height="40dp"
             android:layout_centerHorizontal="true"
             android:layout_below="@+id/signUpPathAppStatement"
-            android:layout_marginTop="112dp"
-            android:text="@string/action_signup_with_facebook"
-            android:alpha="0.5"/>
+            android:layout_marginTop="112dp" />
 
         <Button
             android:id="@+id/signupEmailButton"

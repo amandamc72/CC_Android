@@ -145,10 +145,10 @@
             </RadioGroup>
 
             <Button
-                android:id="@+id/signupSubmitBtn"
+                android:id="@+id/signupNextButton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/action_sign_up"
+                android:text="@string/label_next"
                 android:layout_marginTop="5dp"
                 android:layout_below="@+id/signupGenderRadioGroup"
                 android:layout_centerHorizontal="true" />

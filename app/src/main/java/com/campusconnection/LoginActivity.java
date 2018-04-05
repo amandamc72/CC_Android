@@ -27,7 +27,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class LoginActivity extends AppCompatActivity{
+public class LoginActivity extends AppCompatActivity {
 
     private EditText mEmail;
     private EditText mPassword;
@@ -50,7 +50,7 @@ public class LoginActivity extends AppCompatActivity{
             @Override
             public boolean onEditorAction(TextView textView, int id, KeyEvent keyEvent) {
                 if (id == EditorInfo.IME_ACTION_DONE) {
-                    attemptLogin();
+                    login();
                     return true;
                 }
                 return false;
@@ -61,7 +61,7 @@ public class LoginActivity extends AppCompatActivity{
         mLoginBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-               attemptLogin();
+               login();
             }
         });
         Button mJoinBtn = (Button) findViewById(R.id.signupButton);
@@ -74,7 +74,7 @@ public class LoginActivity extends AppCompatActivity{
         });
     }
 
-    private void attemptLogin() {
+    private void login() {
         String email = mEmail.getText().toString();
         String password = mPassword.getText().toString();
 
@@ -82,12 +82,12 @@ public class LoginActivity extends AppCompatActivity{
         AppUtils.ValidInput validInput = AppUtils.isInputsValid(fields);
         View focusView;
 
-        if (validInput.getIsBlank()){
+        if (validInput.getIsBlank()) {
             validInput.getField().setError(getString(R.string.error_field_required));
             focusView = validInput.getField();
             focusView.requestFocus();
 
-        } else if (validInput.getIsValidEmail()){
+        } else if (validInput.getIsValidEmail()) {
             validInput.getField().setError(getString(R.string.error_invalid_email));
             focusView = validInput.getField();
             focusView.requestFocus();
@@ -100,19 +100,21 @@ public class LoginActivity extends AppCompatActivity{
             call.enqueue(new Callback<GenericResponse>() {
                 @Override
                 public void onResponse(Call<GenericResponse> call, Response<GenericResponse> response) {
-                    GenericResponse res = response.body();
-                    Boolean error = res.getError();
-                    String message = res.getMessage();
-                    String JWT = res.getCode();
-                    mProgress.setVisibility(View.INVISIBLE);
-                    if (!error) {
-                        prefs.setStringPreference(getString(R.string.jwtPref), JWT);
-                        prefs.setBooleanPreference(getString(R.string.isLoggedPref), true);
-                        Intent intent = new Intent(LoginActivity.this, HomeActivity.class);
-                        startActivity(intent);
-                        overridePendingTransition(R.anim.anim_slide_in_left, R.anim.anim_slide_out_left);
-                    } else {
-                        AppUtils.showPopMessage(LoginActivity.this, message);
+                    if(response.isSuccessful()) {
+                        GenericResponse res = response.body();
+                        Boolean error = res.getError();
+                        String message = res.getMessage();
+                        String JWT = res.getCode();
+                        mProgress.setVisibility(View.INVISIBLE);
+                        if (!error) {
+                            prefs.setStringPreference(getString(R.string.jwtPref), JWT);
+                            prefs.setBooleanPreference(getString(R.string.isLoggedPref), true);
+                            Intent intent = new Intent(LoginActivity.this, HomeActivity.class);
+                            startActivity(intent);
+                            overridePendingTransition(R.anim.anim_slide_in_left, R.anim.anim_slide_out_left);
+                        } else {
+                            AppUtils.showPopMessage(LoginActivity.this, message);
+                        }
                     }
                 }
 

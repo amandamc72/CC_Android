@@ -74,7 +74,7 @@ public class RegisterActivity extends AppCompatActivity {
         });
     }
 
-    private void register(){
+    private void register() {
         String email = mEmail.getText().toString();
 
         ArrayList<EditText> fields = new ArrayList<>(Arrays.asList(mEmail));
@@ -99,15 +99,17 @@ public class RegisterActivity extends AppCompatActivity {
             call.enqueue(new Callback<GenericResponse>() {
                 @Override
                 public void onResponse(Call<GenericResponse> call, Response<GenericResponse> response) {
-                    GenericResponse res = response.body();
-                    String message = res.getMessage();
+                    if(response.isSuccessful()) {
+                        GenericResponse res = response.body();
+                        String message = res.getMessage();
 
-                    Log.d("D","Recieved Code is: " + res.getCode());
+                        Log.d("D","Recieved Code is: " + res.getCode());
 
-                    prefs.setStringPreference((getString(R.string.codePref)), res.getCode());
-                    mProgress.setVisibility(View.INVISIBLE);
-                    //TODO want response message in text field not pop up
-                    AppUtils.showPopMessage(RegisterActivity.this, message);
+                        prefs.setStringPreference((getString(R.string.codePref)), res.getCode());
+                        mProgress.setVisibility(View.INVISIBLE);
+                        //TODO want response message in text field not pop up
+                        AppUtils.showPopMessage(RegisterActivity.this, message);
+                    }
                 }
                 @Override
                 public void onFailure(Call call, Throwable t) {

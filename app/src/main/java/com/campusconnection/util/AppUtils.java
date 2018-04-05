@@ -29,7 +29,7 @@ public class AppUtils {
         private Boolean isValidEmail;
         private EditText field;
 
-        public ValidInput(boolean isBlank, boolean isValidEmail, EditText field){
+        public ValidInput(boolean isBlank, boolean isValidEmail, EditText field) {
             this.setIsBlank(isBlank);
             this.setIsValidEmail(isValidEmail);
             this.setField(field);
@@ -61,9 +61,9 @@ public class AppUtils {
     }
 
 
-    public static ValidInput isInputsValid(ArrayList<EditText> inputs){
+    public static ValidInput isInputsValid(ArrayList<EditText> inputs) {
 
-        for (int i = 0; i < inputs.size(); i++){
+        for (int i = 0; i < inputs.size(); i++) {
             EditText uiField = inputs.get(i);
 
             uiField.setError(null);
@@ -73,8 +73,8 @@ public class AppUtils {
                 return new ValidInput(true, false, uiField);
             }
             if(uiField.getId() == R.id.loginEmailInput
-                    || uiField.getId() == R.id.registerEmailInput){
-                if(!isEmailValid(enteredText)){
+                    || uiField.getId() == R.id.registerEmailInput) {
+                if(!isEmailValid(enteredText)) {
                     return new ValidInput(false, true, uiField);
                 }
             }
@@ -92,7 +92,7 @@ public class AppUtils {
         alertResponse.show();
     }
 
-    public static String dateToAge(int year, int month, int day){
+    public static String dateToAge(int year, int month, int day) {
         Calendar dob = Calendar.getInstance();
         Calendar today = Calendar.getInstance();
 
@@ -100,7 +100,7 @@ public class AppUtils {
 
         int age = today.get(Calendar.YEAR) - dob.get(Calendar.YEAR);
 
-        if (today.get(Calendar.DAY_OF_YEAR) < dob.get(Calendar.DAY_OF_YEAR)){
+        if (today.get(Calendar.DAY_OF_YEAR) < dob.get(Calendar.DAY_OF_YEAR)) {
             age--;
         }
 
@@ -117,10 +117,10 @@ public class AppUtils {
                 DisplayMetrics displayMetrics = new DisplayMetrics();
                 display.getMetrics(displayMetrics);
                 return new Point(displayMetrics.widthPixels, displayMetrics.heightPixels);
-            }else{
+            } else {
                 return new Point(0, 0);
             }
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
             return new Point(0, 0);
         }

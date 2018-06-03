@@ -21,7 +21,8 @@ import com.campusconnection.R;
 public class AppUtils {
 
     public static boolean isEmailValid(String email) {
-        return email.contains("@") && email.endsWith(".edu");
+        //return email.contains("@") && email.endsWith(".edu");
+        return email.contains("@");
     }
 
     public static class ValidInput {
@@ -72,9 +73,9 @@ public class AppUtils {
             if (TextUtils.isEmpty(enteredText)) {
                 return new ValidInput(true, false, uiField);
             }
-            if(uiField.getId() == R.id.loginEmailInput
+            if (uiField.getId() == R.id.loginEmailInput
                     || uiField.getId() == R.id.registerEmailInput) {
-                if(!isEmailValid(enteredText)) {
+                if (!isEmailValid(enteredText)) {
                     return new ValidInput(false, true, uiField);
                 }
             }
@@ -112,7 +113,7 @@ public class AppUtils {
 
     public static Point getDisplaySize(WindowManager windowManager) {
         try {
-            if(Build.VERSION.SDK_INT > 16) {
+            if (Build.VERSION.SDK_INT > 16) {
                 Display display = windowManager.getDefaultDisplay();
                 DisplayMetrics displayMetrics = new DisplayMetrics();
                 display.getMetrics(displayMetrics);
@@ -125,9 +126,8 @@ public class AppUtils {
             return new Point(0, 0);
         }
     }
+
     public static int dpToPx(int dp) {
         return (int) (dp * Resources.getSystem().getDisplayMetrics().density);
     }
-
-
 }

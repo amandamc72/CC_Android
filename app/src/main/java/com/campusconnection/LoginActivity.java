@@ -1,10 +1,10 @@
 package com.campusconnection;
 
 import android.content.Intent;
-import android.content.SharedPreferences;
-import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.text.TextUtils;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
@@ -32,20 +32,24 @@ public class LoginActivity extends AppCompatActivity {
     private EditText mEmail;
     private EditText mPassword;
     private ProgressBar mProgress;
-    private PreferencesUtil prefs;
+    private PreferencesUtil mPrefs;
+    private TextView mForgotPasswordText;
+    private Button mLoginBtn;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
         setTheme(R.style.AppTheme);
+        mPrefs = new PreferencesUtil(this);
 
+        mForgotPasswordText = (TextView) findViewById(R.id.forgotPasswordText);
+        mLoginBtn = (Button) findViewById(R.id.loginButton);
+        Button joinBtn = (Button) findViewById(R.id.signupButton);
         mProgress = (ProgressBar) findViewById(R.id.loginProgressBar);
-        mProgress.setVisibility(View.INVISIBLE);
-
-        prefs = new PreferencesUtil(this);
         mEmail = (EditText) findViewById(R.id.loginEmailInput);
         mPassword = (EditText) findViewById(R.id.loginPassInput);
+
         mPassword.setOnEditorActionListener(new EditText.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView textView, int id, KeyEvent keyEvent) {
@@ -57,27 +61,45 @@ public class LoginActivity extends AppCompatActivity {
             }
         });
 
-        Button mLoginBtn = (Button) findViewById(R.id.loginButton);
         mLoginBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                login();
             }
         });
-        Button mJoinBtn = (Button) findViewById(R.id.signupButton);
-        mJoinBtn.setOnClickListener(new View.OnClickListener() {
+
+        joinBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent i = new Intent(LoginActivity.this, RegisterActivity.class);
-                startActivity(i);
+                String code = mPrefs.getStringPreference(getString(R.string.codePref));
+                mEmail.setVisibility(View.INVISIBLE);
+                mPassword.setVisibility(View.INVISIBLE);
+                mLoginBtn.setVisibility(View.INVISIBLE);
+                mForgotPasswordText.setVisibility(View.INVISIBLE);
+                mProgress.setVisibility(View.VISIBLE);
+                if (!TextUtils.isEmpty(code))
+                    checkStatus(code);
+                else {
+                    Intent i = new Intent(LoginActivity.this, RegisterActivity.class);
+                    startActivity(i);
+                    overridePendingTransition(R.anim.anim_slide_in_left, R.anim.anim_slide_out_left);
+                }
             }
         });
     }
 
-    private void login() {
-        String email = mEmail.getText().toString();
-        String password = mPassword.getText().toString();
+    @Override
+    public void onResume() {
+        super.onResume();
+        mEmail.setVisibility(View.VISIBLE);
+        mPassword.setVisibility(View.VISIBLE);
+        mLoginBtn.setVisibility(View.VISIBLE);
+        mForgotPasswordText.setVisibility(View.VISIBLE);
+        mProgress.setVisibility(View.INVISIBLE);
+    }
 
+
+    private void login() {
         ArrayList<EditText> fields = new ArrayList<>(Arrays.asList(mEmail, mPassword));
         AppUtils.ValidInput validInput = AppUtils.isInputsValid(fields);
         View focusView;
@@ -93,6 +115,8 @@ public class LoginActivity extends AppCompatActivity {
             focusView.requestFocus();
 
         } else {
+            String email = mEmail.getText().toString();
+            String password = mPassword.getText().toString();
             ApiInterface apiService = ApiClient.getClient(this).create(ApiInterface.class);
             Call<GenericResponse> call = apiService.checkLogin(new LoginRequest(email, password));
             mProgress.setVisibility(View.VISIBLE);
@@ -107,14 +131,17 @@ public class LoginActivity extends AppCompatActivity {
                         String JWT = res.getCode();
                         mProgress.setVisibility(View.INVISIBLE);
                         if (!error) {
-                            prefs.setStringPreference(getString(R.string.jwtPref), JWT);
-                            prefs.setBooleanPreference(getString(R.string.isLoggedPref), true);
+                            mPrefs.setStringPreference(getString(R.string.jwtPref), JWT);
+                            mPrefs.setBooleanPreference(getString(R.string.isLoggedPref), true);
                             Intent intent = new Intent(LoginActivity.this, HomeActivity.class);
                             startActivity(intent);
                             overridePendingTransition(R.anim.anim_slide_in_left, R.anim.anim_slide_out_left);
+                            finish();
                         } else {
                             AppUtils.showPopMessage(LoginActivity.this, message);
                         }
+                    } else {
+                        onFailure(call, null);
                     }
                 }
 
@@ -122,8 +149,37 @@ public class LoginActivity extends AppCompatActivity {
                 public void onFailure(Call call, Throwable t) {
                     call.cancel();
                     mProgress.setVisibility(View.INVISIBLE);
+                    AppUtils.showPopMessage(LoginActivity.this, "Could not complete request");
                 }
             });
         }
+    }
+
+    private void checkStatus(String code) {
+        Log.d("D", "CODE is: " + code);
+        ApiInterface apiService = ApiClient.getClient(this).create(ApiInterface.class);
+        Call<GenericResponse> call = apiService.checkStatus(code);
+
+        call.enqueue(new Callback<GenericResponse>() {
+            @Override
+            public void onResponse(Call<GenericResponse> call, Response<GenericResponse> response) {
+                GenericResponse res = response.body();
+                String status = res.getMessage();
+                Log.d("D", "res is: " + res);
+                Class actToRouteTo;
+                if(status.equals("verified")) {
+                    actToRouteTo = SignUpActivity.class;
+                } else {
+                    actToRouteTo = RegisterActivity.class;
+                }
+                Intent i = new Intent(LoginActivity.this, actToRouteTo);
+                startActivity(i);
+                overridePendingTransition(R.anim.anim_slide_in_left, R.anim.anim_slide_out_left);
+            }
+            @Override
+            public void onFailure(Call call, Throwable t) {
+                call.cancel();
+            }
+        });
     }
 }

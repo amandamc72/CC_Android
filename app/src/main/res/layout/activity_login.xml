@@ -27,14 +27,14 @@
 
         <TextView
             android:id="@+id/loginAppText"
-            android:textAppearance="?android:attr/textAppearanceLarge"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentTop="true"
-            android:layout_marginTop="69dp"
-            android:text="@string/app_name"
             android:layout_centerHorizontal="true"
-            android:textColor="@color/white"/>
+            android:layout_marginTop="60dp"
+            android:text="@string/app_name"
+            android:textColor="@color/white"
+            android:textSize="30sp" />
 
         <EditText
             android:id="@+id/loginEmailInput"
@@ -42,13 +42,25 @@
             android:layout_height="wrap_content"
             android:layout_below="@+id/loginAppText"
             android:layout_centerHorizontal="true"
-            android:layout_marginTop="80dp"
+            android:layout_marginTop="70dp"
             android:ems="10"
             android:hint="@string/prompt_email"
             android:textColor="@color/white"
             android:backgroundTint="@color/white"
             android:textColorHint="@color/white"
-            android:inputType="textEmailAddress" />
+            android:inputType="textEmailAddress"
+            android:alpha="0.5"
+            android:drawableLeft="@drawable/ic_user"
+            android:drawableStart="@drawable/ic_user"
+            android:drawablePadding="10dp"/>
+
+        <ProgressBar
+            android:id="@+id/loginProgressBar"
+            style="?android:attr/progressBarStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/loginEmailInput"
+            android:layout_centerHorizontal="true" />
 
         <EditText
             android:id="@+id/loginPassInput"
@@ -63,45 +75,46 @@
             android:backgroundTint="@color/white"
             android:textColorHint="@color/white"
             android:layout_alignTop="@+id/loginProgressBar"
-            android:layout_marginTop="28dp" />
+            android:layout_marginTop="28dp"
+            android:alpha="0.5"
+            android:drawableLeft="@drawable/ic_lock"
+            android:drawableStart="@drawable/ic_lock"
+            android:drawablePadding="10dp"/>
 
         <Button
             android:id="@+id/loginButton"
-            android:layout_width="match_parent"
-            android:layout_height="40dp"
-            android:layout_centerHorizontal="true"
-            android:alpha="0.5"
-            android:text="@string/action_login"
-            android:layout_below="@+id/loginPassInput"
-            android:layout_marginTop="39dp" />
-
-        <ProgressBar
-            android:id="@+id/loginProgressBar"
-            style="?android:attr/progressBarStyle"
-            android:layout_width="wrap_content"
+            android:layout_width="250dp"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/loginEmailInput"
-            android:layout_centerHorizontal="true" />
-
-        <Button
-            android:id="@+id/signupButton"
-            android:layout_width="match_parent"
-            android:layout_height="40dp"
-            android:text="@string/action_join"
-            android:layout_alignParentBottom="true"
             android:layout_centerHorizontal="true"
-            android:alpha="0.5"
-            android:layout_marginBottom="25dp" />
+            android:alpha="0.8"
+            android:background="@drawable/rounded_corners"
+            android:text="@string/action_login"
+            android:textColor="@color/white"
+            android:layout_below="@+id/loginPassInput"
+            android:layout_marginTop="40dp" />
 
         <TextView
             android:id="@+id/forgotPasswordText"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignTop="@+id/loginButton"
             android:layout_centerHorizontal="true"
-            android:layout_marginTop="54dp"
+            android:layout_below="@id/loginButton"
+            android:alpha="0.5"
+            android:layout_marginTop="10dp"
             android:text="@string/label_forgot_password"
             android:textColor="@color/white"/>
+
+        <Button
+            android:id="@+id/signupButton"
+            android:layout_width="250dp"
+            android:layout_height="wrap_content"
+            android:text="@string/action_join"
+            android:textColor="@color/white"
+            android:layout_alignParentBottom="true"
+            android:layout_centerHorizontal="true"
+            android:alpha="0.8"
+            android:background="@drawable/rounded_corners"
+            android:layout_marginBottom="20dp" />
 
     </RelativeLayout>
 

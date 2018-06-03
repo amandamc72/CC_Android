@@ -24,6 +24,7 @@ import com.campusconnection.model.responses.MemberListResponse;
 import com.campusconnection.model.requests.SearchRequest;
 import com.campusconnection.rest.ApiClient;
 import com.campusconnection.rest.ApiInterface;
+import com.campusconnection.util.AppUtils;
 import com.campusconnection.util.PreferencesUtil;
 import com.squareup.picasso.Picasso;
 
@@ -221,11 +222,20 @@ public class HomeActivity extends AppCompatActivity
                                     .add(R.id.memberViewFragmentContainer, mRecyclerViewFragment).commit();
                         }
                     }
+                } else {
+                    if (response.code() == 401) {
+                        Intent i = new Intent(HomeActivity.this, LoginActivity.class);
+                        startActivity(i);
+                        overridePendingTransition(R.anim.anim_slide_in_left, R.anim.anim_slide_out_left);
+                    } else {
+                        onFailure(call, null);
+                    }
                 }
             }
             @Override
             public void onFailure(Call call, Throwable t) {
                 call.cancel();
+                AppUtils.showPopMessage(HomeActivity.this, "Could not complete request");
             }
         });
     }

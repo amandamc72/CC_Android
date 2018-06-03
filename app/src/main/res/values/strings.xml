@@ -29,7 +29,7 @@
     <!--Sign up Strings -->
     <string name="prompt_first_name">First Name</string>
     <string name="prompt_last_name">Last Name</string>
-    <string name="prompt_city">City</string>
+    <string name="prompt_location">Location</string>
     <string name="prompt_school">School</string>
     <string name="prompt_major">Major</string>
     <string name="prompt_minor">Minor (Optional)</string>
@@ -39,6 +39,7 @@
     <string name="label_next">Next</string>
     <string name="label_step_2_2">Step 2 of 2</string>
     <string name="label_add_photos">Add Photos</string>
+    <string name="no_location_detected">No location detected</string>
 
     <!--Menu Strings-->
     <string name="label_home">Home</string>
@@ -176,16 +177,17 @@
     <string name="action_sign_in_short">Sign in</string>
     <string name="error_invalid_password">This password is too short</string>
     <string name="error_incorrect_password">This password is incorrect</string>
-    <string name="permission_rationale">"Contacts permissions are needed for providing email
-        completions."
+    <string name="permission_rationale">"Location needed for retrieving current city and state."
     </string>
     <string name="picPref">sideNavPicPref</string>
     <string name="namePref">sideNavNamePref</string>
     <string name="schoolPref">sideNacSchoolPref</string>
 
-    <!-- Facebook sdk strings -->
-    <string name="facebook_app_id">350603888750520</string>
-    <string name="fb_login_protocol_scheme">fb350603888750520</string>
+
+    <string name="service_not_available">Service not available</string>
+    <string name="invalid_lat_long_used">Invalid coordinates used</string>
+    <string name="no_address_found">Could not find location</string>
+    <string name="no_geocoder_available">No geocoder available</string>
 
 
 </resources>

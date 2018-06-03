@@ -17,6 +17,9 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true"
         android:paddingBottom="@dimen/activity_vertical_margin"
         android:paddingLeft="@dimen/activity_horizontal_margin"
         android:paddingRight="@dimen/activity_horizontal_margin"
@@ -26,48 +29,53 @@
             android:id="@+id/registerEmailInput"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="200dp"
-            android:ems="10"
-            android:inputType="textEmailAddress"
-            android:hint="@string/prompt_email"
-            android:textColor="@color/white"
-            android:backgroundTint="@color/white"
-            android:textColorHint="@color/white"
             android:layout_alignParentTop="true"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentStart="true" />
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="185dp"
+            android:alpha="0.5"
+            android:backgroundTint="@color/white"
+            android:drawableLeft="@drawable/ic_user"
+            android:drawablePadding="10dp"
+            android:drawableStart="@drawable/ic_user"
+            android:ems="10"
+            android:hint="@string/prompt_email"
+            android:inputType="textEmailAddress"
+            android:textColor="@color/white"
+            android:textColorHint="@color/white" />
 
         <Button
             android:id="@+id/registerEmailButton"
-            android:layout_width="match_parent"
-            android:layout_height="40dp"
-            android:alpha="0.5"
-            android:layout_below="@+id/registerEmailInput"
-            android:layout_marginTop="76dp"
+            android:layout_width="250dp"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_centerHorizontal="true"
+            android:layout_marginBottom="170dp"
+            android:alpha="0.8"
+            android:background="@drawable/rounded_corners"
             android:text="@string/action_send_activation_email"
-            android:layout_centerHorizontal="true" />
+            android:textColor="@color/white" />
 
         <TextView
             android:id="@+id/registerSignUpLabel"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="60dp"
             android:text="@string/label_sign_up"
             android:textColor="@color/white"
-            android:textAppearance="?android:attr/textAppearanceLarge"
-            android:layout_marginBottom="95dp"
-            android:layout_above="@+id/registerEmailButton"
-            android:layout_centerHorizontal="true" />
+            android:textSize="30sp" />
 
         <TextView
             android:id="@+id/registerStep1OutOf2Label"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textColor="@color/white"
+            android:layout_alignParentBottom="true"
+            android:layout_centerHorizontal="true"
+            android:layout_marginBottom="85dp"
+            android:alpha="0.5"
             android:text="@string/label_step_1_2"
-            android:layout_below="@+id/registerEmailButton"
-            android:layout_alignRight="@+id/registerSignUpLabel"
-            android:layout_alignEnd="@+id/registerSignUpLabel"
-            android:layout_marginTop="75dp" />
+            android:textColor="@color/white" />
 
         <ProgressBar
             android:id="@+id/registerProgressBar"

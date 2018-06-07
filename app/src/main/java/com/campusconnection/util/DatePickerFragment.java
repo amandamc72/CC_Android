@@ -29,6 +29,13 @@ public class DatePickerFragment extends DialogFragment
 
     @Override
     public void onDateSet(DatePicker view, int year, int month, int day) {
-        mBirthday.setText((month + 1) + "/" +  day + "/" + year);
+        month = month + 1;
+        String formattedMonth = String.valueOf(month);
+        String formattedDay = String.valueOf(day);
+        if (month < 10)
+            formattedMonth = "0" + month;
+        if (day < 10)
+            formattedDay = "0" + day;
+        mBirthday.setText(formattedMonth + "/" +  formattedDay + "/" + year);
     }
 }

@@ -130,4 +130,23 @@ public class AppUtils {
     public static int dpToPx(int dp) {
         return (int) (dp * Resources.getSystem().getDisplayMetrics().density);
     }
+
+    public static boolean isLocationValid(String location) {
+        try {
+            String [] splitLocation = location.split(",");
+            String city = splitLocation[0].trim();
+            String state = splitLocation[1].trim();
+            return validateCity(city) && validateState(state);
+        } catch (ArrayIndexOutOfBoundsException e) {
+            return false;
+        }
+    }
+
+    public static boolean validateCity(String city) {
+        return city.matches( "([a-zA-Z]+|[a-zA-Z]+\\s[a-zA-Z]+)" );
+    }
+
+    public static boolean validateState(String state) {
+        return state.matches( "([a-zA-Z]+|[a-zA-Z]+\\s[a-zA-Z]+)" ) ;
+    }
 }

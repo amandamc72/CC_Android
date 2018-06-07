@@ -65,19 +65,18 @@ public class SignUpActivity extends AppCompatActivity implements AddPicturesFrag
     private PreferencesUtil prefs;
     private String code;
     private RelativeLayout mAddPhotosLayout;
-    private LinearLayout mSignupDataLayout;
+    private LinearLayout mSignUpDataLayout;
     private FusedLocationProviderClient mFusedLocationClient;
     private Location mLastLocation;
     private AddressResultReceiver mResultReceiver;
 
     @SuppressLint("ClickableViewAccessibility")
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sign_up);
         setTheme(R.style.AppTheme);
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
-        final Bundle instance = savedInstanceState;
 
         prefs = new PreferencesUtil(this);
         code = prefs.getStringPreference(getString(R.string.codePref));
@@ -85,7 +84,7 @@ public class SignUpActivity extends AppCompatActivity implements AddPicturesFrag
 
         mResultReceiver = new AddressResultReceiver(new Handler());
         mAddPhotosLayout = (RelativeLayout) findViewById(R.id.addPhotosLayout);
-        mSignupDataLayout = (LinearLayout) findViewById(R.id.signUpDataLayout);
+        mSignUpDataLayout = (LinearLayout) findViewById(R.id.signUpDataLayout);
         mFirstName = (EditText) findViewById(R.id.signupFirstNameInput);
         mLastName = (EditText) findViewById(R.id.signupLastNameInput);
         mPassword = (EditText) findViewById(R.id.signupPasswordInput);
@@ -94,16 +93,18 @@ public class SignUpActivity extends AppCompatActivity implements AddPicturesFrag
         mMajor = (EditText) findViewById(R.id.signupMajorInput);
         mBirthday = (EditText) findViewById(R.id.signupBirthdayInput);
         mGender = (RadioGroup) findViewById(R.id.signupGenderRadioGroup);
+        mProgress = (ProgressBar) findViewById(R.id.signUpProgressBar);
         Button nextBtn = (Button) findViewById(R.id.signupNextButton);
         mFusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
         mAddPhotosLayout.setVisibility(View.GONE);
+        mProgress.setVisibility(View.INVISIBLE);
         mLocation.setLongClickable(false);
 
 
         nextBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                signUp(instance);
+                signUp(savedInstanceState);
             }
         });
 
@@ -156,17 +157,14 @@ public class SignUpActivity extends AppCompatActivity implements AddPicturesFrag
         });
     }
 
-    private void signUp(Bundle savedInstanceState) {
+    private void signUp(final Bundle savedInstanceState) {
         String firstName = mFirstName.getText().toString();
         String lastName = mLastName.getText().toString();
         String password = mPassword.getText().toString();
         String school = mSchool.getText().toString();
         String major = mMajor.getText().toString();
         String birthday = mBirthday.getText().toString();
-        final Bundle instanceState = savedInstanceState;
-        String [] location = mLocation.getText().toString().split(",");
-        String city = location[0];
-        String state = location[1];
+        String location = mLocation.getText().toString();
 
         ArrayList<EditText> textFields = new ArrayList<>(Arrays.asList(mFirstName, mLastName,
                                                             mPassword, mLocation, mSchool,
@@ -179,11 +177,19 @@ public class SignUpActivity extends AppCompatActivity implements AddPicturesFrag
             focusView = validInput.getField();
             focusView.requestFocus();
 
+        } else if(!AppUtils.isLocationValid(location)) {
+            mLocation.setError(getString(R.string.error_invalid_location));
+            mLocation.requestFocus();
+
         } else {
+            String [] locationParts = mLocation.getText().toString().split(",");
+            String city = locationParts[0];
+            String state = locationParts[1];
+
             ApiInterface apiService = ApiClient.getClient(this).create(ApiInterface.class);
             Call<GenericResponse> call = apiService.signup(new SignupRequest(code, firstName, lastName, password,
                     city, state, school, major, birthday, gender));
-            //mProgress.setVisibility(View.VISIBLE);
+            mProgress.setVisibility(View.VISIBLE);
 
             call.enqueue(new Callback<GenericResponse>() {
                 @Override
@@ -192,11 +198,11 @@ public class SignUpActivity extends AppCompatActivity implements AddPicturesFrag
                         GenericResponse res = response.body();
                         Boolean error = res.getError();
                         String message = res.getMessage();
-                        //mProgress.setVisibility(View.INVISIBLE);
+                        mProgress.setVisibility(View.INVISIBLE);
                         if(!error) {
                             if (findViewById(R.id.addPhotosContainer) != null) {
                                 // so we don't end up with overlapping fragments.
-                                if (instanceState != null) {
+                                if (savedInstanceState != null) {
                                     return;
                                 }
                                 AddPicturesFragment addPicturesFragment = new AddPicturesFragment().newInstance(new ArrayList<String>());
@@ -205,7 +211,7 @@ public class SignUpActivity extends AppCompatActivity implements AddPicturesFrag
                                         .add(R.id.addPhotosContainer, addPicturesFragment).commit();
                             }
                             mAddPhotosLayout.setVisibility(View.VISIBLE);
-                            mSignupDataLayout.setVisibility(View.GONE);
+                            mSignUpDataLayout.setVisibility(View.GONE);
                         } else {
                             AppUtils.showPopMessage(SignUpActivity.this, message);
                         }
@@ -214,7 +220,7 @@ public class SignUpActivity extends AppCompatActivity implements AddPicturesFrag
                 @Override
                 public void onFailure(Call call, Throwable t) {
                     call.cancel();
-                    //mProgress.setVisibility(View.INVISIBLE);
+                    mProgress.setVisibility(View.INVISIBLE);
                 }
             });
         }

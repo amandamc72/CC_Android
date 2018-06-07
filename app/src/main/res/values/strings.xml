@@ -94,6 +94,7 @@
     <!--Error Strings -->
     <string name="error_invalid_email">This email address is invalid</string>
     <string name="error_field_required">This field is required</string>
+    <string name="error_invalid_location">Invalid location format</string>
 
     <!--Menu Strings -->
     <string name="label_menu_profile">My Info</string>

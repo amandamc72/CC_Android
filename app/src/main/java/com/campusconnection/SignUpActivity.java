@@ -181,6 +181,10 @@ public class SignUpActivity extends AppCompatActivity implements AddPicturesFrag
             mLocation.setError(getString(R.string.error_invalid_location));
             mLocation.requestFocus();
 
+        } else if(gender == null ||  gender.isEmpty()) {
+            mGender.requestFocus();
+            Toast.makeText(getApplicationContext(), "Please select Gender", Toast.LENGTH_SHORT).show();
+
         } else {
             String [] locationParts = mLocation.getText().toString().split(",");
             String city = locationParts[0];
